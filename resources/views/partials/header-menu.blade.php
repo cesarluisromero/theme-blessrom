@@ -20,11 +20,8 @@
   </div>
 
   {{-- Buscador --}}
-  <div class="mt-3">
-    <div class="bg-white rounded overflow-hidden flex items-center w-full">
-      <?php echo do_shortcode('[fibosearch]'); ?>
-    </div>
-  </div>
+        {{-- Buscador --}}
+      @include('partials.buscador-principal')
 
   {{-- Menú lateral móvil dinámico --}}
   @include('partials.mobile-menu')
@@ -43,7 +40,7 @@
       </div>
 
       {{-- Buscador --}}
-      @include('partials.desktop-buscador')
+      @include('partials.buscador-principal')
 
       {{-- Íconos --}}
       <div class="flex items-center space-x-3">
