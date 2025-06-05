@@ -25,7 +25,6 @@
        class="fixed inset-0 bg-white bg-opacity-40 z-80 hidden lg:hidden"
        onclick="document.getElementById('mobile-filters').classList.add('hidden'); this.classList.add('hidden')">
   </div>
-
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
     {{-- Sidebar de filtros (visible en móvil y escritorio) --}}
     <aside id="mobile-filters"
