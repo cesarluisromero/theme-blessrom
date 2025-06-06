@@ -153,3 +153,6 @@ add_action('widgets_init', function () {
         'id' => 'sidebar-footer',
     ] + $config);
 });
+
+
+require_once get_theme_file_path('app/ajax.php');
