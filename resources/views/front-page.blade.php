@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 {{-- Banner principal --}}
   @include('partials.home-banner')
 
@@ -17,7 +16,7 @@
 
   @include('partials.home-explore')
 
-  {{-- Footer --}}
+
   @include('partials.home-testimonials')
   
   {{-- Beneficios o razones para elegir Blessrom --}}

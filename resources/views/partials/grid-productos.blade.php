@@ -1,6 +1,4 @@
 {{-- Contenedor de productos --}}
-
-
 <div class="lg:col-span-3">
 
   {{-- Mostrar la categoría actual si está en la URL (solo con filtro personalizado) --}}

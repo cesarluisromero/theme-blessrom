@@ -36,4 +36,9 @@ class ThemeServiceProvider extends SageServiceProvider
           
 
     }
+
+    protected $composers = [
+    \App\View\Composers\HeaderMenu::class,
+    ];
+
 }

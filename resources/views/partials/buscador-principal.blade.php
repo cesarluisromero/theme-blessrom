@@ -26,7 +26,7 @@
             return groups
         }, {})
     }
-}" @click.away="show = false" class="relative w-full max-w-3xl ml-[120px] z-50">
+}" @click.away="show = false" class="relative w-full max-w-3xl ml-2 sm:ml-10 lg:ml-[120px] z-50">
 
   <!-- Barra de búsqueda estilo Amazon/FiboSearch -->
   <div class="flex w-full bg-white rounded-md overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-yellow-400">
