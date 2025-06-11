@@ -13,6 +13,8 @@
     </style>
     @vite(['resources/scripts/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    
 
     @stack('styles') 
   </head>
@@ -92,5 +94,6 @@
     @php(wp_footer())
 
     @stack('scripts') 
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   </body>
 </html>

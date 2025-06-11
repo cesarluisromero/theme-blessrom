@@ -8,6 +8,7 @@ class HeaderMenu extends Composer
 {
     protected static $views = [
         'partials.desktop-menu',
+        'partials.mobile-menu',
     ];
 
     public function with()

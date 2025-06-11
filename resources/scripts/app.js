@@ -109,6 +109,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   
-  
+
+window.productGallery = function () {
+    return {
+        init() {
+            new Swiper('.product-swiper', {
+                pagination: { el: '.swiper-pagination' },
+                loop: true,
+            });
+        }
+    }
+}
+
   
   
