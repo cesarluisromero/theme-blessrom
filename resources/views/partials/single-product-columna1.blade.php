@@ -1,16 +1,16 @@
 {{-- Columna 1: Imágenes --}}
-<div class="grid grid-cols-[auto_1fr] gap-0 items-start">
+<div class="grid grid-cols-[20%_80%] gap-0 items-start bg-white ml-4">
   
     {{-- Miniaturas --}}
     <div class="hidden md:flex flex-col space-y-1">
         @if ($main_image)
             <img src="{{ wp_get_attachment_image_url($main_image, 'thumbnail') }}" 
-                class="w-16 h-16 object-cover cursor-pointer border rounded hover:border-blue-500" 
+                class="w-16 h-16 object-cover cursor-pointer border border-white rounded bg-[#E1E6E4] hover:border-blue-500" 
                 @click="currentImage = '{{ wp_get_attachment_image_url($main_image, 'large') }}'">
         @endif
         @foreach ($attachment_ids as $id)
             <img src="{{ wp_get_attachment_image_url($id, 'thumbnail') }}" 
-                class="w-16 h-16 object-cover cursor-pointer border rounded hover:border-blue-500" 
+                class="w-16 h-16 object-cover cursor-pointer border border-white rounded bg-[#E1E6E4] hover:border-blue-500" 
                 @click="currentImage = '{{ wp_get_attachment_image_url($id, 'large') }}'">
         @endforeach
     </div>
@@ -32,12 +32,12 @@
             }
         }"
         x-init="window.addEventListener('resize', () => zoomEnabled = window.innerWidth >= 768)"
-        class="relative h-[500px] md:h-[600px]"
+        class="relative"
     >
         {{-- Imagen principal --}}
         <img 
             :src="currentImage" 
-            class="w-full h-auto object-contain border rounded" 
+            class="w-full h-auto object-contain border border-white rounded bg-[#E1E6E4]" 
             alt="Imagen principal"
             @mousemove="updateZoom"
             @mouseenter="if (zoomEnabled) showZoom = true" 

@@ -43,14 +43,31 @@
     </div>
 
     @php(do_action('get_footer'))
-    @php(wp_footer())
 
-      <script>
-          document.addEventListener('DOMContentLoaded', function () {
-          const minPrice = parseFloat(document.getElementById('min_price').value || 5);
-          const maxPrice = parseFloat(document.getElementById('max_price').value || 500);
+    @stack('scripts') 
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener('click', function (e) {
+          const el = e.target.closest('a');
+          if (el && el.href && el.classList.contains('dgwt-wcas-suggestion')) {
+            window.location.href = el.href;
+          }
+        });
+      });
+    </script>
 
-          const slider = document.getElementById('price-slider');
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const minInput = document.getElementById('min_price');
+        const maxInput = document.getElementById('max_price');
+        const slider = document.getElementById('price-slider');
+
+        if (minInput && maxInput && slider) {
+          const minPrice = parseFloat(minInput.value || 5);
+          const maxPrice = parseFloat(maxInput.value || 500);
+          const minLabel = document.getElementById('price-min-label');
+          const maxLabel = document.getElementById('price-max-label');
 
           noUiSlider.create(slider, {
             start: [minPrice, maxPrice],
@@ -66,34 +83,16 @@
             }
           });
 
-          const minInput = document.getElementById('min_price');
-          const maxInput = document.getElementById('max_price');
-          const minLabel = document.getElementById('price-min-label');
-          const maxLabel = document.getElementById('price-max-label');
-
           slider.noUiSlider.on('update', function (values, handle) {
-            const [min, max] = values.map(v => Math.round(v));
-            minInput.value = min;
-            maxInput.value = max;
-            minLabel.innerText = `S/${min}`;
-            maxLabel.innerText = `S/${max}`;
+              const [min, max] = values.map(v => Math.round(v));
+              minInput.value = min;
+              maxInput.value = max;
+              if (minLabel) minLabel.innerText = `S/${min}`;
+              if (maxLabel) maxLabel.innerText = `S/${max}`;
           });
-        });
-      </script>
-      @stack('scripts')
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        document.body.addEventListener('click', function (e) {
-          const el = e.target.closest('a');
-          if (el && el.href && el.classList.contains('dgwt-wcas-suggestion')) {
-            window.location.href = el.href;
-          }
-        });
+        }
       });
-    </script>
-    @php(wp_footer())
-
-    @stack('scripts') 
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    </script>   
+    @php(wp_footer())    
   </body>
 </html>

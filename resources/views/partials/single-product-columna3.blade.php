@@ -1,5 +1,5 @@
 {{-- Columna 3: Acciones y Descripción --}}
-<div class="space-y-4">
+<div class="space-y-0 bg-white" >
     <p class="text-sm text-gray-700 leading-relaxed">
         {!! wpautop($product->get_short_description()) !!}
     </p>
@@ -15,7 +15,5 @@
         @php do_action('woocommerce_after_add_to_cart_button'); @endphp
     </form>
 
-    <button class="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600 transition font-semibold">
-        Comprar ahora
-    </button>
+    
 </div>

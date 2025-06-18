@@ -8,6 +8,7 @@ namespace App;
 
 use Illuminate\Support\Facades\Vite;
 
+require_once get_theme_file_path('app/cart-actions.php');
 /**
  * Inject styles into the block editor.
  *
@@ -79,6 +80,7 @@ add_action('after_setup_theme', function () {
         'primary_navigation' => __('Primary Navigation', 'sage'),
     ]);
 
+
     /**
      * Disable the default block patterns.
      *
@@ -92,6 +94,20 @@ add_action('after_setup_theme', function () {
      * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
      */
     add_theme_support('title-tag');
+
+
+    add_theme_support('woocommerce');
+
+    add_filter('template_include', function ($template) {
+        if (is_singular('product')) {
+            $blade_template = locate_template('resources/views/woocommerce/single-product.blade.php');
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.single-product')->render();
+                exit; // Evita que cargue otras plantillas
+            }
+        }
+        return $template;
+    }, 99);
 
     /**
      * Enable post thumbnail support.
@@ -167,4 +183,11 @@ add_filter('template_include', function ($template) {
 
     return $template;
 }, 99);
+
+
+
+
+
+
+
 
