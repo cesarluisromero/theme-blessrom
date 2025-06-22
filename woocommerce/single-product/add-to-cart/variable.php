@@ -282,8 +282,6 @@ function alpineCart() {
             // Asegurarse de que el variation_id se envía en el FormData si no viene del botón
             // Si el botón ya tiene name="add-to-cart" y x-bind:value, y un input hidden con name="variation_id",
             // entonces FormData() ya lo debería recoger.
-            // Si el botón no lo tiene, o si el input hidden para variation_id no se llama "variation_id"
-            // o no está en el DOM, es mejor añadirlo aquí.
 
             // Aseguramos que el variation_id se envía (es el mismo que el x-bind:value del botón)
             if (this.currentVariationId) {
