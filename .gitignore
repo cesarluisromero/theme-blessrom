@@ -4,3 +4,22 @@
 !/public/.gitkeep
 .env
 npm-debug.log
+
+# Archivos temporales de sistema
+.DS_Store
+Thumbs.db
+
+# Configuración de IDE/editors
+.vscode/
+.idea/
+
+# Archivos de log o debug
+*.log
+
+# Backups
+*.bak
+*.zip
+*.tar.gz
+
+# Sistema operativo
+desktop.ini
