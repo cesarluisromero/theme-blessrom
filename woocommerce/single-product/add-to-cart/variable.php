@@ -120,7 +120,7 @@ foreach ($attributes as $attribute_name => $options) {
             <div x-show="maxQty > 0" x-transition>
                 <label for="quantity" class="sr-only">Cantidad</label>
                 <input type="hidden" name="maxQty" value="0" x-ref="maxQty">
-                <input type="hidden" name="add-to-cart" value="{{ $product->get_id() }}">
+                <input type="hidden" name="add-to-cart" value="<?php echo $product->get_id(); ?>">
 
                 <input type="hidden" name="variation_id" :value="selectedVariationId()">
                 <input
