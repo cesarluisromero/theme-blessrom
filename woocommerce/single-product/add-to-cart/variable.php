@@ -120,6 +120,11 @@ foreach ($attributes as $attribute_name => $options) {
             <div x-show="maxQty > 0" x-transition>
                 <label for="quantity" class="sr-only">Cantidad</label>
                 <input type="hidden" name="maxQty" value="0" x-ref="maxQty">
+                {{-- Campo oculto con el ID del producto padre (WooCommerce lo espera) --}}
+                <input type="hidden" name="add-to-cart" value="{{ $product->get_id() }}">
+
+                {{-- Campo oculto con el variation_id seleccionado dinámicamente por Alpine --}}
+                <input type="hidden" name="variation_id" :value="selectedVariationId()">
                 <input
                     type="number"
                     id="quantity"
@@ -146,15 +151,15 @@ foreach ($attributes as $attribute_name => $options) {
 
                 <template x-if="selected_pa_talla && selected_pa_color">
                     <button
-                        type="submit" @click.prevent="addToCartAjax($refs.form)" :disabled="maxQty === 0"
+                        type="submit"
+                        @click.prevent="addToCartAjax($refs.form)"
+                        :disabled="maxQty === 0"
                         :class="maxQty === 0 ? 'opacity-50 cursor-not-allowed bg-gray-400 hover:bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'"
-                        class="inline-flex items-center justify-center px-6 py-3 text-white rounded text-sm font-medium shadow transition duration-300 ease-in-out w-full sm:w-auto"
-                        name="add-to-cart"
-                        value="<?php echo esc_attr($product->get_id()); ?>"
-                        x-bind:value="selectedVariationId()" >
+                        class="inline-flex items-center justify-center px-6 py-3 text-white rounded text-sm font-medium shadow transition duration-300 ease-in-out w-full sm:w-auto">
                         <img src="<?php echo get_template_directory_uri(); ?>/resources/images/cart-icon.png" alt="Carrito" class="w-5 h-5 mr-2">
                         Agregar al carrito
                     </button>
+
                 </template>
             </div>
         </div>
@@ -307,7 +312,7 @@ function alpineCart() {
             // });
 
             // Crucial: Add the action parameter for admin-ajax.php
-            formData.append('action', 'woocommerce_add_to_cart');
+            formData.append('action', 'add_product_to_cart');
 
             // El nonce ya se agrega desde el input hidden generado por wp_nonce_field.
             // formData.append('_wpnonce', '<?php echo wp_create_nonce( "add-to-cart_{$product->get_id()}" ); ?>'); // Ya no es necesario si wp_nonce_field está en PHP
