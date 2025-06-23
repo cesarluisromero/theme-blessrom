@@ -120,10 +120,8 @@ foreach ($attributes as $attribute_name => $options) {
             <div x-show="maxQty > 0" x-transition>
                 <label for="quantity" class="sr-only">Cantidad</label>
                 <input type="hidden" name="maxQty" value="0" x-ref="maxQty">
-                {{-- Campo oculto con el ID del producto padre (WooCommerce lo espera) --}}
                 <input type="hidden" name="add-to-cart" value="{{ $product->get_id() }}">
 
-                {{-- Campo oculto con el variation_id seleccionado dinámicamente por Alpine --}}
                 <input type="hidden" name="variation_id" :value="selectedVariationId()">
                 <input
                     type="number"
