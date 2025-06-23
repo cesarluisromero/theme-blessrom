@@ -122,4 +122,68 @@ window.productGallery = function () {
 }
 
   
-  
+  function alpineCart() {
+    return {
+        selected_pa_talla: '',
+        selected_pa_color: '',
+        quantity: 1,
+        maxQty: 0,
+        errorMessage: '',
+
+        validColors() {
+            const selectedVariation = this.getSelectedVariation();
+            return selectedVariation ? selectedVariation.attributes['attribute_pa_color'] ? [selectedVariation.attributes['attribute_pa_color']] : [] : [];
+        },
+
+        selectedVariationId() {
+            const variation = this.getSelectedVariation();
+            return variation ? variation.variation_id : 0;
+        },
+
+        getSelectedVariation() {
+            const variations = JSON.parse(this.$root.dataset.product_variations);
+            return variations.find(v =>
+                v.attributes['attribute_pa_talla'] === this.selected_pa_talla &&
+                v.attributes['attribute_pa_color'] === this.selected_pa_color
+            );
+        },
+
+        updateMaxQty() {
+            const variation = this.getSelectedVariation();
+            this.maxQty = variation ? parseInt(variation.max_qty || variation.max_qty === 0 ? variation.max_qty : variation.stock_quantity || 0) : 0;
+        },
+
+        validateBeforeSubmit(form) {
+            if (!this.selected_pa_talla || !this.selected_pa_color) {
+                this.errorMessage = 'Debes seleccionar una talla y color.';
+            } else {
+                this.errorMessage = '';
+                form.submit();
+            }
+        },
+
+        addToCartAjax(form) {
+            this.errorMessage = '';
+            const formData = new FormData(form);
+
+            fetch(wc_add_to_cart_params.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(response => {
+                if (response.error && response.product_url) {
+                    window.location = response.product_url;
+                } else {
+                    window.location.href = wc_add_to_cart_params.cart_url;
+                }
+            })
+            .catch(error => {
+                console.error('Error al agregar al carrito:', error);
+                this.errorMessage = 'Ocurrió un error al agregar al carrito.';
+            });
+        }
+    }
+}
+window.alpineCart = alpineCart; 
