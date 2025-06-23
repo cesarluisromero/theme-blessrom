@@ -278,89 +278,43 @@ function alpineCart() {
             // Si todo es válido, procede con el AJAX add to cart
             this.addToCartAjax(formElement);
         },
-        async addToCartAjax(formElement) {
-            this.errorMessage = ''; // Limpia errores previos
-            const formData = new FormData(formElement); // Esto recoge TODOS los inputs del form con sus 'name'
+        async function addToCartAjax(form) {
+            const formData = new FormData(form);
 
-            // Asegurarse de que el variation_id se envía en el FormData si no viene del botón
-            // Si el botón ya tiene name="add-to-cart" y x-bind:value, y un input hidden con name="variation_id",
-            // entonces FormData() ya lo debería recoger.
-
-            // Aseguramos que el variation_id se envía (es el mismo que el x-bind:value del botón)
-            if (this.currentVariationId) {
-                 formData.append('variation_id', this.currentVariationId);
-            } else {
-                 console.warn("No se pudo obtener el variation_id. La solicitud puede fallar.");
+            // Verificación básica por si faltan campos requeridos
+            if (!formData.get('add-to-cart') || !formData.get('variation_id')) {
+                showErrorMessage('Selecciona una talla y un color antes de continuar.');
+                return;
             }
 
-            // `add-to-cart` ya debería estar presente en el payload del botón `type="submit"` con su `name` y `value`.
-            // Lo quitamos de aquí para evitar la duplicación y confiar en que el formulario lo recoge.
-            // formData.append('add-to-cart', '<?php echo absint($product->get_id()); ?>'); // Esto ya no es necesario aquí
-
-            // `quantity` ya debería estar presente como input `name="quantity"`.
-            // formData.append('quantity', this.quantity); // Esto ya no es necesario aquí
-
-            // Los atributos ya deberían estar presentes como inputs `name="attribute_pa_talla"` y `name="attribute_pa_color"`.
-            // Esto evita la duplicación en el payload
-            // Object.keys(this.availableVariations[0]?.attributes || {}).forEach(attrKey => {
-            //     const alpineAttrKey = attrKey.replace('attribute_', 'selected_');
-            //     if (this[alpineAttrKey]) {
-            //         formData.append(attrKey, this[alpineAttrKey]);
-            //     }
-            // });
-
-            // Crucial: Add the action parameter for admin-ajax.php
-            formData.append('action', 'add_product_to_cart');
-
-            // El nonce ya se agrega desde el input hidden generado por wp_nonce_field.
-            // formData.append('_wpnonce', '<?php echo wp_create_nonce( "add-to-cart_{$product->get_id()}" ); ?>'); // Ya no es necesario si wp_nonce_field está en PHP
-
-            const ajaxUrl = '<?php echo admin_url('admin-ajax.php'); ?>';
-
             try {
-                // Add a loading state here (opcional)
-                // this.isAddingToCart = true;
-
-                // debugger; // Mantén este debugger si quieres seguir depurando paso a paso
-
-                const response = await fetch(ajaxUrl, {
+                const response = await fetch(wc_add_to_cart_params.ajax_url, {
                     method: 'POST',
-                    body: formData
+                    credentials: 'same-origin',
+                    body: formData,
                 });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.');
-                }
+                const result = await response.json();
 
-                // Intenta parsear como JSON primero
-                const data = await response.json();
+                if (result.success) {
+                    // Disparar evento de actualización del carrito
+                    document.body.dispatchEvent(new Event('wc_fragment_refresh'));
 
-                if (data.fragments && data.cart_hash) {
-                    // Dispara un evento personalizado para actualizar el carrito de WooCommerce (importante para el mini-carrito)
-                    jQuery(document.body).trigger('added_to_cart', [data.fragments, data.cart_hash, formData.get('add-to-cart')]);
-                    window.location.href = '<?php echo esc_url(wc_get_cart_url()); ?>'; // Redirige al carrito
-                    return;
-                } else if (data.error) {
-                    this.errorMessage = data.error; // Muestra el mensaje de error del servidor
+                    // Opcional: redirigir al carrito o mostrar mensaje
+                    // window.location.href = wc_add_to_cart_params.cart_url;
+                    showSuccessMessage('Producto agregado al carrito.');
                 } else {
-                    // Si no es un éxito estándar de JSON de WooCommerce, lo logeamos para depuración
-                    console.warn('Unexpected AJAX response:', data);
-                    this.errorMessage = "Respuesta inesperada del servidor. Inténtalo de nuevo.";
+                    showErrorMessage('No se pudo agregar al carrito. Intenta nuevamente.');
+                    console.error('Error en respuesta:', result);
                 }
 
             } catch (error) {
-                console.error('Error adding to cart:', error);
-                // Si el análisis JSON falló, significa que la respuesta no era JSON (probablemente HTML)
-                if (error instanceof SyntaxError && error.message.includes('Unexpected token <')) {
-                    this.errorMessage = "Hubo un error de comunicación con el servidor. Es posible que no se haya podido agregar el producto. Por favor, revisa la consola para más detalles.";
-                } else {
-                    this.errorMessage = "Hubo un error al agregar el producto al carrito. Por favor, inténtalo de nuevo.";
-                }
-            } finally {
-                // Oculta el estado de carga aquí (opcional)
-                // this.isAddingToCart = false;
+                console.error('Error AJAX:', error);
+                showErrorMessage('Error inesperado al agregar el producto.');
             }
         }
+
+
     }
 }
 </script>
