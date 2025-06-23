@@ -121,69 +121,125 @@ window.productGallery = function () {
     }
 }
 
-  
-  function alpineCart() {
+window.alpineCart = function () {
     return {
         selected_pa_talla: '',
         selected_pa_color: '',
         quantity: 1,
         maxQty: 0,
         errorMessage: '',
+        availableVariations: [],
+        cartQuantities: {},
+        currentVariationId: 0,
 
-        validColors() {
-            const selectedVariation = this.getSelectedVariation();
-            return selectedVariation ? selectedVariation.attributes['attribute_pa_color'] ? [selectedVariation.attributes['attribute_pa_color']] : [] : [];
+        init() {
+            this.availableVariations = JSON.parse(this.$root.dataset.product_variations || '[]');
+            this.cartQuantities = JSON.parse(this.$root.dataset.cart_quantities || '{}');
         },
 
         selectedVariationId() {
-            const variation = this.getSelectedVariation();
-            return variation ? variation.variation_id : 0;
-        },
-
-        getSelectedVariation() {
-            const variations = JSON.parse(this.$root.dataset.product_variations);
-            return variations.find(v =>
-                v.attributes['attribute_pa_talla'] === this.selected_pa_talla &&
-                v.attributes['attribute_pa_color'] === this.selected_pa_color
-            );
+            const match = this.availableVariations.find(v => {
+                return Object.entries(v.attributes).every(([key, val]) => {
+                    const attr = key.replace('attribute_', '');
+                    return this['selected_' + attr] === val;
+                });
+            });
+            return match ? match.variation_id : 0;
         },
 
         updateMaxQty() {
-            const variation = this.getSelectedVariation();
-            this.maxQty = variation ? parseInt(variation.max_qty || variation.max_qty === 0 ? variation.max_qty : variation.stock_quantity || 0) : 0;
-        },
+            const match = this.availableVariations.find(v => {
+                return Object.entries(v.attributes).every(([key, val]) => {
+                    const attr = key.replace('attribute_', '');
+                    return this['selected_' + attr] === val;
+                });
+            });
 
-        validateBeforeSubmit(form) {
-            if (!this.selected_pa_talla || !this.selected_pa_color) {
-                this.errorMessage = 'Debes seleccionar una talla y color.';
+            if (match) {
+                const vid = match.variation_id;
+                const stock = parseInt(match.max_qty) || 0;
+                const inCart = this.cartQuantities?.[vid] ?? 0;
+                this.maxQty = stock - inCart;
+                this.currentVariationId = vid;
+
+                if (inCart >= stock) {
+                    this.errorMessage = "Ya tienes en el carrito toda la cantidad disponible de este producto.";
+                    this.maxQty = 0;
+                    this.quantity = 0;
+                } else {
+                    this.errorMessage = "";
+                    this.quantity = 1;
+                }
+
+                this.$refs.variationId.value = vid;
+                this.$refs.maxQty.value = this.maxQty;
+
             } else {
-                this.errorMessage = '';
-                form.submit();
+                this.maxQty = 10;
+                this.quantity = 1;
+                this.errorMessage = "";
+                this.currentVariationId = 0;
+                this.$refs.variationId.value = 0;
+                this.$refs.maxQty.value = 0;
             }
         },
 
-        addToCartAjax(form) {
-            this.errorMessage = '';
+        validColors() {
+            const talla = this.selected_pa_talla;
+            if (!talla) return [];
+
+            const colors = new Set();
+            this.availableVariations.forEach(v => {
+                if (v.attributes['attribute_pa_talla'] === talla) {
+                    const color = v.attributes['attribute_pa_color'];
+                    if (color) colors.add(color);
+                }
+            });
+
+            return Array.from(colors);
+        },
+
+        validateBeforeSubmit(form) {
+            if (!this.selected_pa_talla) {
+                this.errorMessage = "Por favor, selecciona una talla.";
+                return;
+            }
+
+            if (!this.selected_pa_color) {
+                this.errorMessage = "Por favor, selecciona un color.";
+                return;
+            }
+
+            if (this.maxQty <= 0) {
+                return;
+            }
+
+            this.addToCartAjax(form);
+        },
+
+        async addToCartAjax(form) {
             const formData = new FormData(form);
 
-            fetch(wc_add_to_cart_params.ajax_url, {
-                method: 'POST',
-                credentials: 'same-origin',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(response => {
-                if (response.error && response.product_url) {
-                    window.location = response.product_url;
-                } else {
+            try {
+                const response = await fetch(wc_add_to_cart_params.ajax_url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.body.dispatchEvent(new Event('wc_fragment_refresh'));
                     window.location.href = wc_add_to_cart_params.cart_url;
+                } else {
+                    this.errorMessage = "No se pudo agregar al carrito.";
+                    console.error(result);
                 }
-            })
-            .catch(error => {
-                console.error('Error al agregar al carrito:', error);
-                this.errorMessage = 'Ocurrió un error al agregar al carrito.';
-            });
+            } catch (err) {
+                console.error('Error:', err);
+                this.errorMessage = "Error inesperado al agregar al carrito.";
+            }
         }
     }
-}
-window.alpineCart = alpineCart; 
+};
