@@ -2,14 +2,15 @@
 
 @section('content')
   
-    <pre>
-        {{ var_dump($main_image) }}
-    </pre>
+        
     {{-- 🔄 WooCommerce necesita esto para inicializar el carrito --}}
     @php do_action('woocommerce_before_main_content'); @endphp
-    
+    @php
+            global $product;
+            $main_image = $product ? $product->get_image_id() : null;
+     @endphp
     <div x-data="{
-        currentImage: '{{ \wp_get_attachment_image_url($main_image, 'large') }}'
+        currentImage: '{{ wp_get_attachment_image_url($main_image, 'large') }}'
     }" class="container max-w-6xl mx-auto px-2 md:px-4 lg:px-6 py-10">
         
         {{-- Imagen principal + galería táctil en móvil --}}
