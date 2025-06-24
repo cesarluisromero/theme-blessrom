@@ -2,6 +2,9 @@
 
 @section('content')
   
+    <pre>
+        {{ var_dump($main_image) }}
+    </pre>
     {{-- 🔄 WooCommerce necesita esto para inicializar el carrito --}}
     @php do_action('woocommerce_before_main_content'); @endphp
     
