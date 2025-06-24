@@ -6,7 +6,7 @@
     @php do_action('woocommerce_before_main_content'); @endphp
     
     <div x-data="{
-        currentImage: '{{ wp_get_attachment_image_url($main_image, 'large') }}'
+        currentImage: '{{ \wp_get_attachment_image_url($main_image, 'large') }}'
     }" class="container max-w-6xl mx-auto px-2 md:px-4 lg:px-6 py-10">
         
         {{-- Imagen principal + galería táctil en móvil --}}
