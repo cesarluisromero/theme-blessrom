@@ -7,12 +7,12 @@
     @php
         global $product;
         $main_image = $product ? $product->get_image_id() : null;
+        $main_image_url = wp_get_attachment_image_url($main_image ?? 0, 'large') ?? 'https://via.placeholder.com/500';
     @endphp
 
     <div x-data="{
-    currentImage: {!! json_encode(wp_get_attachment_image_url($main_image ?? 0, 'large'))!!}
+    currentImage: {!! json_encode($main_image_url) !!}
 }" class="container max-w-6xl mx-auto px-2 md:px-4 lg:px-6 py-10">
-
         
         {{-- Imagen principal + galería táctil en móvil --}}
         @include('partials.mobile-single-product')
