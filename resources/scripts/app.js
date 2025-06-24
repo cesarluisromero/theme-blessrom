@@ -5,7 +5,7 @@ import 'swiper/css/bundle';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-window.alpineCart = function () {
+function alpineCart() {
     return {
         selected_pa_talla: '',
         selected_pa_color: '',
@@ -127,7 +127,7 @@ window.alpineCart = function () {
         }
     }
 };
-
+window.alpineCart = alpineCart;
 window.Alpine = Alpine;
 Alpine.start();
 document.addEventListener('DOMContentLoaded', () => {

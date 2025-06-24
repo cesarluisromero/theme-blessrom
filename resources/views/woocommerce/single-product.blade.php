@@ -31,6 +31,10 @@
 
 @push('scripts')
     <script>
+        window.wc_add_to_cart_params = {
+            ajax_url: "{{ admin_url('admin-ajax.php') }}",
+            cart_url: "{{ wc_get_cart_url() }}"
+        };
         function productGallery() {
             return {
                 init() {

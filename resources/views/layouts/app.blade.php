@@ -44,8 +44,9 @@
 
     @php(do_action('get_footer'))
 
-    @stack('scripts') 
+    
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    @stack('scripts') 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         document.body.addEventListener('click', function (e) {

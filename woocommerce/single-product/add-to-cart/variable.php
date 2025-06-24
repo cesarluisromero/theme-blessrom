@@ -28,6 +28,7 @@ if (WC()->cart) { // Asegurarse de que el carrito esté inicializado
     }
 }
 
+$attributes = $product->get_variation_attributes();
 
 $alpine_data = [
     'maxQty' => 10,
