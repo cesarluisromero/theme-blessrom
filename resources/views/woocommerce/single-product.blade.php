@@ -5,10 +5,7 @@
         
     {{-- 🔄 WooCommerce necesita esto para inicializar el carrito --}}
     @php do_action('woocommerce_before_main_content'); @endphp
-    @php
-            global $product;
-            $main_image = $product ? $product->get_image_id() : null;
-     @endphp
+    
     <div x-data="{
         currentImage: '{{ wp_get_attachment_image_url($main_image, 'large') }}'
     }" class="container max-w-6xl mx-auto px-2 md:px-4 lg:px-6 py-10">
@@ -35,10 +32,7 @@
 
 @push('scripts')
     <script>
-        window.wc_add_to_cart_params = {
-            ajax_url: "{{ admin_url('admin-ajax.php') }}",
-            cart_url: "{{ wc_get_cart_url() }}"
-        };
+        
         function productGallery() {
             return {
                 init() {
