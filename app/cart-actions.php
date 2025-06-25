@@ -1,5 +1,5 @@
 <?php
-
+error_log('✅ cart-actions.php CARGADO');
 // Eliminar un ítem del carrito
 add_action('template_redirect', function () {
     if (!is_cart() || !isset($_POST['remove_item'], $_POST['cart_item_key'])) {
