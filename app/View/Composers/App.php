@@ -26,8 +26,15 @@ class App extends Composer
 
     public function with()
     {
+        $cartCount = 0;
+
+        if (function_exists('WC') && did_action('wp_loaded')) {
+            $cartCount = WC()->cart->get_cart_contents_count();
+        }
+
         return [
-            'cartCount' => function_exists('WC') ? WC()->cart->get_cart_contents_count() : 0,
+            'cartCount' => $cartCount,
         ];
     }
+
 }
