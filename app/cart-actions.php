@@ -1,6 +1,5 @@
 <?php
 error_log('✅ cart-actions.php CARGADO');
-
 // Eliminar un ítem del carrito
 add_action('template_redirect', function () {
     if (!is_cart() || !isset($_POST['remove_item'], $_POST['cart_item_key'])) {
@@ -47,33 +46,14 @@ function blessrom_add_to_cart_custom() {
     $product_id   = absint($_POST['product_id']);
     $variation_id = absint($_POST['variation_id']);
     $quantity     = absint($_POST['quantity']);
+    $variation    = [];
 
-    if (!$variation_id || !$product_id || !$quantity) {
-        wp_send_json_error(['message' => 'Datos inválidos.']);
-    }
-
-    // Sanitizar atributos de variación
-    $variation = [];
     foreach ($_POST as $key => $value) {
         if (strpos($key, 'attribute_') === 0) {
             $variation[$key] = sanitize_text_field($value);
         }
     }
 
-    // ✅ Revisión: ¿ya está este producto en el carrito?
-    foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-        if (
-            $cart_item['product_id'] === $product_id &&
-            $cart_item['variation_id'] === $variation_id &&
-            $cart_item['variation'] === $variation
-        ) {
-            WC()->cart->set_quantity($cart_item_key, $cart_item['quantity'] + $quantity);
-            wp_send_json_success(['message' => 'Cantidad actualizada en el carrito.']);
-            return;
-        }
-    }
-
-    // ✅ Intentar agregar
     $added = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
 
     if ($added) {
