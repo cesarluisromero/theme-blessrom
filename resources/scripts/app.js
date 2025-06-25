@@ -112,6 +112,7 @@ function alpineCart() {
                 });
 
                 const result = await response.json();
+                console.log('Resultado AJAX cesarluis:', result); 
 
                 if (result.success) {
                     document.body.dispatchEvent(new Event('wc_fragment_refresh'));
