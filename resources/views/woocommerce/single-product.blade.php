@@ -4,15 +4,10 @@
   
     {{-- 🔄 WooCommerce necesita esto para inicializar el carrito --}}
     @php do_action('woocommerce_before_main_content'); @endphp
-    @php
-        global $product;
-        $main_image = $product ? $product->get_image_id() : null;
-        $main_image_url = wp_get_attachment_image_url($main_image ?? 0, 'large') ?? 'https://via.placeholder.com/500';
-    @endphp
-
+    
     <div x-data="{
-    currentImage: {!! json_encode($main_image_url) !!}
-}" class="container max-w-6xl mx-auto px-2 md:px-4 lg:px-6 py-10">
+        currentImage: '{{ wp_get_attachment_image_url($main_image, 'large') }}'
+    }" class="container max-w-6xl mx-auto px-2 md:px-4 lg:px-6 py-10">
         
         {{-- Imagen principal + galería táctil en móvil --}}
         @include('partials.mobile-single-product')
@@ -31,7 +26,7 @@
     </div>
 
     {{-- 🔄 WooCommerce también necesita esto para finalizar su contenido --}}
-    @php do_action('woocommerce_after_main_content'); @endphp
+   @php do_action('woocommerce_after_main_content'); @endphp
 @endsection
 
 @push('scripts')
@@ -43,18 +38,18 @@
         function productGallery() {
             return {
                 init() {
-                    new Swiper(this.$el, {
-                        slidesPerView: 1,
-                        spaceBetween: 10,
-                        pagination: { el: this.$el.querySelector('.swiper-pagination'), clickable: true },
-                        breakpoints: {
-                            768: {
-                                pagination: false,
-                                swipe: false,
-                                allowTouchMove: false
-                            }
-                        }
-                    });
+                new Swiper(this.$el, {
+                    slidesPerView: 1,
+                    spaceBetween: 10,
+                    pagination: { el: this.$el.querySelector('.swiper-pagination'), clickable: true },
+                    breakpoints: {
+                    768: {
+                        pagination: false,
+                        swipe: false,
+                        allowTouchMove: false
+                    }
+                    }
+                });
                 }
             }
         }
