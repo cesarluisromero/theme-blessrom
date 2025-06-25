@@ -103,7 +103,17 @@ function alpineCart() {
 
         async addToCartAjax(form) {
             const formData = new FormData(form);
+              // 👇 AÑADIR: define manualmente el action que WordPress necesita
+            formData.append('action', 'add_to_cart_custom');
 
+            // 👇 AÑADIR: asegura que product_id esté presente (como data-product_id en <form>)
+            if (!form.dataset.product_id) {
+                console.error('Falta el data-product_id en el formulario');
+                this.errorMessage = "Error interno: falta ID del producto.";
+                return;
+            }
+
+            formData.append('product_id', form.dataset.product_id);
             try {
                 const response = await fetch(wc_add_to_cart_params.ajax_url, {
                     method: 'POST',
