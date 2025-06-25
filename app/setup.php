@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Vite;
 
 require_once get_theme_file_path('app/cart-actions.php');
 
-add_action('wp_enqueue_scripts', function () {
-    echo \Roots\bundle('app')->enqueue();
-}, 100);
-
 /**
  * Inject styles into the block editor.
  *
