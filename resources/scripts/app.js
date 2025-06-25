@@ -102,68 +102,59 @@ function alpineCart() {
         },
 
         async addToCartAjax(form) {
-          console.log('🛒 Ejecutando addToCartAjax');
+    console.log('🛒 Ejecutando addToCartAjax');
 
-          let formData = new FormData(form);
+    let formData = new FormData(form);
 
-          // 👇 Agregar campos obligatorios
-          formData.append('action', 'add_to_cart_custom');
+    // 🔍 Eliminar previamente los campos sensibles si ya existen
+    formData.delete('action');
+    formData.delete('product_id');
+    formData.delete('add-to-cart');
+    formData.delete('variation_id');
+    formData.delete('quantity');
 
-          if (!form.dataset.product_id) {
-              console.error('Falta el data-product_id en el formulario');
-              this.errorMessage = "Error interno: falta ID del producto.";
-              return;
-          }
+    // ✅ Añadir los campos necesarios SIN duplicar
+    formData.append('action', 'add_to_cart_custom');
 
-          formData.append('product_id', form.dataset.product_id);
+    if (!form.dataset.product_id) {
+        console.error('Falta el data-product_id en el formulario');
+        this.errorMessage = "Error interno: falta ID del producto.";
+        return;
+    }
 
-          
-          // Evita campos duplicados solo para claves sensibles
-          const cleaned = new FormData();
-          const skipKeys = ['quantity', 'variation_id', 'add-to-cart'];
+    const productId = form.dataset.product_id;
+    formData.append('product_id', productId);
+    formData.append('add-to-cart', this.currentVariationId || productId);
+    formData.append('variation_id', this.currentVariationId);
+    formData.append('quantity', this.quantity);
 
-          const seen = new Set();
-          for (const [key, value] of formData.entries()) {
-              if (skipKeys.includes(key)) {
-                  if (!seen.has(key)) {
-                      cleaned.append(key, value);
-                      seen.add(key);
-                  } else {
-                      console.warn(`🟡 Duplicado sensible omitido: ${key}`);
-                  }
-              } else {
-                  cleaned.append(key, value);
-              }
-          }
-          formData = cleaned;
+    // 👀 Opcional: mostrar lo que realmente se enviará
+    for (let [k, v] of formData.entries()) {
+        console.log(`${k}: ${v}`);
+    }
 
+    try {
+        const response = await fetch(wc_add_to_cart_params.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            body: formData,
+        });
 
-          // 👇 Opcional: mostrar lo que realmente se enviará
-          for (let [k, v] of formData.entries()) {
-              console.log(`${k}: ${v}`);
-          }
+        const result = await response.json();
 
-          try {
-              const response = await fetch(wc_add_to_cart_params.ajax_url, {
-                  method: 'POST',
-                  credentials: 'same-origin',
-                  body: formData,
-              });
-
-              const result = await response.json();
-
-              if (result.success) {
-                  document.body.dispatchEvent(new Event('wc_fragment_refresh'));
-                  window.location.href = wc_add_to_cart_params.cart_url;
-              } else {
-                  this.errorMessage = "No se pudo agregar al carrito.";
-                  console.error(result);
-              }
-          } catch (err) {
-              console.error('Error:', err);
-              this.errorMessage = "Error inesperado al agregar al carrito.";
-          }
+        if (result.success) {
+            document.body.dispatchEvent(new Event('wc_fragment_refresh'));
+            window.location.href = wc_add_to_cart_params.cart_url;
+        } else {
+            this.errorMessage = "No se pudo agregar al carrito.";
+            console.error(result);
         }
+    } catch (err) {
+        console.error('Error:', err);
+        this.errorMessage = "Error inesperado al agregar al carrito.";
+    }
+}
+
 
     }
 };
