@@ -117,22 +117,26 @@ function alpineCart() {
 
           formData.append('product_id', form.dataset.product_id);
 
-          // ✅ Eliminar duplicados por nombre (como "quantity" o "variation_id")
-          const entries = Array.from(formData.entries());
+          
+          // Evita campos duplicados solo para claves sensibles
           const cleaned = new FormData();
-          const seen = new Set();
+          const skipKeys = ['quantity', 'variation_id', 'add-to-cart'];
 
-          for (const [key, value] of entries) {
-              if (!seen.has(key)) {
-                  cleaned.append(key, value);
-                  seen.add(key);
+          const seen = new Set();
+          for (const [key, value] of formData.entries()) {
+              if (skipKeys.includes(key)) {
+                  if (!seen.has(key)) {
+                      cleaned.append(key, value);
+                      seen.add(key);
+                  } else {
+                      console.warn(`🟡 Duplicado sensible omitido: ${key}`);
+                  }
               } else {
-                  console.warn(`🟡 Duplicado omitido: ${key}`);
+                  cleaned.append(key, value);
               }
           }
-
-          // 👇 Reemplazar el formData con la versión limpia
           formData = cleaned;
+
 
           // 👇 Opcional: mostrar lo que realmente se enviará
           for (let [k, v] of formData.entries()) {

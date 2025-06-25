@@ -122,9 +122,9 @@ foreach ($attributes as $attribute_name => $options) {
             <div x-show="maxQty > 0" x-transition>
                 <label for="quantity" class="sr-only">Cantidad</label>
                 <input type="hidden" name="maxQty" value="0" x-ref="maxQty">
-                <input type="hidden" name="add-to-cart" value="<?php echo $product->get_id(); ?>">
+                <input type="hidden" name="add-to-cart" :value="currentVariationId">
 
-                <input type="hidden" name="variation_id" :value="selectedVariationId()">
+                <input type="hidden" name="variation_id" :value="selectedVariationId()" x-ref="variationId">
                 <input
                     type="number"
                     id="quantity"
@@ -136,7 +136,7 @@ foreach ($attributes as $attribute_name => $options) {
                 >
             </div>
             <div class="w-full">
-                <input type="hidden" name="variation_id_placeholder" value="0" x-ref="variationId"> 
+                
                     <template x-if="!selected_pa_talla || !selected_pa_color">
                         <button
                             type="button"
