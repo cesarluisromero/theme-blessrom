@@ -102,6 +102,7 @@ function alpineCart() {
         },
 
         async addToCartAjax(form) {
+            console.log('🛒 Ejecutando addToCartAjax');
             const formData = new FormData(form);
               // 👇 AÑADIR: define manualmente el action que WordPress necesita
             formData.append('action', 'add_to_cart_custom');
@@ -122,7 +123,7 @@ function alpineCart() {
                 });
 
                 const result = await response.json();
-                console.log('Resultado AJAX cesarluis:', result); 
+                
 
                 if (result.success) {
                     document.body.dispatchEvent(new Event('wc_fragment_refresh'));
