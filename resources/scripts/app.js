@@ -154,11 +154,15 @@ function alpineCart() {
               });
               console.log('ver el responses', response);
               const result = await response.json();
-
+              console.log('ver el result', result);
+              console.log('ver el result.succes', result.success);
               if (result.success) {
+                  
+                  console.log('ver el result.succes si es verdadero', verdadero);
                   document.body.dispatchEvent(new Event('wc_fragment_refresh'));
                   window.location.href = wc_add_to_cart_params.cart_url;
               } else {
+                  console.log('ver el result.succes si es falso', falso);
                   this.errorMessage = "No se pudo agregar al carrito.";
                   console.error(result);
               }
