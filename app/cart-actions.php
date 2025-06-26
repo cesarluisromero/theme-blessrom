@@ -30,7 +30,7 @@ add_action('template_redirect', function () {
     }
 });
 
-// AJAX para agregar producto variable al carrito
+// AJAX para agregar producto variable al carro
 add_action('wp_ajax_add_to_cart_custom', 'blessrom_add_to_cart_custom');
 add_action('wp_ajax_nopriv_add_to_cart_custom', 'blessrom_add_to_cart_custom');
 
