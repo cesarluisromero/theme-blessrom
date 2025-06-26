@@ -102,47 +102,6 @@ function alpineCart() {
         },
 
         async addToCartAjax(form) {
-          console.log('🛒 Ejecutando addToCartAjax');
-
-          let formData = new FormData(form);
-
-          // 👇 Agregar campos obligatorios
-          formData.append('action', 'add_to_cart_custom');
-
-          if (!form.dataset.product_id) {
-              console.error('Falta el data-product_id en el formulario');
-              this.errorMessage = "Error interno: falta ID del producto.";
-              return;
-          }
-
-          formData.append('product_id', form.dataset.product_id);
-
-          
-          // Evita campos duplicados solo para claves sensibles
-          const cleaned = new FormData();
-          const skipKeys = ['quantity', 'variation_id', 'add-to-cart'];
-
-          const seen = new Set();
-          for (const [key, value] of formData.entries()) {
-              if (skipKeys.includes(key)) {
-                  if (!seen.has(key)) {
-                      cleaned.append(key, value);
-                      seen.add(key);
-                  } else {
-                      console.warn(`🟡 Duplicado sensible omitido: ${key}`);
-                  }
-              } else {
-                  cleaned.append(key, value);
-              }
-          }
-          formData = cleaned;
-
-
-          // 👇 Opcional: mostrar lo que realmente se enviará
-          for (let [k, v] of formData.entries()) {
-              console.log(`${k}: ${v}`);
-          }
-          console.log('AJAX nuevor URL:', wc_add_to_cart_params.ajax_url);
           try {
               const response = await fetch(wc_add_to_cart_params.ajax_url, {
                   method: 'POST',
@@ -150,7 +109,10 @@ function alpineCart() {
                   body: formData,
               });
 
-              const result = await response.json();
+              const text = await response.text();
+              console.log('🔎 Respuesta cruda:', text);
+
+              const result = JSON.parse(text);
 
               if (result.success) {
                   document.body.dispatchEvent(new Event('wc_fragment_refresh'));
@@ -160,7 +122,7 @@ function alpineCart() {
                   console.error(result);
               }
           } catch (err) {
-              console.error('Error:', err);
+              console.error('❌ Error al agregar al carrito:', err);
               this.errorMessage = "Error inesperado al agregar al carrito.";
           }
         }
