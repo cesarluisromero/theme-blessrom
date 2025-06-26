@@ -154,6 +154,8 @@ function alpineCart() {
               });
               console.log('ver el responses', response);
               console.log('ver el responses.json', response.json);
+              const raw = await response.text();
+              console.log('🧾 Respuesta cruda:', raw);
               const result = await response.json();
               console.log('ver el result', result);
               console.log('ver el result.succes', result.success);
