@@ -38,6 +38,38 @@ add_action('init', function () {
 
 function blessrom_add_to_cart_custom() {
     error_log('✅ Entró a blessrom_add_to_cart_custom');
-    die('✅ llamada directa AJAX');
-}
+    if (!isset($_POST['product_id'], $_POST['variation_id'], $_POST['quantity'])) {
+        wp_send_json_error(['message' => 'Datos incompletos.']);
+        error_log('❌ Faltan datos obligatorios');
+         wp_die();
+    }
 
+    if (!wp_verify_nonce($_POST['_wpnonce'], 'woocommerce-add-to-cart')) {
+         error_log('❌ Nonce inválido: ' . $_POST['_wpnonce']);
+        wp_send_json_error(['message' => 'Nonce inválido']);
+        wp_die();
+    }
+    error_log('✅ Nonce válido');
+
+    $product_id   = absint($_POST['product_id']);
+    $variation_id = absint($_POST['variation_id']);
+    $quantity     = absint($_POST['quantity']);
+    $variation    = [];
+
+    foreach ($_POST as $key => $value) {
+        if (strpos($key, 'attribute_') === 0) {
+            $variation[$key] = sanitize_text_field($value);
+        }
+    }
+
+    $added = WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $variation);
+
+    if ($added) {
+        error_log("✅ Producto $product_id agregado correctamente");
+        wp_send_json_success(['message' => 'Producto agregado correctamente.']);
+    } else {
+        error_log("❌ No se pudo agregar el producto $product_id");
+        wp_send_json_error(['message' => 'No se pudo agregar el producto al carrito.']);
+    }
+     wp_die();
+}
