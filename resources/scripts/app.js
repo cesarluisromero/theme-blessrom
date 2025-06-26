@@ -146,12 +146,13 @@ function alpineCart() {
           }
 
           try {
+              console.log('entrando al try y veo el formData', formData);
               const response = await fetch(wc_add_to_cart_params.ajax_url, {
                   method: 'POST',
                   credentials: 'same-origin',
                   body: formData,
               });
-
+              console.log('ver el responses', response);
               const result = await response.json();
 
               if (result.success) {
