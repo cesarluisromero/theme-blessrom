@@ -142,7 +142,7 @@ function alpineCart() {
           for (let [k, v] of formData.entries()) {
               console.log(`${k}: ${v}`);
           }
-
+          console.log('AJAX nuevor URL:', wc_add_to_cart_params.ajax_url);
           try {
               const response = await fetch(wc_add_to_cart_params.ajax_url, {
                   method: 'POST',
