@@ -107,7 +107,7 @@ function alpineCart() {
           let formData = new FormData(form);
 
           // 👇 Agregar campos obligatorios
-          formData.append('action', 'add_to_cart_custom');
+          formData.append('action', 'woocommerce_add_to_cart');
 
           if (!form.dataset.product_id) {
               console.error('Falta el data-product_id en el formulario');
