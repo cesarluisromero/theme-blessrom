@@ -35,12 +35,15 @@ add_action('wp_ajax_add_to_cart_custom', 'blessrom_add_to_cart_custom');
 add_action('wp_ajax_nopriv_add_to_cart_custom', 'blessrom_add_to_cart_custom');
 
 function blessrom_add_to_cart_custom() {
+    error_log('✅ Entró a blessrom_add_to_cart_custom');
     if (!isset($_POST['product_id'], $_POST['variation_id'], $_POST['quantity'])) {
         wp_send_json_error(['message' => 'Datos incompletos.']);
     }
 
     if (!wp_verify_nonce($_POST['_wpnonce'], 'woocommerce-add-to-cart')) {
+         error_log('❌ Nonce inválido: ' . $_POST['_wpnonce']);
         wp_send_json_error(['message' => 'Nonce inválido']);
+        wp_die();
     }
 
     $product_id   = absint($_POST['product_id']);
