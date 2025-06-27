@@ -79,7 +79,7 @@ function alpineCart() {
                     if (color) colors.add(color);
                 }
             });
-
+            console.log('🎨 Colores válidos para talla:', tallaSeleccionada, result);
             return Array.from(colors);
         },
 
