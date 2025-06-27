@@ -48,34 +48,46 @@
 
                         <!-- Talla -->
                         <div>
-                            <label>Talla</label>
-                            <div class="flex gap-2">
+                            <label>Talla</label>                            
+                            <div class="flex flex-wrap gap-2 justify-center mt-2">
                                 @foreach ($product->get_attribute('pa_talla') ? explode('|', $product->get_attribute('pa_talla')) : [] as $talla)
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         @click="selected_pa_talla = '{{ trim($talla) }}'; selected_pa_color = ''; updateMaxQty()"
-                                        :class="selected_pa_talla === '{{ trim($talla) }}' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'"
-                                        class="px-3 py-1 border rounded font-semibold text-sm transition">
+                                        :class="[
+                                            'min-w-[48px] px-3 py-2 border rounded-lg font-medium text-sm shadow-sm transition-all duration-150 text-center',
+                                            selected_pa_talla === '{{ trim($talla) }}'
+                                                ? 'bg-blue-600 text-white border-blue-600'
+                                                : 'bg-white text-gray-700 border-gray-300'
+                                        ]"
+                                    >
                                         {{ trim($talla) }}
                                     </button>
                                 @endforeach
                             </div>
                         </div>
 
-                        <!-- Color -->
-                        <div x-show="selected_pa_talla">
-                            <label>Color</label>
-                           <div class="flex gap-3 mt-2">
+                       <!-- Color -->
+                        <div x-show="selected_pa_talla" class="mt-4">
+                            <label class="block mb-2 text-sm font-medium text-gray-700 text-center">Color</label>
+                            <div class="flex justify-center gap-3">
                                 <template x-for="color in validColors()" :key="color">
-                                    <button type="button"
-                                        @click="selected_pa_color = color; updateMaxQty()"
-                                        :class="selected_pa_color === color ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
-                                        :style="'background-color:' + (colorMap[color] ?? '#ccc')"
-                                        class="w-8 h-8 rounded-full border border-gray-300 transition-all duration-200">
-                                    </button>
+                                    <div class="relative group">
+                                        <button type="button"
+                                            @click="selected_pa_color = color; updateMaxQty()"
+                                            :class="selected_pa_color === color ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
+                                            :style="'background-color:' + (colorMap[color] ?? '#ccc')"
+                                            class="w-9 h-9 rounded-full border border-gray-300 transition-all duration-200">
+                                        </button>
+
+                                        <!-- Tooltip flotante con el nombre del color -->
+                                        <div class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 text-xs bg-gray-700 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span x-text="color"></span>
+                                        </div>
+                                    </div>
                                 </template>
                             </div>
                         </div>
-
                         <!-- Cantidad y botón -->
                         <div x-show="selected_pa_talla && selected_pa_color">
                             <input
@@ -85,8 +97,16 @@
                                 min="1"
                                 class="w-full border border-gray-300 rounded px-3 py-2 text-center"
                                 />
-                            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">
-                                Agregar al carrito
+                            <button
+                                type="submit"
+                                class="w-full py-2 rounded font-semibold"
+                                :class="maxQty <= 0 
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                    : 'bg-blue-600 text-white'"
+                                :disabled="maxQty <= 0"
+                            >
+                                <template x-if="maxQty > 0">Agregar al carrito</template>
+                                <template x-if="maxQty <= 0">Sin stock disponible</template>
                             </button>
                         </div>
 
