@@ -50,7 +50,10 @@
                         <div>
                             <label>Talla</label>                            
                             <div class="flex flex-wrap gap-2 justify-center mt-2">
-                                @foreach ($product->get_attribute('pa_talla') ? explode('|', $product->get_attribute('pa_talla')) : [] as $talla)
+                                @php
+                                    $tallas = array_map('trim', explode(',', $product->get_attribute('pa_talla')));
+                                @endphp
+                                @foreach ($tallas as $talla)
                                     <button
                                         type="button"
                                         @click="selected_pa_talla = '{{ trim($talla) }}'; selected_pa_color = ''; updateMaxQty()"
