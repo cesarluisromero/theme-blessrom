@@ -31,10 +31,61 @@
                     @endif
                 </div>
                 <div class="flex flex-col gap-2">
-                    <form method="post" action="{{ esc_url( $product->add_to_cart_url() ) }}">
+                    <form
+                        x-data="alpineCart()"
+                        x-ref="form"
+                        x-init="setTimeout(() => updateMaxQty(), 50)"
+                        method="post"
+                        @submit.prevent="addToCartAjax($refs.form)"
+                        class="space-y-4"
+                    >
                         @csrf
-                        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded font-semibold">Agregar al carrito</button>
+                        <input type="hidden" name="_wpnonce" value="{{ wp_create_nonce('woocommerce-add-to-cart') }}">
+                        <input type="hidden" name="add-to-cart" value="{{ $product->get_id() }}">
+                        <input type="hidden" name="variation_id" :value="selectedVariationId()">
+                        <input type="hidden" name="attribute_pa_talla" :value="selected_pa_talla">
+                        <input type="hidden" name="attribute_pa_color" :value="selected_pa_color">
+
+                        <!-- Talla -->
+                        <div>
+                            <label>Talla</label>
+                            <div class="flex gap-2">
+                                @foreach ($product->get_attribute('pa_talla') ? explode('|', $product->get_attribute('pa_talla')) : [] as $talla)
+                                    <button type="button"
+                                            @click="selected_pa_talla = '{{ trim($talla) }}'; selected_pa_color = ''; updateMaxQty()"
+                                            :class="selected_pa_talla === '{{ trim($talla) }}' ? 'bg-blue-600 text-white' : 'bg-gray-200'">
+                                        {{ trim($talla) }}
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Color -->
+                        <div x-show="selected_pa_talla">
+                            <label>Color</label>
+                            <div class="flex gap-2">
+                                <template x-for="color in validColors()" :key="color">
+                                    <button type="button"
+                                            @click="selected_pa_color = color; updateMaxQty()"
+                                            :class="selected_pa_color === color ? 'ring ring-blue-600' : ''"
+                                            :style="'background-color:' + (colorMap[color] ?? '#ccc')"
+                                            class="w-8 h-8 rounded-full border"></button>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Cantidad y botón -->
+                        <div x-show="selected_pa_talla && selected_pa_color">
+                            <input type="number" x-model="quantity" :max="maxQty" min="1" class="border rounded px-3 py-2">
+                            <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">
+                                Agregar al carrito
+                            </button>
+                        </div>
+
+                        <!-- Error -->
+                        <p x-show="errorMessage" class="text-red-600 font-semibold" x-text="errorMessage"></p>
                     </form>
+
                     <a href="#" class="w-full text-center bg-green-600 text-white py-2 rounded font-semibold">Comprar ahora</a>
                 </div>
             </div>
