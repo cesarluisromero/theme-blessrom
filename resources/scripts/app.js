@@ -79,7 +79,7 @@ function alpineCart() {
                     if (color) colors.add(color);
                 }
             });
-            console.log('🎨 Colores válidos para talla:', tallaSeleccionada, result);
+
             return Array.from(colors);
         },
 
@@ -157,8 +157,7 @@ function alpineCart() {
               window.location.href = response.url;
             } else {
               // Si no hubo redirección, por seguridad te llevamos al carrito igual
-              //window.location.href = wc_add_to_cart_params.cart_url;
-              window.location.href = this.redirectAfterAdd;
+              window.location.href = wc_add_to_cart_params.cart_url;
             }
 
           } catch (err) {
