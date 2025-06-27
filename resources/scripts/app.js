@@ -165,11 +165,6 @@ function alpineCart() {
             this.errorMessage = "Error inesperado al agregar al carrito.";
           }
 
-        },
-
-        buyNow() {
-          this.redirectAfterAdd = wc_add_to_cart_params.checkout_url;
-          this.addToCartAjax(this.$refs.form);
         }
 
     }
