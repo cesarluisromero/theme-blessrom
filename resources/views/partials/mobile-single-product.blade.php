@@ -31,6 +31,24 @@
 
         <div class="flex flex-col gap-2">
             @php
+                $available_variations = $product->get_available_variations();
+
+                $filtered_variations = array_filter($available_variations, function ($variation) {
+                    if (empty($variation['availability_html'])) return false;
+                    if (preg_match('/(\d+)/', $variation['availability_html'], $matches)) {
+                        return intval($matches[1]) > 0;
+                    }
+                    return false;
+                });
+
+                $cart_quantities = [];
+                if (WC()->cart) {
+                    foreach (WC()->cart->get_cart() as $item) {
+                        $vid = $item['variation_id'];
+                        $cart_quantities[$vid] = ($cart_quantities[$vid] ?? 0) + $item['quantity'];
+                    }
+                }
+
                 $colorMap = [
                     'azul' => '#165DFF', 'rojo' => '#FF0000', 'verde' => '#00AA00',
                     'negro' => '#000000', 'blanco' => '#FFFFFF', 'gris' => '#888888',
