@@ -52,8 +52,9 @@
                             <div class="flex gap-2">
                                 @foreach ($product->get_attribute('pa_talla') ? explode('|', $product->get_attribute('pa_talla')) : [] as $talla)
                                     <button type="button"
-                                            @click="selected_pa_talla = '{{ trim($talla) }}'; selected_pa_color = ''; updateMaxQty()"
-                                            :class="selected_pa_talla === '{{ trim($talla) }}' ? 'bg-blue-600 text-white' : 'bg-gray-200'">
+                                        @click="selected_pa_talla = '{{ trim($talla) }}'; selected_pa_color = ''; updateMaxQty()"
+                                        :class="selected_pa_talla === '{{ trim($talla) }}' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'"
+                                        class="px-3 py-1 border rounded font-semibold text-sm transition">
                                         {{ trim($talla) }}
                                     </button>
                                 @endforeach
@@ -63,20 +64,27 @@
                         <!-- Color -->
                         <div x-show="selected_pa_talla">
                             <label>Color</label>
-                            <div class="flex gap-2">
+                           <div class="flex gap-3 mt-2">
                                 <template x-for="color in validColors()" :key="color">
                                     <button type="button"
-                                            @click="selected_pa_color = color; updateMaxQty()"
-                                            :class="selected_pa_color === color ? 'ring ring-blue-600' : ''"
-                                            :style="'background-color:' + (colorMap[color] ?? '#ccc')"
-                                            class="w-8 h-8 rounded-full border"></button>
+                                        @click="selected_pa_color = color; updateMaxQty()"
+                                        :class="selected_pa_color === color ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
+                                        :style="'background-color:' + (colorMap[color] ?? '#ccc')"
+                                        class="w-8 h-8 rounded-full border border-gray-300 transition-all duration-200">
+                                    </button>
                                 </template>
                             </div>
                         </div>
 
                         <!-- Cantidad y botón -->
                         <div x-show="selected_pa_talla && selected_pa_color">
-                            <input type="number" x-model="quantity" :max="maxQty" min="1" class="border rounded px-3 py-2">
+                            <input
+                                type="number"
+                                x-model="quantity"
+                                :max="maxQty"
+                                min="1"
+                                class="w-full border border-gray-300 rounded px-3 py-2 text-center"
+                                />
                             <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">
                                 Agregar al carrito
                             </button>
@@ -86,7 +94,11 @@
                         <p x-show="errorMessage" class="text-red-600 font-semibold" x-text="errorMessage"></p>
                     </form>
 
-                    <a href="#" class="w-full text-center bg-green-600 text-white py-2 rounded font-semibold">Comprar ahora</a>
+                    <a href="#"
+                        @click.prevent="buyNow()"
+                        class="w-full text-center bg-green-600 text-white py-2 rounded font-semibold">
+                        Comprar ahora
+                    </a>
                 </div>
             </div>
         </div>

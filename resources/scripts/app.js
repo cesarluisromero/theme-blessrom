@@ -157,7 +157,8 @@ function alpineCart() {
               window.location.href = response.url;
             } else {
               // Si no hubo redirección, por seguridad te llevamos al carrito igual
-              window.location.href = wc_add_to_cart_params.cart_url;
+              //window.location.href = wc_add_to_cart_params.cart_url;
+              window.location.href = this.redirectAfterAdd;
             }
 
           } catch (err) {
@@ -165,6 +166,11 @@ function alpineCart() {
             this.errorMessage = "Error inesperado al agregar al carrito.";
           }
 
+        },
+
+        buyNow() {
+          this.redirectAfterAdd = wc_add_to_cart_params.checkout_url;
+          this.addToCartAjax(this.$refs.form);
         }
 
     }
