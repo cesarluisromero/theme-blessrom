@@ -64,7 +64,9 @@
                     'selected_pa_color' => '',
                 ];
             @endphp
-
+                <pre class="text-xs text-left overflow-auto bg-gray-100 p-2 rounded">
+                    {!! json_encode(array_values($filtered_variations), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) !!}
+                </pre>
             <form
                 x-data='alpineCart(@json($alpineProps))'
                 x-ref="form"
