@@ -153,8 +153,7 @@ foreach ($attributes as $attribute_name => $options) {
                     <template x-if="selected_pa_talla && selected_pa_color">
                         <button
                             type="submit"
-                            @click.prevent="
-                            ($refs.form)"
+                            @click.prevent="addToCartAjax($refs.form)"
                             :disabled="maxQty === 0"
                             :class="maxQty === 0 ? 'opacity-50 cursor-not-allowed bg-gray-400 hover:bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'"
                             class="inline-flex items-center justify-center px-6 py-3 text-white rounded text-sm font-medium shadow transition duration-300 ease-in-out w-full sm:w-auto">
