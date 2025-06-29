@@ -4,6 +4,7 @@
 <div class="container mx-auto px-4 py-8 max-w-4xl">
     <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Finalizar compra</h1>
 
+    @php $checkout = WC()->checkout(); @endphp
     @php do_action('woocommerce_before_checkout_form', $checkout); @endphp
 
     @if (!$checkout->is_registration_enabled() && $checkout->is_registration_required() && !is_user_logged_in())
