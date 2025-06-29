@@ -1,64 +1,52 @@
-<?php
-  if (!defined('ABSPATH')) exit;
-  do_action('woocommerce_before_checkout_form', $checkout);
-?>
+{{-- resources/views/woocommerce/checkout/form-checkout.blade.php --}}
+@php
+    if (!defined('ABSPATH')) exit;
+@endphp
 
-@extends('layouts.app')
+<?php do_action('woocommerce_before_checkout_form', WC()->checkout()); ?>
 
-@section('content')
+<form name="checkout" method="post" class="checkout" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
+  <div class="container mx-auto py-12 px-4">
+    <h1 class="text-2xl font-bold text-center mb-8">Finalizar compra</h1>
 
-  <section class="bg-gray-100 py-10">
-    <div class="container mx-auto px-4">
-      <h1 class="text-2xl font-bold text-center mb-8">Finalizar compra</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {{-- Columna izquierda: Datos de facturación y envío --}}
+      <div class="space-y-8">
 
-      <form name="checkout" method="post" class="woocommerce-checkout grid grid-cols-1 lg:grid-cols-2 gap-8"
-            action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
-        
-        {{-- Columna izquierda: Datos del cliente --}}
-        <div class="space-y-8">
-
-          {{-- Detalles de facturación --}}
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-semibold mb-4">Datos de facturación</h2>
-            @php do_action('woocommerce_checkout_billing'); @endphp
-          </div>
-
-          {{-- Detalles de envío --}}
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-semibold mb-4">Datos de envío</h2>
-            @php do_action('woocommerce_checkout_shipping'); @endphp
-          </div>
-
-          {{-- Información adicional --}}
-          <div class="bg-white p-6 rounded-lg shadow">
-            <h2 class="text-xl font-semibold mb-4">Información adicional</h2>
-            @php do_action('woocommerce_before_order_notes', $checkout); @endphp
-            @php woocommerce_form_field('order_comments', [
-                'type'        => 'textarea',
-                'class'       => ['form-row-wide'],
-                'label'       => __('Notas del pedido'),
-                'placeholder' => __('Notas sobre tu pedido, por ejemplo, notas especiales para la entrega.'),
-              ], $checkout->get_value('order_comments')); @endphp
-            @php do_action('woocommerce_after_order_notes', $checkout); @endphp
-          </div>
-
+        {{-- Datos de facturación --}}
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="text-lg font-semibold mb-4 text-gray-800">Datos de facturación</h2>
+          <?php do_action('woocommerce_checkout_billing'); ?>
         </div>
 
-        {{-- Columna derecha: Resumen del pedido y pago --}}
-        <div class="bg-white p-6 rounded-lg shadow">
-          <h2 class="text-xl font-semibold mb-4">Resumen del pedido</h2>
-
-          @php do_action('woocommerce_checkout_before_order_review_heading'); @endphp
-
-          <div id="order_review" class="woocommerce-checkout-review-order">
-            @php do_action('woocommerce_checkout_order_review'); @endphp
-          </div>
-
-          @php do_action('woocommerce_checkout_after_order_review'); @endphp
+        {{-- Datos de envío --}}
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="text-lg font-semibold mb-4 text-gray-800">Datos de envío</h2>
+          <?php do_action('woocommerce_checkout_shipping'); ?>
         </div>
-      </form>
+
+        {{-- Información adicional --}}
+        <div class="bg-white rounded-xl shadow p-6">
+          <h2 class="text-lg font-semibold mb-4 text-gray-800">Información adicional</h2>
+          <?php do_action('woocommerce_before_order_notes', WC()->checkout()); ?>
+          <?php do_action('woocommerce_after_order_notes', WC()->checkout()); ?>
+        </div>
+      </div>
+
+      {{-- Columna derecha: Resumen del pedido y pagos --}}
+      <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">Resumen del pedido</h2>
+
+        <div>
+          <?php do_action('woocommerce_checkout_before_order_review'); ?>
+          <div id="order_review">
+            <?php do_action('woocommerce_checkout_order_review'); ?>
+          </div>
+          <?php do_action('woocommerce_checkout_after_order_review'); ?>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</form>
 
-  @php do_action('woocommerce_after_checkout_form', $checkout); @endphp
-@endsection
+<?php do_action('woocommerce_after_checkout_form', WC()->checkout()); ?>
