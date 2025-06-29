@@ -2,11 +2,8 @@
 @extends('layouts.app')
 
 @section('content')
-    @php
-        if (!defined('ABSPATH')) exit;
-    @endphp
+    @php if (!defined('ABSPATH')) exit; @endphp
 
-    {{-- Acción antes del formulario --}}
     {!! do_action('woocommerce_before_checkout_form', WC()->checkout()) !!}
 
     <form name="checkout" method="post" class="checkout" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
@@ -19,20 +16,26 @@
                     {{-- Datos de facturación --}}
                     <div class="bg-white rounded-xl shadow p-6">
                         <h2 class="text-lg font-semibold mb-4 text-gray-800">Datos de facturación</h2>
-                        {!! do_action('woocommerce_checkout_billing') !!}
+                        <div class="woocommerce-billing-fields">
+                            {!! do_action('woocommerce_checkout_billing') !!}
+                        </div>
                     </div>
 
                     {{-- Datos de envío --}}
                     <div class="bg-white rounded-xl shadow p-6">
                         <h2 class="text-lg font-semibold mb-4 text-gray-800">Datos de envío</h2>
-                        {!! do_action('woocommerce_checkout_shipping') !!}
+                        <div class="woocommerce-shipping-fields">
+                            {!! do_action('woocommerce_checkout_shipping') !!}
+                        </div>
                     </div>
 
                     {{-- Información adicional --}}
                     <div class="bg-white rounded-xl shadow p-6">
                         <h2 class="text-lg font-semibold mb-4 text-gray-800">Información adicional</h2>
-                        {!! do_action('woocommerce_before_order_notes', WC()->checkout()) !!}
-                        {!! do_action('woocommerce_after_order_notes', WC()->checkout()) !!}
+                        <div class="woocommerce-additional-fields">
+                            {!! do_action('woocommerce_before_order_notes', WC()->checkout()) !!}
+                            {!! do_action('woocommerce_after_order_notes', WC()->checkout()) !!}
+                        </div>
                     </div>
                 </div>
 
@@ -42,7 +45,7 @@
 
                     {!! do_action('woocommerce_checkout_before_order_review') !!}
 
-                    <div id="order_review">
+                    <div id="order_review" class="woocommerce-checkout-review-order">
                         {!! do_action('woocommerce_checkout_order_review') !!}
                     </div>
 
@@ -52,6 +55,5 @@
         </div>
     </form>
 
-    {{-- Acción después del formulario --}}
     {!! do_action('woocommerce_after_checkout_form', WC()->checkout()) !!}
 @endsection
