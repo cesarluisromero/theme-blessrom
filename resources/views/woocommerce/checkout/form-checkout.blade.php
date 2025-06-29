@@ -5,40 +5,42 @@
   {!! do_action('woocommerce_before_checkout_form', $checkout) !!}
 @endif
 
-  <div class="container mx-auto max-w-6xl px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Finalizar compra</h1>
+  <div class="container mx-auto px-4 py-6">
+  <h1 class="text-2xl font-bold mb-6">Finalizar compra</h1>
 
-    <form name="checkout" method="post" class="grid grid-cols-1 lg:grid-cols-2 gap-10" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
-      @csrf
+  <form name="checkout" method="post" class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-8" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
 
-      {{-- Columna izquierda: Detalles de facturación y envío --}}
-      <div class="space-y-8">
-        <div>
-          <h2 class="text-xl font-semibold mb-4">Datos de facturación</h2>
-          @php do_action('woocommerce_checkout_billing'); @endphp
-        </div>
+    {{-- Column: Facturación y Envío --}}
+    <div class="space-y-8">
 
-        <div>
-          <h2 class="text-xl font-semibold mb-4">Datos de envío</h2>
-          @php do_action('woocommerce_checkout_shipping'); @endphp
-        </div>
+      {{-- Detalles de facturación --}}
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-4">Detalles de facturación</h2>
+        {!! woocommerce_checkout_billing() !!}
       </div>
 
-      {{-- Columna derecha: Resumen del pedido --}}
-      <div class="bg-white border rounded-lg shadow p-6 space-y-6">
-        <h2 class="text-xl font-semibold mb-4">Resumen del pedido</h2>
-        @php do_action('woocommerce_checkout_before_order_review'); @endphp
-
-        <div id="order_review">
-          @php do_action('woocommerce_checkout_order_review'); @endphp
-        </div>
-
-        <div id="payment" class="woocommerce-checkout-payment">
-          @php do_action('woocommerce_checkout_payment'); @endphp
-        </div>
+      {{-- Detalles de envío --}}
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-4">Datos de envío</h2>
+        {!! woocommerce_checkout_shipping() !!}
       </div>
-    </form>
-  </div>
+
+      {{-- Notas del pedido --}}
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-4">Información adicional</h2>
+        {!! woocommerce_checkout_order_review(['order_review' => false, 'checkout' => $checkout]) !!}
+      </div>
+
+    </div>
+
+    {{-- Column: Resumen del pedido --}}
+    <div class="bg-white p-6 rounded-xl shadow border border-gray-300">
+      {!! do_action('woocommerce_checkout_order_review') !!}
+    </div>
+
+  </form>
+</div>
+
 
   @if (function_exists('do_action') && isset($checkout))
   {!! do_action('woocommerce_after_checkout_form', $checkout) !!}
