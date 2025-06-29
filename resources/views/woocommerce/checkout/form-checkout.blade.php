@@ -40,5 +40,7 @@
     </form>
   </div>
 
-  @php do_action('woocommerce_after_checkout_form', $checkout); @endphp
+  @if (function_exists('do_action') && isset($checkout))
+  {!! do_action('woocommerce_after_checkout_form', $checkout) !!}
+@endif
 @endsection
