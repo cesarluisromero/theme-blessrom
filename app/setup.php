@@ -111,15 +111,15 @@ add_action('after_setup_theme', function () {
     }, 99);
 
     add_filter('template_include', function ($template) {
-    if (is_checkout() && !is_order_received_page()) {
-        $blade_template = locate_template('resources/views/woocommerce/checkout/form-checkout.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.checkout.form-checkout')->render();
-            exit; // Detiene el flujo de carga de otras plantillas
+        if (is_checkout() && !is_order_received_page()) {
+            $blade_template = locate_template('resources/views/woocommerce/checkout/form-checkout.blade.php');
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.checkout.form-checkout')->render();
+                exit; // Detiene el flujo de carga de otras plantillas
+            }
         }
-    }
-    return $template;
-}, 99);
+        return $template;
+    }, 99);
 
     /**
      * Enable post thumbnail support.
