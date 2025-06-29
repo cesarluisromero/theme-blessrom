@@ -1,48 +1,62 @@
+@php
+  if (!defined('ABSPATH')) exit;
+@endphp
+
 @extends('layouts.app')
 
 @section('content')
-  @if (function_exists('do_action') && isset($checkout))
-  {!! do_action('woocommerce_before_checkout_form', $checkout) !!}
-@endif
+  <section class="bg-gray-100 py-10">
+    <div class="container mx-auto px-4">
+      <h1 class="text-2xl font-bold text-center mb-8">Finalizar compra</h1>
 
-  <div class="container mx-auto px-4 py-6">
-  <h1 class="text-2xl font-bold mb-6">Finalizar compra</h1>
+      <form name="checkout" method="post" class="woocommerce-checkout grid grid-cols-1 lg:grid-cols-2 gap-8"
+            action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
+        
+        {{-- Columna izquierda: Datos del cliente --}}
+        <div class="space-y-8">
 
-  <form name="checkout" method="post" class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-8" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
+          {{-- Detalles de facturación --}}
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Datos de facturación</h2>
+            @php do_action('woocommerce_checkout_billing'); @endphp
+          </div>
 
-    {{-- Column: Facturación y Envío --}}
-    <div class="space-y-8">
+          {{-- Detalles de envío --}}
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Datos de envío</h2>
+            @php do_action('woocommerce_checkout_shipping'); @endphp
+          </div>
 
-      {{-- Detalles de facturación --}}
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-4">Detalles de facturación</h2>
-        {!! woocommerce_checkout_billing() !!}
-      </div>
+          {{-- Información adicional --}}
+          <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Información adicional</h2>
+            @php do_action('woocommerce_before_order_notes', $checkout); @endphp
+            @php woocommerce_form_field('order_comments', [
+                'type'        => 'textarea',
+                'class'       => ['form-row-wide'],
+                'label'       => __('Notas del pedido'),
+                'placeholder' => __('Notas sobre tu pedido, por ejemplo, notas especiales para la entrega.'),
+              ], $checkout->get_value('order_comments')); @endphp
+            @php do_action('woocommerce_after_order_notes', $checkout); @endphp
+          </div>
 
-      {{-- Detalles de envío --}}
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-4">Datos de envío</h2>
-        {!! woocommerce_checkout_shipping() !!}
-      </div>
+        </div>
 
-      {{-- Notas del pedido --}}
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h2 class="text-xl font-semibold mb-4">Información adicional</h2>
-        {!! woocommerce_checkout_order_review(['order_review' => false, 'checkout' => $checkout]) !!}
-      </div>
+        {{-- Columna derecha: Resumen del pedido y pago --}}
+        <div class="bg-white p-6 rounded-lg shadow">
+          <h2 class="text-xl font-semibold mb-4">Resumen del pedido</h2>
 
+          @php do_action('woocommerce_checkout_before_order_review_heading'); @endphp
+
+          <div id="order_review" class="woocommerce-checkout-review-order">
+            @php do_action('woocommerce_checkout_order_review'); @endphp
+          </div>
+
+          @php do_action('woocommerce_checkout_after_order_review'); @endphp
+        </div>
+      </form>
     </div>
+  </section>
 
-    {{-- Column: Resumen del pedido --}}
-    <div class="bg-white p-6 rounded-xl shadow border border-gray-300">
-      {!! do_action('woocommerce_checkout_order_review') !!}
-    </div>
-
-  </form>
-</div>
-
-
-  @if (function_exists('do_action') && isset($checkout))
-  {!! do_action('woocommerce_after_checkout_form', $checkout) !!}
-@endif
+  @php do_action('woocommerce_after_checkout_form', $checkout); @endphp
 @endsection
