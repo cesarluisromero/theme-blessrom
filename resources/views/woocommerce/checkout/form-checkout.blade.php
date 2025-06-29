@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-  @php
-    if (!defined('ABSPATH')) exit;
-    do_action('woocommerce_before_checkout_form', $checkout);
-  @endphp
+  @if (function_exists('do_action') && isset($checkout))
+  {!! do_action('woocommerce_before_checkout_form', $checkout) !!}
+@endif
 
   <div class="container mx-auto max-w-6xl px-4 py-10">
     <h1 class="text-2xl font-bold text-gray-800 mb-6">Finalizar compra</h1>
