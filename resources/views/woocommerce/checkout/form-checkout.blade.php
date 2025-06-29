@@ -65,7 +65,7 @@
 
         {{-- Métodos de pago --}}
         <div id="payment" class="woocommerce-checkout-payment">
-          @php wc_get_template('checkout/payment.php'); @endphp
+          @php do_action('woocommerce_checkout_payment'); @endphp
         </div>
 
         {{-- Botón de pagar --}}
