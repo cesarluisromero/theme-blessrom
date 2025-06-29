@@ -1,10 +1,12 @@
 @php
   if (!defined('ABSPATH')) exit;
+  $checkout = WC()->checkout();
 @endphp
 
 @extends('layouts.app')
 
 @section('content')
+
   <section class="bg-gray-100 py-10">
     <div class="container mx-auto px-4">
       <h1 class="text-2xl font-bold text-center mb-8">Finalizar compra</h1>
