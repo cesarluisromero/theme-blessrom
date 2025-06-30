@@ -77,11 +77,7 @@
                             @endphp
                         </div>
                         
-                        @php
-                            if (function_exists('WC') && WC()->checkout()) {
-                                do_action('woocommerce_checkout_after_order_review');
-                            }
-                        @endphp
+                       
                        
                     </div>
                 </div>
