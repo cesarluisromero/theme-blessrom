@@ -51,45 +51,48 @@
                     </div>
                 </div>
                 {{-- Columna derecha: Resumen del pedido --}}
-                
-<div class="bg-white rounded-2xl shadow p-6">
-  <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
+                <div class="bg-white rounded-2xl shadow p-6">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
+                    {{-- Tabla del pedido --}}
+                    <div class="space-y-4">
+                        @php
+                        if (function_exists('WC') && WC()->checkout()) {
+                            do_action('woocommerce_checkout_before_order_review');
+                        }
+                        @endphp
 
-  {{-- Tabla del pedido --}}
-  <div class="space-y-4">
-    @php
-      if (function_exists('WC') && WC()->checkout()) {
-          do_action('woocommerce_checkout_before_order_review');
-      }
-    @endphp
-
-    <div id="order_review" class="[&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_td]:py-1 [&_td]:align-top">
-      @php
-        if (function_exists('WC') && WC()->checkout()) {
-            do_action('woocommerce_checkout_order_review');
-        }
-      @endphp
-    </div>
-
-    @php
-      if (function_exists('WC') && WC()->checkout()) {
-          do_action('woocommerce_checkout_after_order_review');
-      }
-    @endphp
-  </div>
-
-  {{-- Métodos de pago --}}
-  <div class="border-t pt-6 mt-6">
-    <h3 class="text-lg font-medium mb-4 text-gray-700">Selecciona el método de pago</h3>
-
-    @php
-      if (function_exists('WC') && WC()->checkout()) {
-          do_action('woocommerce_checkout_payment');
-      }
-    @endphp
-  </div>
-</div>
-
+                        <div id="order_review" class="[&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_td]:py-1 [&_td]:align-top">
+                            @php
+                                if (function_exists('WC') && WC()->checkout()) {
+                                    do_action('woocommerce_checkout_order_review');
+                                }
+                            @endphp
+                        </div>
+                        @php
+                        if (function_exists('WC') && WC()->checkout()) {
+                            do_action('woocommerce_checkout_after_order_review');
+                        }
+                        @endphp
+                    </div>
+                    {{-- Métodos de pago --}}
+                    <div class="border-t pt-6 mt-6">
+                    <h3 class="text-lg font-semibold mb-4 text-gray-700">Selecciona el método de pago</h3>
+                        <div class="[&_input[type=radio]]:accent-blue-600
+                                    [&_label]:block [&_label]:cursor-pointer
+                                    [&_label]:bg-gray-50 [&_label]:hover:bg-blue-50
+                                    [&_label]:border [&_label]:border-gray-300
+                                    [&_label]:rounded-lg [&_label]:px-4 [&_label]:py-3
+                                    [&_label]:text-sm [&_label]:text-gray-800
+                                    [&_label]:transition [&_label]:duration-200
+                                    space-y-4">
+                            @php
+                            if (function_exists('WC') && WC()->checkout()) {
+                                do_action('woocommerce_checkout_payment');
+                            }
+                            @endphp
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
