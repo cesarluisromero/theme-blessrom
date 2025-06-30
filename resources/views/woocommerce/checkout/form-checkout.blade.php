@@ -71,6 +71,16 @@
                                 do_action('woocommerce_checkout_after_order_review');
                             }
                         @endphp
+                        <div class="mt-6">
+                            <h3 class="text-lg font-medium mb-4 text-gray-700">Método de pago</h3>
+                            <div class="space-y-4 [&_input[type=radio]]:accent-blue-600 [&_label]:text-sm [&_label]:text-gray-800">
+                                @php
+                                    if (function_exists('WC') && WC()->checkout()) {
+                                        do_action('woocommerce_checkout_payment');
+                                    }
+                                @endphp
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
