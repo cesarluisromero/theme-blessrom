@@ -69,13 +69,7 @@
                                 @endphp
                             </div>
                         </div>
-                        <div id="order_review" class="[&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_td]:py-1 [&_td]:align-top">
-                            @php
-                                if (function_exists('WC') && WC()->checkout()) {
-                                    do_action('woocommerce_checkout_order_review');
-                                }
-                            @endphp
-                        </div>
+                        
                         
                         @php
                             if (function_exists('WC') && WC()->checkout()) {
