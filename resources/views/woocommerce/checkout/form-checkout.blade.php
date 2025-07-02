@@ -69,19 +69,6 @@
                                 }
                             @endphp
                         </div>
-                        {{-- Métodos de pago --}}
-                        <div class="pt-6 border-t">
-                        <h3 class="text-base font-semibold mb-3 text-gray-700">Selecciona el método de pago</h3>
-                        <div class="space-y-4 [&_input[type=radio]]:accent-blue-600 [&_label]:text-sm [&_label]:text-gray-800">
-                            <div id="payment" class="woocommerce-checkout-payment mt-6">
-                                @php
-                                    if (function_exists('WC') && WC()->checkout()) {
-                                        do_action('woocommerce_checkout_payment');
-                                    }
-                                @endphp
-                            </div>
-                        </div>
-                        </div>
                         {{-- Botón Realizar pedido --}}
                         <div class="pt-4">
                             <button
