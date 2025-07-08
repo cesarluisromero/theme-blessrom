@@ -29,7 +29,11 @@ class App extends Composer
         $cartCount = 0;
 
         if (function_exists('WC') && did_action('wp_loaded')) {
-            $cartCount = WC()->cart->get_cart_contents_count();
+            $woocommerce = WC();
+
+            if ($woocommerce && $woocommerce->cart) {
+            $cartCount = $woocommerce->cart->get_cart_contents_count();
+            }
         }
 
         return [
