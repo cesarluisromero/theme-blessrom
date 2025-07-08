@@ -122,18 +122,6 @@ add_action('after_setup_theme', function () {
     }, 99);
 
    add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
-    if ($template_name === 'checkout/payment.php') {
-        $theme_template = get_stylesheet_directory() . '/resources/views/woocommerce/checkout/payment.blade.php';
-        if (file_exists($theme_template)) {
-            return $theme_template;
-        }
-    }
-    return $template;
-}, 100, 3);
-
-
-
-
 
     /**
      * Enable post thumbnail support.
