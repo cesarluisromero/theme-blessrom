@@ -121,7 +121,18 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-    
+    add_filter('template_include', function ($template) {
+    if (is_checkout()) {
+        add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+            if ($template_name === 'checkout/payment.php') {
+                return locate_template('resources/views/woocommerce/checkout/payment.php');
+            }
+            return $template;
+        }, 100, 3);
+    }
+    return $template;
+});
+
 
     /**
      * Enable post thumbnail support.
