@@ -123,13 +123,14 @@ add_action('after_setup_theme', function () {
 
     add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
     if ($template_name === 'checkout/payment.php') {
-        $blade_template = locate_template('resources/views/woocommerce/checkout/payment.blade.php');
-        if ($blade_template) {
-            return $blade_template; // sin echo, sin exit
+        $blade_template = get_stylesheet_directory() . '/resources/views/woocommerce/checkout/payment.blade.php';
+        if (file_exists($blade_template)) {
+            return $blade_template;
         }
     }
     return $template;
 }, 100, 3);
+
 
 
 
