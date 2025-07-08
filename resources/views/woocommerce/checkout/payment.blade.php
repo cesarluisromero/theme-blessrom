@@ -16,7 +16,7 @@
                     @if ($gateway->has_fields() || $gateway->get_description())
                         <div class="mt-4 ml-6 text-sm text-gray-600">
                             {!! $gateway->get_description() !!}
-                            @php $gateway->payment_fields(); @endphp
+                            {!! $gateway->payment_fields() !!}
                         </div>
                     @endif
                 </li>
