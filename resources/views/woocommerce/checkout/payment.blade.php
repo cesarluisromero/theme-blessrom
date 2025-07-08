@@ -1,4 +1,3 @@
-{{-- resources/views/woocommerce/checkout/payment.blade.php --}}
 <div class="woocommerce-checkout-payment">
     @php
         if (WC()->cart->needs_payment()) {

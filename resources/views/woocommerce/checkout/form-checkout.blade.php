@@ -1,4 +1,3 @@
-{{-- resources/views/woocommerce/checkout/form-checkout.blade.php --}}
 @extends('layouts.app')
 @section('content')
 <main class="max-w-6xl mx-auto py-10 px-4">
