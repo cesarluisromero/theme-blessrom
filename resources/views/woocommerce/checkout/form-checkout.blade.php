@@ -58,14 +58,7 @@
                             @php do_action('woocommerce_checkout_order_review'); @endphp
                         </div>
 
-                        {{-- Métodos de pago --}}
-                        <div class="pt-6 border-t">
-                            <h3 class="text-base font-semibold mb-3 text-gray-700">Método de pago</h3>
-                            <div class="space-y-4 [&_input[type=radio]]:accent-blue-600 [&_label]:text-sm [&_label]:text-gray-800">
-                                @include('woocommerce.checkout.payment')
-                            </div>
-                        </div>
-
+                        
                         {{-- Botón realizar pedido --}}
                         <div class="pt-4">
                             <button
