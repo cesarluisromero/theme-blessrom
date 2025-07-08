@@ -121,9 +121,7 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-   add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
-
-    /**
+       /**
      * Enable post thumbnail support.
      *
      * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
