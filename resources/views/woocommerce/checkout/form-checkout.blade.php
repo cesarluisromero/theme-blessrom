@@ -1,3 +1,4 @@
+{{-- resources/views/woocommerce/checkout/form-checkout.blade.php --}}
 @extends('layouts.app')
 @section('content')
 <main class="max-w-6xl mx-auto py-10 px-4">
@@ -13,21 +14,22 @@
         <div class="container mx-auto py-12 px-4">
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                
                 {{-- Columna izquierda --}}
                 <div class="space-y-10">
-                    {{-- Datos de facturación --}}
+                    {{-- Facturación --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de facturación</h2>
-                        <div class="space-y-4 [&_input]:border [&_input]:rounded-md [&_input]:w-full [&_input]:px-4 [&_input]:py-2 [&_input]:text-sm [&_input]:border-gray-300 [&_input:focus]:outline-none [&_input:focus]:ring-2 [&_input:focus]:ring-blue-500 [&_select]:border [&_select]:rounded-md [&_select]:w-full [&_select]:px-4 [&_select]:py-2 [&_select]:text-sm [&_select]:border-gray-300 [&_select:focus]:outline-none [&_select:focus]:ring-2 [&_select:focus]:ring-blue-500 [&_textarea]:border [&_textarea]:rounded-md [&_textarea]:w-full [&_textarea]:px-4 [&_textarea]:py-2 [&_textarea]:text-sm [&_textarea]:border-gray-300 [&_textarea:focus]:outline-none [&_textarea:focus]:ring-2 [&_textarea:focus]:ring-blue-500">
-                            @php if (function_exists('WC') && WC()->checkout()) do_action('woocommerce_checkout_billing'); @endphp
+                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
+                            @php do_action('woocommerce_checkout_billing'); @endphp
                         </div>
                     </div>
 
-                    {{-- Datos de envío --}}
+                    {{-- Envío --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de envío</h2>
                         <div class="space-y-4">
-                            @php if (function_exists('WC') && WC()->checkout()) do_action('woocommerce_checkout_shipping'); @endphp
+                            @php do_action('woocommerce_checkout_shipping'); @endphp
                         </div>
                     </div>
 
@@ -35,11 +37,9 @@
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Información adicional</h2>
                         <div class="space-y-4">
-                            @php
-                                if (function_exists('WC') && WC()->checkout()) {
-                                    do_action('woocommerce_before_order_notes', WC()->checkout());
-                                    do_action('woocommerce_after_order_notes', WC()->checkout());
-                                }
+                            @php 
+                                do_action('woocommerce_before_order_notes', WC()->checkout());
+                                do_action('woocommerce_after_order_notes', WC()->checkout());
                             @endphp
                         </div>
                     </div>
@@ -49,11 +49,24 @@
                 <div x-data="{ loading: false }" class="bg-white rounded-2xl shadow p-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
                     <div class="space-y-6">
-                        @php if (function_exists('WC') && WC()->checkout()) do_action('woocommerce_checkout_before_order_review'); @endphp
-
+                        
+                        {{-- Antes del resumen --}}
+                        @php do_action('woocommerce_checkout_before_order_review'); @endphp
+                        
+                        {{-- Resumen y Totales --}}
                         <div id="order_review" class="[&_table]:w-full [&_table]:text-sm [&_th]:text-left [&_td]:py-1 [&_td]:align-top">
-                            @php if (function_exists('WC') && WC()->checkout()) do_action('woocommerce_checkout_order_review'); @endphp
+                            @php do_action('woocommerce_checkout_order_review'); @endphp
                         </div>
+
+                        {{-- Métodos de pago --}}
+                        <div class="pt-6 border-t">
+                            <h3 class="text-base font-semibold mb-3 text-gray-700">Método de pago</h3>
+                            <div class="space-y-4 [&_input[type=radio]]:accent-blue-600 [&_label]:text-sm [&_label]:text-gray-800">
+                                @include('woocommerce.checkout.payment')
+                            </div>
+                        </div>
+
+                        {{-- Botón realizar pedido --}}
                         <div class="pt-4">
                             <button
                                 type="submit"
@@ -72,17 +85,14 @@
                             </button>
                         </div>
 
-                        @php if (function_exists('WC') && WC()->checkout()) do_action('woocommerce_checkout_after_order_review'); @endphp
+                        {{-- Después del resumen --}}
+                        @php do_action('woocommerce_checkout_after_order_review'); @endphp
                     </div>
                 </div>
             </div>
         </div>
     </form>
 
-    @php
-        if (function_exists('WC') && WC()->checkout()) {
-            do_action('woocommerce_after_checkout_form', WC()->checkout());
-        }
-    @endphp
+    @php do_action('woocommerce_after_checkout_form', WC()->checkout()); @endphp
 </main>
 @endsection
