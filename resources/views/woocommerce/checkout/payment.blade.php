@@ -1,4 +1,3 @@
-{{-- resources/views/woocommerce/checkout/payment.blade.php --}}
 <div class="woocommerce-checkout-payment">
     @php
         if (WC()->cart->needs_payment()) {
@@ -16,7 +15,7 @@
                 </label>
 
                 @if ($gateway->has_fields() || $gateway->get_description())
-                    <div class="mt-4 ml-6 text-sm text-gray-600">
+                    <div class="mt-4 ml-6 text-sm text-gray-600 space-y-2">
                         {!! $gateway->get_description() !!}
                         @php $gateway->payment_fields(); @endphp
                     </div>

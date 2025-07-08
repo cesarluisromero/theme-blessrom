@@ -121,17 +121,16 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-    add_filter('template_include', function ($template) {
-    if (is_checkout()) {
-        add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
-            if ($template_name === 'checkout/payment.php') {
-                return locate_template('resources/views/woocommerce/checkout/payment.php');
-            }
-            return $template;
-        }, 100, 3);
+    add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+    if ($template_name === 'checkout/payment.php') {
+        $blade_template = locate_template('resources/views/woocommerce/checkout/payment.blade.php');
+        if ($blade_template) {
+            return $blade_template; // sin echo, sin exit
+        }
     }
     return $template;
-});
+}, 100, 3);
+
 
 
     /**
