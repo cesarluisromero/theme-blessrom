@@ -121,6 +121,22 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+    add_filter('woocommerce_login_redirect', function($redirect, $user) {
+        // Si hay una redirección almacenada en la URL (por ejemplo, checkout), redirige allí
+        if (isset($_GET['redirect_to']) && !empty($_GET['redirect_to'])) {
+            return esc_url($_GET['redirect_to']);
+        }
+
+        // Por defecto, redirige al checkout si el carrito no está vacío
+        if (WC()->cart && !WC()->cart->is_empty()) {
+            return wc_get_checkout_url();
+        }
+
+        // Si no hay nada en el carrito, redirige a la cuenta
+        return wc_get_page_permalink('myaccount');
+    }, 10, 2);
+
+
        /**
      * Enable post thumbnail support.
      *
