@@ -60,3 +60,32 @@ a {
   border-radius: 0.5rem;
   background-color: #fff;
 }
+
+/* Asegura que los contenedores de columnas se comporten correctamente en móvil */
+@media (max-width: 640px) {
+  .mp-checkout-custom-dual-column-row {
+    display: flex;
+    flex-direction: column !important;
+    gap: 1rem;
+  }
+
+  .mp-checkout-custom-card-column {
+    width: 100% !important;
+    max-width: 100%;
+    display: block;
+  }
+
+  /* Ajuste general para inputs (si son iframes u otros internos) */
+  .mp-checkout-custom-card-input,
+  .mp-checkout-custom-card-input iframe {
+    width: 100% !important;
+    min-width: 0;
+    height: 50px; /* o auto si se rompe */
+  }
+
+  .mp-checkout-custom-card-input input,
+  .mp-checkout-custom-card-input select {
+    width: 100% !important;
+    font-size: 16px;
+  }
+}
