@@ -136,6 +136,21 @@ add_action('after_setup_theme', function () {
         return wc_get_page_permalink('myaccount');
     }, 10, 2);
 
+    add_filter('template_include', function ($template) {
+        if (is_order_received_page()) {
+            $order_id = absint(get_query_var('order-received'));
+            $order = wc_get_order($order_id);
+
+            if ($order) {
+                echo \Roots\view('woocommerce.thankyou', [
+                    'order' => $order,
+                ])->render();
+                exit;
+            }
+        }
+
+        return $template;
+    }, 99);
 
        /**
      * Enable post thumbnail support.
