@@ -21,7 +21,7 @@
                     <div class="bg-gray-50 rounded-xl shadow p-4 md:p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de Envío y facturación</h2>
                         <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
-                            @php do_action('woocommerce_checkout_billing'); @endphp
+                            @include('partials.checkout-billing-fields')
                             @php do_action('woocommerce_checkout_shipping'); @endphp
                         </div>
                     </div>
