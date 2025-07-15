@@ -22,7 +22,7 @@
                     {{-- Facturación --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de facturación</h2>
-                        <div class="space-y-4 [&_input]:bg-gray-100 [&_select]:bg-gray-100 [&_textarea]:bg-gray-100 [&_input]:rounded-lg [&_select]:rounded-lg [&_textarea]:rounded-lg [&_input]:p-2 [&_select]:p-2 [&_textarea]:p-2">
+                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
                             @php do_action('woocommerce_checkout_billing'); @endphp
                         </div>
                     </div>
@@ -30,15 +30,15 @@
                     {{-- Envío --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de envío</h2>
-                        <div class="space-y-4 [&_input]:bg-gray-100 [&_select]:bg-gray-100 [&_textarea]:bg-gray-100 [&_input]:rounded-lg [&_select]:rounded-lg [&_textarea]:rounded-lg [&_input]:p-2 [&_select]:p-2 [&_textarea]:p-2">
+                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
                             @php do_action('woocommerce_checkout_shipping'); @endphp
                         </div>
                     </div>
 
                     {{-- Información adicional --}}
-                    <div class="space-y-4 [&_input]:bg-gray-100 [&_select]:bg-gray-100 [&_textarea]:bg-gray-100 [&_input]:rounded-lg [&_select]:rounded-lg [&_textarea]:rounded-lg [&_input]:p-2 [&_select]:p-2 [&_textarea]:p-2">
+                    <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Información adicional</h2>
-                        <div class="space-y-4">
+                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
                             @php 
                                 do_action('woocommerce_before_order_notes', WC()->checkout());
                                 do_action('woocommerce_after_order_notes', WC()->checkout());
