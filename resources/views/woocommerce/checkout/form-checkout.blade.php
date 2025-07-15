@@ -34,17 +34,7 @@
                         </div>
                     </div>
 
-                    {{-- Información adicional --}}
-                    <div class="bg-gray-50 rounded-xl shadow p-4 md:p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-gray-700">Información adicional</h2>
-                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
-
-                            @php 
-                                do_action('woocommerce_before_order_notes', WC()->checkout());
-                                do_action('woocommerce_after_order_notes', WC()->checkout());
-                            @endphp
-                        </div>
-                    </div>
+                    
                 </div>
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
