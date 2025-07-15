@@ -46,7 +46,7 @@
                 </div>
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
-                <div x-data="{ loading: false }" class="bg-white rounded-2xl shadow">
+                <div x-data="{ loading: false }" class="rounded-2xl shadow">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
                     <div class="space-y-6">
                         
