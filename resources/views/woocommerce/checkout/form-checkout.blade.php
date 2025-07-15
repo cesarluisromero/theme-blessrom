@@ -36,9 +36,10 @@
                         
                         {{-- Resumen y Totales + botón --}}
                         <div id="order_review" class="w-full">
+                            {{-- Resumen del pedido --}}
                             @include('woocommerce.checkout.partials.review-order')
-
-                            @include('woocommerce.checkout.payment')
+                            
+                            
 
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">
@@ -60,8 +61,6 @@
                                         </template>
                                         <span x-text="loading ? 'Procesando...' : 'Realizar el pedido'"></span>
                                     </button>
-
-
                                 @else
                                     {{-- Botón falso que redirige al login si no está logueado --}}
                                     <a
@@ -81,7 +80,10 @@
                     </div>
                 </div>
             </div>
-        
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                {{-- Método de pago --}}
+                @include('woocommerce.checkout.payment')
+            </div>
     </form>
 
     @php do_action('woocommerce_after_checkout_form', WC()->checkout()); @endphp
