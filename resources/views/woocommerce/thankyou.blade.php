@@ -23,7 +23,7 @@
                Volver al inicio
             </a>
 
-            <a href="https://wa.me/519XXXXXXXX" target="_blank"
+            <a href="https://wa.me/51949545854" target="_blank"
                class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-xl transition">
                 ¿Tienes dudas? Escríbenos por WhatsApp
             </a>
