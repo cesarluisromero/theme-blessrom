@@ -20,27 +20,7 @@ a {
   .desktop-gallery { display: none; }
 }
 
-@layer components {
-  .woocommerce-checkout-payment {
-    @apply w-full;
-  }
 
-  .woocommerce-checkout-payment li {
-    @apply w-full;
-  }
-
-  .woocommerce-checkout-payment iframe,
-  .woocommerce-checkout-payment input,
-  .woocommerce-checkout-payment select {
-    @apply w-full;
-  }
-
-  @media (max-width: 768px) {
-    .woocommerce-checkout-payment {
-      @apply px-2;
-    }
-  }
-}
 
 
 
