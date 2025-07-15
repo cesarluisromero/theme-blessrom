@@ -152,9 +152,8 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-    add_action('after_setup_theme', function () {
-    remove_action('twentytwentyone_header', 'twentytwentyone_site_branding');
-    });
+    add_filter('theme_mod_blogname', '__return_empty_string');
+    add_filter('theme_mod_blogdescription', '__return_empty_string');
 
 
        /**
