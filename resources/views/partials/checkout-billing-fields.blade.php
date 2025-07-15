@@ -21,7 +21,7 @@
 
     {{-- País / Región --}}
     <div>
-        <label for="billing_country" class="block text-sm font-medium text-gray-700">País / Región *</label>
+        <label for="billing_country" class="block text-sm font-medium text-gray-700"></label>
         {!! woocommerce_form_field('billing_country', $checkout->get_checkout_fields()['billing']['billing_country'], $checkout->get_value('billing_country')) !!}
     </div>
 
@@ -43,7 +43,7 @@
 
     {{-- Provincia / Departamento --}}
     <div>
-        <label for="billing_state" class="block text-sm font-medium text-gray-700">Región / Provincia *</label>
+        <label for="billing_state" class="block text-sm font-medium text-gray-700"> </label>
         {!! woocommerce_form_field('billing_state', $checkout->get_checkout_fields()['billing']['billing_state'], $checkout->get_value('billing_state')) !!}
     </div>
 
