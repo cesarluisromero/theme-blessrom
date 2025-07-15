@@ -33,7 +33,7 @@
 
     {{-- Ciudad --}}
     <div>
-        <label for="billing_city" class="block text-sm font-medium text-gray-700 mb-1">Ciudad *</label>
+        <label for="billing_city" class="block text-sm font-medium text-gray-700 mb-1">Distrito*</label>
         <input type="text" name="billing_city" id="billing_city"
             class="form-input w-full rounded-md border-gray-300 shadow-sm h-12 text-base focus:ring-blue-500 focus:border-blue-500"
             value="{{ $checkout->get_value('billing_city') }}" required>
