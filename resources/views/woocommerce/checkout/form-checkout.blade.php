@@ -14,7 +14,7 @@
         
         <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-6 md:p-10">
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
-            <div class="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-[50%_50%] gap-8">
 
                 
                 {{-- Columna izquierda --}}
