@@ -1,7 +1,7 @@
 {{-- resources/views/woocommerce/checkout/form-checkout.blade.php --}}
 @extends('layouts.app')
 @section('content')
-<main class="min-h-screen bg-white py-10 px-4">
+<main class="min-h-screen bg-white py-6 px-4 sm:py-10 sm:px-6">
     @php if (!defined('ABSPATH')) exit; @endphp
     @include('partials.checkout-login-warning')
     @php 
