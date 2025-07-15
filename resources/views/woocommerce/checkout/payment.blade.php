@@ -7,7 +7,7 @@
 
         <ul class="space-y-4">
             @foreach ($available_gateways as $gateway)
-                <li class="border rounded-lg p-4 w-full {{ $gateway->chosen ? 'border-blue-600' : 'border-gray-300' }}">
+                
                     <label class="flex items-center space-x-2">
                         <input type="radio" name="payment_method" value="{{ $gateway->id }}" class="accent-blue-600" {{ $gateway->chosen ? 'checked' : '' }}>
                         <span class="font-medium text-sm text-gray-800">{{ $gateway->get_title() }}</span>
@@ -19,7 +19,7 @@
                             {!! $gateway->payment_fields() !!}
                         </div>
                     @endif
-                </li>
+                
             @endforeach
         </ul>
 
