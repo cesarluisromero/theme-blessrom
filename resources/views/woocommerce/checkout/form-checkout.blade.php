@@ -14,11 +14,12 @@
         
         <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-6 md:p-10">
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
-            <div class="grid grid-cols-1 md:grid-cols-[50%_50%] gap-8">
+            <div class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[50%_50%] gap-8 bg-white shadow-md rounded-2xl p-4 md:p-8">
+
 
                 
                 {{-- Columna izquierda --}}
-                <div class="space-y-10">
+                <div class="space-y-10 w-full">
                     {{-- Facturación --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de facturación</h2>
