@@ -1,55 +1,59 @@
-<div class="bg-gray-50 p-6 rounded-xl shadow space-y-4">
-  <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Resumen del pedido</h2>
+<div class="bg-white p-6 rounded-xl shadow space-y-4 text-sm text-gray-800">
+    <h2 class="text-lg font-semibold text-gray-700">Resumen del pedido</h2>
 
-  {{-- Cabecera --}}
-  <div class="flex justify-between text-sm font-semibold text-gray-600">
-    <span>Producto</span>
-    <span>Subtotal</span>
-  </div>
+    <hr class="border-gray-200">
 
-  {{-- Productos --}}
-  @foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item)
-    @php
-      $_product   = apply_filters('woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key);
-      $product_id = apply_filters('woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key);
-    @endphp
-
-    @if ($_product && $_product->exists() && $cart_item['quantity'] > 0)
-      <div class="flex justify-between text-sm text-gray-800 py-1 border-b">
-        <span>
-          {{ $_product->get_name() }}
-          @if ($_product->get_attribute_summary())
-            <span class="block text-xs text-gray-500">{{ $_product->get_attribute_summary() }}</span>
-          @endif
-          <span class="block text-xs text-gray-500">× {{ $cart_item['quantity'] }}</span>
-        </span>
-        <span>{{ wc_price($_product->get_price() * $cart_item['quantity']) }}</span>
-      </div>
-    @endif
-  @endforeach
-
-  {{-- Subtotal --}}
-  <div class="flex justify-between text-sm text-gray-700 pt-2">
-    <span>Subtotal</span>
-    <span>{{ WC()->cart->get_cart_subtotal() }}</span>
-  </div>
-
-  {{-- Envío (si aplica) --}}
-  @if (WC()->cart->needs_shipping())
-    @foreach (WC()->shipping->get_packages() as $i => $package)
-      @foreach ($package['rates'] as $method)
-        <div class="flex justify-between text-sm text-gray-700">
-          <span>Envío</span>
-          <span>{{ wc_price($method->cost) }}</span>
-        </div>
-        @break
-      @endforeach
-    @endforeach
-  @endif
-
-  {{-- Total --}}
-  <div class="flex justify-between text-base font-bold text-gray-900 border-t pt-3">
-    <span>Total</span>
-    <span>{{ WC()->cart->get_total() }}</span>
-  </div>
+    <table class="w-full text-left">
+        <thead class="text-xs text-gray-500 uppercase">
+            <tr>
+                <th class="pb-2">Producto</th>
+                <th class="pb-2 text-right">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item)
+                @php
+                    $product = $cart_item['data'];
+                @endphp
+                <tr>
+                    <td class="py-3">
+                        <div class="font-medium">{!! $product->get_name() !!}</div>
+                        <div class="text-xs text-gray-500">
+                            @if ($product->is_type('variation') && isset($cart_item['variation']))
+                                @foreach ($cart_item['variation'] as $key => $value)
+                                    {!! wc_attribute_label(str_replace('attribute_', '', $key)) !!}: {!! $value !!} <br>
+                                @endforeach
+                            @endif
+                            × {{ $cart_item['quantity'] }}
+                        </div>
+                    </td>
+                    <td class="py-3 text-right">
+                        {!! WC()->cart->get_product_subtotal($product, $cart_item['quantity']) !!}
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+        <tfoot class="border-t border-gray-300 text-sm">
+            <tr>
+                <th class="pt-4 text-right font-normal">Subtotal</th>
+                <td class="pt-4 text-right">{!! WC()->cart->get_cart_subtotal() !!}</td>
+            </tr>
+            @foreach (WC()->cart->get_coupons() as $code => $coupon)
+                <tr>
+                    <th class="text-right font-normal">Cupón: {{ esc_html($coupon->get_code()) }}</th>
+                    <td class="text-right">{!! wc_cart_totals_coupon_html($coupon) !!}</td>
+                </tr>
+            @endforeach
+            @if (WC()->cart->needs_shipping())
+                <tr>
+                    <th class="text-right font-normal">Envío</th>
+                    <td class="text-right">{!! WC()->cart->get_cart_shipping_total() !!}</td>
+                </tr>
+            @endif
+            <tr>
+                <th class="pt-4 text-right text-base font-semibold">Total</th>
+                <td class="pt-4 text-right text-base font-bold">{!! WC()->cart->get_total() !!}</td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
