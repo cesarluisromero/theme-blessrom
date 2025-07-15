@@ -152,6 +152,11 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+    add_action('after_setup_theme', function () {
+    remove_action('twentytwentyone_header', 'twentytwentyone_site_branding');
+    });
+
+
        /**
      * Enable post thumbnail support.
      *
