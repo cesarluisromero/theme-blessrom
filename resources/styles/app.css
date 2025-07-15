@@ -25,5 +25,9 @@ a {
   display: none !important;
 }
 
-
+/* Ocultar el título y descripción del sitio que WordPress inserta automáticamente */
+.site-title,
+.site-description {
+  @apply hidden;
+}
 

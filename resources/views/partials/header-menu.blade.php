@@ -1,5 +1,13 @@
 {{-- Encabezado MÓVIL --}}
-
+<div class="lg:hidden w-full bg-[#165DFF] text-white px-4 py-2">
+  <div class="flex justify-between items-center">
+      @include('partials.mobile-boton-hamburguesa')
+      @include('partials.logo-blessrom')
+      @include('partials.mobile-cuenta-registro-carrito')
+  </div>        
+      @include('partials.buscador-principal')
+      @include('partials.mobile-menu')
+</div>
 
 {{-- Encabezado ESCRITORIO --}}
 <nav class="hidden lg:flex bg-[#165DFF] text-white shadow-md w-full m-0 p-0">
