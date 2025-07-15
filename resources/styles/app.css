@@ -21,35 +21,40 @@ a {
 }
 
 @layer components {
-  /* Estilos responsivos para formulario de Mercado Pago */
-
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    .mp-checkout-custom-card-row,
     .mp-checkout-custom-dual-column-row {
-      @apply flex flex-col gap-4;
+      @apply flex flex-col gap-4 w-full;
     }
 
-    .mp-checkout-custom-card-column {
-      @apply w-full block;
-    }
-
+    .mp-checkout-custom-card-column,
     .mp-checkout-custom-card-input,
     .mp-checkout-custom-card-input iframe {
-      width: 100% !important;
-      height: auto;
+      @apply w-full;
     }
 
-    .mp-checkout-custom-card-input input,
-    .mp-checkout-custom-card-input select {
-      @apply w-full text-base;
+    iframe[name="cardNumber"],
+    iframe[name="expirationDate"],
+    iframe[name="securityCode"] {
+      width: 100% !important;
+      min-width: 0 !important;
+      height: 48px !important;
     }
 
     .mp-input-label {
-      @apply mb-2 text-sm block;
+      @apply text-sm block mb-1;
     }
 
     .mp-helper {
-      @apply text-sm mt-1 text-red-600;
+      @apply text-red-600 text-sm mt-1;
+    }
+
+    .mp-document,
+    .mp-checkout-custom-card-input input,
+    .mp-checkout-custom-card-input select {
+      @apply w-full px-3 py-2 border rounded;
     }
   }
 }
+
 
