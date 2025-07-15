@@ -20,8 +20,10 @@ a {
   .desktop-gallery { display: none; }
 }
 
-
-
+/* 🔒 Ocultar la sección del cupón en el checkout */
+.woocommerce-form-coupon-toggle {
+  display: none !important;
+}
 
 
 
