@@ -20,31 +20,43 @@ a {
   .desktop-gallery { display: none; }
 }
 
-
-/* Aplica a contenedor generado por MP */
-#mercado_pago_checkout, .mp-box-input {
-  width: 100% !important;
+/* Estilos base para el contenedor del checkout */
+.mp-checkout-custom-container,
+#mp-custom-checkout-form-container {
+  width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-/* Para inputs dentro de Mercado Pago */
-#mercado_pago_checkout input,
-.mp-box-input input {
+/* Asegura que los inputs se apilen y ocupen todo el ancho */
+.mp-checkout-custom-card-row,
+.mp-checkout-custom-card-column {
+  width: 100% !important;
+  display: block !important;
+}
+
+/* Campos de texto (cuando no son iframe) */
+.mp-checkout-custom-card-input input,
+.mp-checkout-custom-card-input select {
   width: 100% !important;
   max-width: 100%;
   font-size: 16px;
-  padding: 12px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
-/* Arregla márgenes y separación entre inputs */
-#mercado_pago_checkout .form-row,
-.mp-box-input {
-  margin-bottom: 1rem;
-  display: block;
+/* Contenedores tipo dual (vencimiento y código seguridad) en columna en móvil */
+@media (max-width: 640px) {
+  .mp-checkout-custom-dual-column-row {
+    flex-direction: column !important;
+    gap: 1rem;
+  }
 }
 
-/* Asegúrate de que no se desborde */
-#mercado_pago_checkout {
-  overflow-x: hidden;
+.mp-checkout-custom-card-input {
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  background-color: #fff;
 }
