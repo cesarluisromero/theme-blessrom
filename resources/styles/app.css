@@ -21,25 +21,27 @@ a {
 }
 
 @layer components {
-  /* Ajustes responsivos para campos de Mercado Pago */
+  .woocommerce-checkout-payment {
+    @apply w-full;
+  }
+
+  .woocommerce-checkout-payment li {
+    @apply w-full;
+  }
+
+  .woocommerce-checkout-payment iframe,
+  .woocommerce-checkout-payment input,
+  .woocommerce-checkout-payment select {
+    @apply w-full;
+  }
+
   @media (max-width: 768px) {
-    .mp-checkout-custom-container,
-    #mp-custom-checkout-form-container {
-      padding: 0.5rem;
-    }
-
-    .mp-checkout-custom-card-input,
-    .mp-checkout-custom-card-input iframe {
-      width: 100% !important;
-      height: auto;
-    }
-
-    .mp-checkout-custom-card-column {
-      width: 100% !important;
-      display: block;
+    .woocommerce-checkout-payment {
+      @apply px-2;
     }
   }
 }
+
 
 
 
