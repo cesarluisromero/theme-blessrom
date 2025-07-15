@@ -20,72 +20,36 @@ a {
   .desktop-gallery { display: none; }
 }
 
-/* Estilos base para el contenedor del checkout */
-.mp-checkout-custom-container,
-#mp-custom-checkout-form-container {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
+@layer components {
+  /* Estilos responsivos para formulario de Mercado Pago */
 
-/* Asegura que los inputs se apilen y ocupen todo el ancho */
-.mp-checkout-custom-card-row,
-.mp-checkout-custom-card-column {
-  width: 100% !important;
-  display: block !important;
-}
+  @media (max-width: 640px) {
+    .mp-checkout-custom-dual-column-row {
+      @apply flex flex-col gap-4;
+    }
 
-/* Campos de texto (cuando no son iframe) */
-.mp-checkout-custom-card-input input,
-.mp-checkout-custom-card-input select {
-  width: 100% !important;
-  max-width: 100%;
-  font-size: 16px;
-  padding: 10px;
-  box-sizing: border-box;
-}
+    .mp-checkout-custom-card-column {
+      @apply w-full block;
+    }
 
-/* Contenedores tipo dual (vencimiento y código seguridad) en columna en móvil */
-@media (max-width: 640px) {
-  .mp-checkout-custom-dual-column-row {
-    flex-direction: column !important;
-    gap: 1rem;
+    .mp-checkout-custom-card-input,
+    .mp-checkout-custom-card-input iframe {
+      width: 100% !important;
+      height: auto;
+    }
+
+    .mp-checkout-custom-card-input input,
+    .mp-checkout-custom-card-input select {
+      @apply w-full text-base;
+    }
+
+    .mp-input-label {
+      @apply mb-2 text-sm block;
+    }
+
+    .mp-helper {
+      @apply text-sm mt-1 text-red-600;
+    }
   }
 }
 
-.mp-checkout-custom-card-input {
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background-color: #fff;
-}
-
-/* Asegura que los contenedores de columnas se comporten correctamente en móvil */
-@media (max-width: 640px) {
-  .mp-checkout-custom-dual-column-row {
-    display: flex;
-    flex-direction: column !important;
-    gap: 1rem;
-  }
-
-  .mp-checkout-custom-card-column {
-    width: 100% !important;
-    max-width: 100%;
-    display: block;
-  }
-
-  /* Ajuste general para inputs (si son iframes u otros internos) */
-  .mp-checkout-custom-card-input,
-  .mp-checkout-custom-card-input iframe {
-    width: 100% !important;
-    min-width: 0;
-    height: 50px; /* o auto si se rompe */
-  }
-
-  .mp-checkout-custom-card-input input,
-  .mp-checkout-custom-card-input select {
-    width: 100% !important;
-    font-size: 16px;
-  }
-}
