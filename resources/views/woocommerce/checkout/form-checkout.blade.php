@@ -12,7 +12,7 @@
 
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
         
-        <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-6 md:p-10">
+        
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
             <div class="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-[50%_50%] gap-8 bg-white shadow-md rounded-2xl p-4 md:p-8">
 
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </form>
 
     @php do_action('woocommerce_after_checkout_form', WC()->checkout()); @endphp
