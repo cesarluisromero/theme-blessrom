@@ -48,6 +48,7 @@
                 </div>
             </div>
             <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                <div class="w-full">
                 {{-- Método de pago --}}
                 @include('woocommerce.checkout.payment')
 
@@ -82,6 +83,8 @@
                     @endif
 
                 </div>
+                </div>
+                
             </div>
     </form>
 
