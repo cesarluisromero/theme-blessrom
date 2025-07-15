@@ -152,11 +152,7 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-    add_filter('theme_mod_blogname', '__return_empty_string');
-    add_filter('theme_mod_blogdescription', '__return_empty_string');
-
-
-       /**
+     /**
      * Enable post thumbnail support.
      *
      * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
