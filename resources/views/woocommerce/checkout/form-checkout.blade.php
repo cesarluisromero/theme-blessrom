@@ -28,8 +28,7 @@
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
                 <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
-                    
+                                   
                         
                         {{-- Antes del resumen --}}
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
