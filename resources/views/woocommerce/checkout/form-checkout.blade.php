@@ -18,23 +18,23 @@
                 {{-- Columna izquierda --}}
                 
                     {{-- Facturación --}}
-                    <div class="bg-gray-50 rounded-xl shadow p-4 md:p-6">
+                    
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de Envío y facturación</h2>
                         <div class="[&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
                             @include('partials.checkout-billing-fields')
                         </div>
-                    </div>
+                    
                 
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
-                <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
+                <div x-data="{ loading: false }" >
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
                     
                         
                         {{-- Antes del resumen --}}
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
                         
-                        {{-- Resumen y Totales + botón --}}
+                        {{-- Resumen y Totales}}
                         <div id="order_review" class="w-full">
                             {{-- Resumen del pedido --}}
                             @include('woocommerce.checkout.partials.review-order')
