@@ -38,6 +38,7 @@
                         <div id="order_review" class="w-full">
                             @include('woocommerce.checkout.partials.review-order')
 
+                            @include('woocommerce.checkout.payment')
 
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">
