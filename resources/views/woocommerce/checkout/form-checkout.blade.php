@@ -11,7 +11,7 @@
     @endphp
 
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
-        <div class="container mx-auto py-12 px-4">
+        
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 
@@ -98,7 +98,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </form>
 
     @php do_action('woocommerce_after_checkout_form', WC()->checkout()); @endphp
