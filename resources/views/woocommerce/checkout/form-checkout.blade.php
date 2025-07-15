@@ -12,17 +12,18 @@
 
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
         
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 bg-white shadow-md rounded-2xl p-8">
-
+        <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-6 md:p-10">
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-[60%_40%] gap-8">
+
                 
                 {{-- Columna izquierda --}}
                 <div class="space-y-10">
                     {{-- Facturación --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de facturación</h2>
-                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
+                        <div class="space-y-4 [&_input]:bg-gray-100 [&_input]:rounded-lg [&_input]:p-2 [&_select]:bg-gray-100 [&_select]:rounded-lg [&_select]:p-2 [&_textarea]:bg-gray-100 [&_textarea]:rounded-lg [&_textarea]:p-2 text-sm">
+
                             @php do_action('woocommerce_checkout_billing'); @endphp
                         </div>
                     </div>
@@ -30,7 +31,8 @@
                     {{-- Envío --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de envío</h2>
-                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
+                        <div class="space-y-4 [&_input]:bg-gray-100 [&_input]:rounded-lg [&_input]:p-2 [&_select]:bg-gray-100 [&_select]:rounded-lg [&_select]:p-2 [&_textarea]:bg-gray-100 [&_textarea]:rounded-lg [&_textarea]:p-2 text-sm">
+
                             @php do_action('woocommerce_checkout_shipping'); @endphp
                         </div>
                     </div>
@@ -38,7 +40,8 @@
                     {{-- Información adicional --}}
                     <div class="bg-white rounded-2xl shadow p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Información adicional</h2>
-                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
+                        <div class="space-y-4 [&_input]:bg-gray-100 [&_input]:rounded-lg [&_input]:p-2 [&_select]:bg-gray-100 [&_select]:rounded-lg [&_select]:p-2 [&_textarea]:bg-gray-100 [&_textarea]:rounded-lg [&_textarea]:p-2 text-sm">
+
                             @php 
                                 do_action('woocommerce_before_order_notes', WC()->checkout());
                                 do_action('woocommerce_after_order_notes', WC()->checkout());
@@ -48,7 +51,7 @@
                 </div>
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
-                <div x-data="{ loading: false }" class="rounded-2xl shadow">
+                <div x-data="{ loading: false }" class="bg-white p-6 rounded-2xl shadow space-y-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
                     <div class="space-y-6">
                         
