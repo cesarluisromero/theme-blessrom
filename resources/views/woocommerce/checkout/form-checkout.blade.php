@@ -48,7 +48,7 @@
                 {{-- Columna derecha: Resumen del pedido y pago --}}
                 <div x-data="{ loading: false }" class="bg-white rounded-2xl shadow p-6">
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
-                    <div class="space-y-6">
+                    
                         
                         {{-- Antes del resumen --}}
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
@@ -95,7 +95,7 @@
 
                         {{-- Después del resumen --}}
                         @php do_action('woocommerce_checkout_after_order_review'); @endphp
-                    </div>
+                    
                 </div>
             </div>
         
