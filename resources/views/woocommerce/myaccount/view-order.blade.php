@@ -15,7 +15,7 @@
     <span class="font-semibold capitalize">{{ wc_get_order_status_name($order->get_status()) }}</span>.
   </p>
     
-    @include('woocommerce.myaccount.status-order')
+    
   <div class="mb-6">
     <h2 class="font-bold text-lg mb-2">Productos</h2>
     <ul class="space-y-2">
