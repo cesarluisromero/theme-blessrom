@@ -9,19 +9,21 @@
     <?php if (is_array($address)) : ?>
       <?php foreach ($address as $key => $field) : ?>
         <?php
-          // Añadir clases Tailwind a inputs y etiquetas
-          $address[$key]['input_class'] = ['w-full', 'rounded-lg', 'border-gray-300', 'shadow-sm', 'focus:border-blue-500', 'focus:ring-blue-500'];
-          $address[$key]['label_class'] = ['block', 'text-sm', 'font-medium', 'text-gray-700', 'mb-1'];
-          $address[$key]['class'] = ['w-full'];
+          // Estilo con Tailwind
+          $field['input_class'] = ['w-full', 'rounded-lg', 'border-gray-300', 'shadow-sm', 'focus:border-blue-500', 'focus:ring-blue-500'];
+          $field['label_class'] = ['block', 'text-sm', 'font-medium', 'text-gray-700', 'mb-1'];
+          $field['class'] = ['w-full'];
 
-          // Forzar ancho completo en algunos campos
-          $full_width = ['company', 'address_1', 'address_2', 'country', 'state'];
-          $col_class = in_array($key, $full_width) ? 'col-span-2' : '';
+          // Verificar si 'value' existe
+          $field_value = isset($field['value']) ? wc_get_post_data_by_key($key, $field['value']) : '';
 
-          echo '<div class="' . esc_attr($col_class) . '">';
-          echo woocommerce_form_field($key, $address[$key], wc_get_post_data_by_key($key, $address[$key]['value']));
-          echo '</div>';
+          // Algunos campos deben ocupar toda la fila
+          $full_width_fields = ['company', 'address_1', 'address_2', 'country', 'state'];
+          $col_class = in_array($key, $full_width_fields) ? 'col-span-2' : '';
         ?>
+        <div class="<?php echo esc_attr($col_class); ?>">
+          <?php echo woocommerce_form_field($key, $field, $field_value); ?>
+        </div>
       <?php endforeach; ?>
     <?php else : ?>
       <p class="col-span-2 text-red-500 text-sm">No se pudieron cargar los campos de dirección.</p>
