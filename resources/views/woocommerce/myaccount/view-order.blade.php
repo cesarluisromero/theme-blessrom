@@ -20,8 +20,8 @@
             <p class="font-semibold">{{ $item->get_name() }}</p>
             <p class="text-sm text-gray-600">Talla: {{ $item->get_meta('pa_talla') }} | Color: {{ $item->get_meta('pa_color') }}</p>
           </div>
-          <div class="text-right">
-            <p>{{ $item->get_quantity() }} × {{ strip_tags($order->get_formatted_line_subtotal($item)) }}</p>
+          <div class="text-right">           
+            <p>{{ $item->get_quantity() }} × {{ str_replace('&nbsp;', ' ', strip_tags($order->get_formatted_line_subtotal($item))) }}</p>
           </div>
         </li>
       @endforeach
@@ -35,7 +35,7 @@
     </div>
     <div class="text-right">
       <h3 class="font-bold text-base mb-1">Total</h3>
-      <p>{{ strip_tags($order->get_formatted_order_total()) }}</p>
+      <p>{{ str_replace('&nbsp;', ' ', strip_tags($order->get_formatted_order_total())) }}</p>
     </div>
   </div>
 
