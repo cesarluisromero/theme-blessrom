@@ -35,11 +35,8 @@
                         
                         {{-- Resumen y Totales--}}
                         <div id="order_review" class="w-full">
-                            {{-- Resumen del pedido --}}
-                            @include('woocommerce.checkout.partials.review-order')
-                             {{-- Método de pago (WooCommerce hook) --}}
-                            @include('woocommerce.checkout.payment')
-                        </div>
+                            @php do_action('woocommerce_checkout_order_review'); @endphp
+                        
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">
                                 @if (is_user_logged_in())
@@ -69,8 +66,8 @@
                                         Inicia sesión para completar tu compra
                                     </a>
                                 @endif
-
                             </div>
+                        </div>
                         
                 </div>
 
