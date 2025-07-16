@@ -2,6 +2,9 @@
 
 @section('content')
 
+
+<div class="container max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+
 @php
     $status = $order->get_status();
 
@@ -45,7 +48,6 @@
     </div>
 </div>
 
-<div class="container max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
   <h1 class="text-2xl font-bold mb-4">Detalles del pedido</h1>
 
   <p class="mb-6 text-gray-700">
