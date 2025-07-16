@@ -16,7 +16,7 @@
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
             <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">     
                 {{-- Columna izquierda --}}
-                
+                <div class="w-full">
                     {{-- Facturación --}}
                     <div class="bg-gray-50 rounded-xl shadow p-4 md:p-6">
                         <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de Envío y facturación</h2>
@@ -24,19 +24,22 @@
                             @include('partials.checkout-billing-fields')
                         </div>
                     </div>
-                
+                </div>
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
                 <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
-                                   
+                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
+                    <div class="w-full">
                         
                         {{-- Antes del resumen --}}
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
                         
-                        {{-- Resumen y Totales--}}
+                        {{-- Resumen y Totales + botón --}}
                         <div id="order_review" class="w-full">
-                            @php do_action('woocommerce_checkout_order_review'); @endphp
-                        
+                            @include('woocommerce.checkout.partials.review-order')
+
+                            @include('woocommerce.checkout.payment')
+
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">
                                 @if (is_user_logged_in())
@@ -57,6 +60,8 @@
                                         </template>
                                         <span x-text="loading ? 'Procesando...' : 'Realizar el pedido'"></span>
                                     </button>
+
+
                                 @else
                                     {{-- Botón falso que redirige al login si no está logueado --}}
                                     <a
@@ -66,16 +71,17 @@
                                         Inicia sesión para completar tu compra
                                     </a>
                                 @endif
+
                             </div>
                         </div>
-                        
-                </div>
+
 
                         {{-- Después del resumen --}}
                         @php do_action('woocommerce_checkout_after_order_review'); @endphp
-                    
+                    </div>
                 </div>
             </div>
+        
     </form>
 
     @php do_action('woocommerce_after_checkout_form', WC()->checkout()); @endphp
