@@ -1,6 +1,4 @@
-@php
-  defined('ABSPATH') || exit;
-@endphp
+@php defined('ABSPATH') || exit; @endphp
 
 <div class="max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-xl">
   <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Editar dirección de facturación</h2>
@@ -11,18 +9,20 @@
     @if (is_array($address))
       @foreach ($address as $key => $field)
         <div>
-          @if (function_exists('woocommerce_form_field'))
-            {!! woocommerce_form_field(
-              $key,
-              array_merge($field, [
-                'input_class' => ['w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'],
-                'label_class' => ['block text-sm font-medium text-gray-700 mb-1'],
-              ]),
-              wc_get_post_data_by_key($key, $field['value'])
-            ) !!}
-          @else
-            <p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>
-          @endif
+          @php
+            if (function_exists('woocommerce_form_field')) {
+              echo woocommerce_form_field(
+                $key,
+                array_merge($field, [
+                  'input_class' => ['w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'],
+                  'label_class' => ['block text-sm font-medium text-gray-700 mb-1'],
+                ]),
+                wc_get_post_data_by_key($key, $field['value'])
+              );
+            } else {
+              echo '<p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>';
+            }
+          @endphp
         </div>
       @endforeach
     @else
