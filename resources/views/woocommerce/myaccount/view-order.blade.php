@@ -47,14 +47,6 @@
   @endif
 
   {{-- Acciones como pagar o cancelar --}}
-  <div class="mt-6 flex space-x-4">
-    @php($actions = wc_get_account_view_order_actions($order))
-    @foreach ($actions as $action)
-    <a href="{{ esc_url($action['url']) }}"
-        class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium">
-        {{ esc_html($action['name']) }}
-    </a>
-    @endforeach
-  </div>
+  
 </div>
 @endsection
