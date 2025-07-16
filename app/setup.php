@@ -163,7 +163,17 @@ add_action('after_setup_theme', function () {
     return $template;
     }, 99);
 
-    
+    add_filter('template_include', function ($template) {
+    if (is_account_page() && !is_wc_endpoint_url()) {
+        $blade_template = locate_template('resources/views/woocommerce/myaccount/dashboard.blade.php');
+        if ($blade_template) {
+            echo \Roots\view('woocommerce.myaccount.dashboard')->render();
+            exit;
+        }
+    }
+    return $template;
+    }, 99);
+
        /**
      * Enable post thumbnail support.
      *
