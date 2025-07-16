@@ -17,7 +17,7 @@
     
 
     @stack('styles')
-   
+    @php(wp_head()) 
   </head>
 
   <body class="m-0 p-0 bg-[#f0f0f0]" @php(body_class())>
