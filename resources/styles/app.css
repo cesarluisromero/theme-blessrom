@@ -26,19 +26,4 @@ a {
 }
 
 
-/* Elimina header duplicado posiblemente inyectado por plugin */
-header.site-header,
-header.storefront-header,
-header[class*="elementor"],
-header.wp-block-template-part {
-  display: none !important;
-}
 
-@media (min-width: 1024px) {
-  header.site-header,
-  header.storefront-header,
-  header[class*="elementor"],
-  header.wp-block-template-part {
-    display: block !important;
-  }
-}
