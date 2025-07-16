@@ -10,6 +10,7 @@
       <?php foreach ($address as $key => $field) : ?>
         <div>
           <?php
+          $value = isset($field['value']) ? $field['value'] : '';
           if (function_exists('woocommerce_form_field')) {
             echo woocommerce_form_field(
               $key,
@@ -17,7 +18,7 @@
                 'input_class' => ['w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'],
                 'label_class' => ['block text-sm font-medium text-gray-700 mb-1'],
               ]),
-              wc_get_post_data_by_key($key, $field['value'])
+              wc_get_post_data_by_key($key, $value)
             );
           } else {
             echo '<p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>';
