@@ -1,4 +1,6 @@
 @extends('layouts.app')
+
+@section('content')
 <?php defined('ABSPATH') || exit; ?>
 
 <div class="max-w-4xl mx-auto px-6 py-10 bg-white rounded-2xl shadow-xl">
@@ -40,3 +42,5 @@
     </div>
   </form>
 </div>
+@endsection
+
