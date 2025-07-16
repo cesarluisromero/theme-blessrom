@@ -20,7 +20,7 @@
         <a href="{{ esc_url( wc_get_endpoint_url('edit-account') ) }}" class="block bg-blue-600 hover:bg-blue-700 text-white text-center font-medium py-3 px-5 rounded-xl transition-all">
           ⚙️ Detalles de la cuenta
         </a>
-        <a href="{{ esc_url( wc_logout_url() ) }}" class="block bg-red-600 hover:bg-red-700 text-white text-center font-medium py-3 px-5 rounded-xl transition-all">
+        <a href="{{ wc_logout_url(home_url()) }}" class="block bg-red-600 hover:bg-red-700 text-white text-center font-medium py-3 px-5 rounded-xl transition-all">
           🚪 Cerrar sesión
         </a>
       </div>
