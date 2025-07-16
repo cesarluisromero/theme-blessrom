@@ -40,3 +40,19 @@
         @endforeach
     </div>
 </div>
+
+@if ($order->get_status() === 'completed')
+    <div class="mt-10 p-6 rounded-xl bg-green-50 border border-green-200 shadow-md text-center">
+        <div class="text-4xl mb-2">🎉</div>
+        <h2 class="text-xl font-bold text-green-700">¡Tu pedido fue completado con éxito!</h2>
+        <p class="text-green-600 mt-2">Gracias por tu compra. Esperamos que disfrutes tu producto.</p>
+
+        {{-- Si más adelante quieres agregar seguimiento real, aquí podría ir --}}
+        {{-- <p class="mt-4 text-sm text-gray-500">Número de seguimiento: 12345678</p> --}}
+
+        <a href="{{ home_url('/tienda') }}"
+           class="inline-block mt-6 px-6 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition">
+            Seguir comprando
+        </a>
+    </div>
+@endif
