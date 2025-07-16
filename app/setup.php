@@ -212,6 +212,29 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+    add_filter('template_include', function ($template) {
+        if (is_wc_endpoint_url('orders')) {
+            $blade_template = locate_template('resources/views/woocommerce/myaccount/orders.blade.php');
+
+            if ($blade_template) {
+                $current_page = max(1, get_query_var('paged'));
+                $customer_orders = wc_get_orders([
+                    'customer_id' => get_current_user_id(),
+                    'paginate' => true,
+                    'paged' => $current_page,
+                    'limit' => 10,
+                ]);
+
+                echo \Roots\view('woocommerce.myaccount.orders', [
+                    'orders' => $customer_orders,
+                    'current_page' => $current_page,
+                ])->render();
+                exit;
+            }
+        }
+
+        return $template;
+    }, 99);
 
        /**
      * Enable post thumbnail support.
