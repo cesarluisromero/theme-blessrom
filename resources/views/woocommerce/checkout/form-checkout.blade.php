@@ -36,9 +36,7 @@
                         
                         {{-- Resumen y Totales + botón --}}
                         <div id="order_review" class="w-full">
-                            @include('woocommerce.checkout.partials.review-order')
-
-                            @include('woocommerce.checkout.payment')
+                             @php do_action('woocommerce_checkout_order_review'); @endphp
 
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">

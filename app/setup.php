@@ -152,6 +152,13 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+
+    add_action('wp_enqueue_scripts', function () {
+    // Cargar jQuery si no se ha cargado aún
+    if (!wp_script_is('jquery', 'enqueued')) {
+        wp_enqueue_script('jquery');
+    }
+    }, 100);
        /**
      * Enable post thumbnail support.
      *
