@@ -8,7 +8,7 @@
           <span>&nbsp;</span>
           <span>Los más vendidos</span>
         </a>
-        <a href="#" class="no-underline hover:text-white flex flex-col items-center">
+        <a href="https://blessrom.com/mi-cuenta/orders/" class="no-underline hover:text-white flex flex-col items-center">
           <span>&nbsp;</span>
           <span>Mis pedidos</span>
         </a>
