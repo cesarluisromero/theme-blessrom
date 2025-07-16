@@ -153,20 +153,17 @@ add_action('after_setup_theme', function () {
     }, 99);
 
 
-    add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
-    if ($template_name === 'myaccount/form-login.php') {
-        $blade_template = locate_template('views/woocommerce/myaccount/form-login.blade.php');
-
-        if ($blade_template) {
-            // Renderizar la vista Blade y devolver el HTML en lugar del archivo de plantilla PHP
-            echo view(app('sage.finder')->get($blade_template), app('sage.data'))->render();
-            exit; // Detener ejecución para evitar que WooCommerce continúe buscando la plantilla PHP
-        }
+    add_filter('template_include', function ($template) {
+    // Mostrar solo en la página "Mi cuenta" (login/register)
+    if (is_account_page() && !is_user_logged_in()) {
+        echo \Roots\view('woocommerce.myaccount.form-login')->render();
+        exit;
     }
 
     return $template;
-    }, 100, 3);
+    }, 99);
 
+    
        /**
      * Enable post thumbnail support.
      *
