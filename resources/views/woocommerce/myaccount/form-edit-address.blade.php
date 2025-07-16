@@ -8,15 +8,17 @@
   {{-- Iterar campos del formulario --}}
   @foreach ($address as $key => $field)
     <div class="mb-4">
-      @if (function_exists('woocommerce_form_field'))
-        {!! woocommerce_form_field(
-              $key,
-              $field,
-              wc_get_post_data_by_key($key, $field['value'])
-          ) !!}
-      @else
-        <p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>
-      @endif
+      @php
+        if (function_exists('woocommerce_form_field')) {
+          echo woocommerce_form_field(
+            $key,
+            $field,
+            wc_get_post_data_by_key($key, $field['value'])
+          );
+        } else {
+          echo '<p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>';
+        }
+      @endphp
     </div>
   @endforeach
 
