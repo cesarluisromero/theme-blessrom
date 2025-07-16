@@ -31,7 +31,8 @@
                 {{ wc_get_order_status_name($order->get_status()) }}
               </td>
               <td class="px-4 py-3">
-                 {{ strip_tags($order->get_formatted_order_total()) }}
+                 
+                 {{ wc_price($order->get_total()) }}
               </td>
               <td class="px-4 py-3 space-x-2">
                 @foreach (wc_get_account_orders_actions($order) as $action)
