@@ -34,8 +34,14 @@
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
                         
                         {{-- Resumen y Totales--}}
-                        <div id="order_review" class="woocommerce-checkout-review-order">
-                            @php do_action('woocommerce_checkout_order_review'); @endphp
+                        <div id="order_review" class="w-full">
+                            {{-- Resumen del pedido --}}
+                            @include('woocommerce.checkout.partials.review-order')
+                            
+                        </div>
+                        <div class="w-full">
+                            {{-- Método de pago (WooCommerce hook) --}}
+                            @include('woocommerce.checkout.payment.php')
                         </div>
                        <div class="w-full">
                             {{-- Botón realizar pedido --}}
