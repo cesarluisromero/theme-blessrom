@@ -34,14 +34,8 @@
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
                         
                         {{-- Resumen y Totales--}}
-                        <div id="order_review" class="w-full">
-                            {{-- Resumen del pedido --}}
-                            @include('woocommerce.checkout.partials.review-order')
-                            
-                        </div>
-                        <div class="w-full">
-                            {{-- Método de pago (WooCommerce hook) --}}
-                            @php do_action('woocommerce_checkout_payment'); @endphp
+                        <div id="order_review" class="woocommerce-checkout-review-order">
+                            @php do_action('woocommerce_checkout_order_review'); @endphp
                         </div>
                        <div class="w-full">
                             {{-- Botón realizar pedido --}}
@@ -52,9 +46,17 @@
                                         type="submit"
                                         id="place_order"
                                         name="woocommerce_checkout_place_order"
-                                        class="button alt w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-sm transition-all duration-200"
+                                        x-data="{ loading: false }"
+                                        @click="setTimeout(() => loading = true, 100)"
+                                        class="button alt w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-sm transition-all duration-200 flex items-center justify-center"
                                     >
-                                        Realizar el pedido
+                                        <template x-if="loading">
+                                            <svg class="w-5 h-5 animate-spin mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                            </svg>
+                                        </template>
+                                        <span x-text="loading ? 'Procesando...' : 'Realizar el pedido'"></span>
                                     </button>
                                 @else
                                     {{-- Botón falso que redirige al login si no está logueado --}}
