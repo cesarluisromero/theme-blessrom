@@ -4,19 +4,23 @@
   @php do_action('woocommerce_before_edit_address_form_' . $load_address); @endphp
 
   {{-- Iterar campos del formulario --}}
-  @foreach ($address as $key => $field)
-    <div class="mb-4">
-      @if (function_exists('woocommerce_form_field'))
-        {!! woocommerce_form_field(
-          $key,
-          $field,
-          wc_get_post_data_by_key($key, $field['value'])
-        ) !!}
-      @else
-        <p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>
-      @endif
-    </div>
-  @endforeach
+  @if (is_array($address))
+    @foreach ($address as $key => $field)
+      <div class="mb-4">
+        @if (function_exists('woocommerce_form_field'))
+          {!! woocommerce_form_field(
+            $key,
+            $field,
+            wc_get_post_data_by_key($key, $field['value'])
+          ) !!}
+        @else
+          <p class="text-red-500 text-sm">No se puede mostrar el campo: función no disponible.</p>
+        @endif
+      </div>
+    @endforeach
+  @else
+    <p class="text-red-500 text-sm">No se pudieron cargar los campos de dirección.</p>
+  @endif
 
   @php do_action('woocommerce_after_edit_address_form_' . $load_address); @endphp
 
