@@ -174,6 +174,14 @@ add_action('after_setup_theme', function () {
     return $template;
     }, 99);
 
+    add_filter('template_include', function ($template) {
+    if (is_account_page() && is_wc_endpoint_url('edit-address')) {
+        echo \Roots\view('woocommerce.myaccount.edit-address')->render();
+        exit;
+    }
+    return $template;
+    }, 100);
+
        /**
      * Enable post thumbnail support.
      *
