@@ -54,15 +54,16 @@
   @endif
 
   {{-- Acciones como pagar o cancelar --}}
-  <div class="mt-6 flex space-x-4">
-    @foreach (wc_get_account_orders_actions($order) as $action)
-        @if ($action['name'] !== 'Ver')
-            <a href="{{ esc_url($action['url']) }}"
-            class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium">
-            {{ esc_html($action['name']) }}
-            </a>
-      @endif
-    @endforeach
+    <div class="mt-6 flex space-x-4">
+        @foreach (wc_get_account_orders_actions($order) as $action)
+            @if ($action['name'] !== 'Ver')
+                <a href="{{ esc_url($action['url']) }}"
+                class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium">
+                {{ esc_html($action['name']) }}
+                </a>
+            @endif
+        @endforeach
     </div>
+@include('woocommerce.myaccount.status-order')
 </div>
 @endsection
