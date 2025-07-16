@@ -158,7 +158,7 @@ add_action('after_setup_theme', function () {
     if (!wp_script_is('jquery', 'enqueued')) {
         wp_enqueue_script('jquery');
     }
-    }, 100);
+    }, 1);
        /**
      * Enable post thumbnail support.
      *
