@@ -8,7 +8,7 @@
   {{-- Iterar campos --}}
   @foreach ($address as $key => $field)
     <div class="mb-4">
-      <?php
+      @php
         if (function_exists('woocommerce_form_field')) {
           echo woocommerce_form_field(
             $key,
@@ -16,7 +16,7 @@
             wc_get_post_data_by_key($key, $field['value'])
           );
         }
-      ?>
+      @endphp
     </div>
   @endforeach
 
@@ -27,4 +27,5 @@
     Guardar dirección
   </button>
 </form>
+
 
