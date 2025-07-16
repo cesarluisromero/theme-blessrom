@@ -13,9 +13,9 @@
         @php do_action('woocommerce_before_edit_account_address_form') @endphp
 
         @php
-          $billing_address = wc_get_account_address('billing');
-          echo wp_kses_post($billing_address);
+          $billing_address = function_exists('wc_get_account_address') ? wc_get_account_address('billing') : '';
         @endphp
+        {!! wp_kses_post($billing_address) !!}
 
         <a 
           href="{{ esc_url(wc_get_endpoint_url('edit-address', 'billing')) }}"
@@ -30,9 +30,9 @@
         <h2 class="text-lg font-semibold text-gray-700 mb-4">Dirección de envío</h2>
 
         @php
-          $shipping_address = wc_get_account_address('shipping');
-          echo wp_kses_post($shipping_address);
+          $shipping_address = function_exists('wc_get_account_address') ? wc_get_account_address('shipping') : '';
         @endphp
+        {!! wp_kses_post($shipping_address) !!}
 
         <a 
           href="{{ esc_url(wc_get_endpoint_url('edit-address', 'shipping')) }}"
