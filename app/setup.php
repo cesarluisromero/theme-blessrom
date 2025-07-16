@@ -255,12 +255,12 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-   
-
-    add_action('wp_logout', function () {
-        wp_redirect(home_url());
-        exit;
+    add_filter('woocommerce_logout_redirect', function($redirect_to) {
+         return home_url(); // Redirige al home después de cerrar sesión
     });
+
+    
+
        /**
      * Enable post thumbnail support.
      *

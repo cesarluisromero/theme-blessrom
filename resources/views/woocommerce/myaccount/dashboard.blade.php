@@ -21,11 +21,12 @@
           ⚙️ Detalles de la cuenta
         </a>
        <a 
-        href="{{ wc_logout_url() }}"
-        class="block bg-red-600 hover:bg-red-700 text-white text-center font-medium py-3 px-5 rounded-xl transition-all"
-        >
-        🚪 Cerrar sesión
+            href="{{ wc_logout_url() }}"
+            class="block bg-red-600 hover:bg-red-700 text-white text-center font-medium py-3 px-5 rounded-xl transition-all"
+            >
+            🚪 Cerrar sesión
         </a>
+
 
       </div>
     </div>
