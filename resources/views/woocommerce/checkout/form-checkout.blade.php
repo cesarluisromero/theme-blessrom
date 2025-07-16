@@ -44,7 +44,7 @@
                             @php do_action('woocommerce_checkout_payment'); @endphp
                         </div>
                        <div class="w-full">
-                        {{-- Botón realizar pedido --}}
+                            {{-- Botón realizar pedido --}}
                             <div class="pt-4">
                                 @if (is_user_logged_in())
                                     {{-- Botón de compra normal para usuarios logueados --}}
@@ -52,17 +52,9 @@
                                         type="submit"
                                         id="place_order"
                                         name="woocommerce_checkout_place_order"
-                                        x-data="{ loading: false }"
-                                        @click="setTimeout(() => loading = true, 100)"
-                                        class="button alt w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-sm transition-all duration-200 flex items-center justify-center"
+                                        class="button alt w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl text-sm transition-all duration-200"
                                     >
-                                        <template x-if="loading">
-                                            <svg class="w-5 h-5 animate-spin mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke-width="4"></circle>
-                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                                            </svg>
-                                        </template>
-                                        <span x-text="loading ? 'Procesando...' : 'Realizar el pedido'"></span>
+                                        Realizar el pedido
                                     </button>
                                 @else
                                     {{-- Botón falso que redirige al login si no está logueado --}}
