@@ -49,10 +49,12 @@
   {{-- Acciones como pagar o cancelar --}}
   <div class="mt-6 flex space-x-4">
     @foreach (wc_get_account_orders_actions($order) as $action)
-        <a href="{{ esc_url($action['url']) }}"
-        class="inline-block px-3 py-1 rounded-md text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 transition">
-        {{ $action['name'] }}
-        </a>
+        @if ($action['name'] !== 'Ver')
+            <a href="{{ esc_url($action['url']) }}"
+            class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium">
+            {{ esc_html($action['name']) }}
+            </a>
+      @endif
     @endforeach
     </div>
 </div>
