@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+     @include('woocommerce.myaccount.status-order')
   <h1 class="text-2xl font-bold mb-4">Detalles del pedido</h1>
 
   <p class="mb-6 text-gray-700">
@@ -58,6 +59,6 @@
         @endif
         @endforeach
     </div>
-    @include('woocommerce.myaccount.status-order')
+   
 </div>
 @endsection
