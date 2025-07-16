@@ -45,7 +45,6 @@
                         </div>
                        <div class="w-full">
                         {{-- Botón realizar pedido --}}
-                        <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
                             <div class="pt-4">
                                 @if (is_user_logged_in())
                                     {{-- Botón de compra normal para usuarios logueados --}}
