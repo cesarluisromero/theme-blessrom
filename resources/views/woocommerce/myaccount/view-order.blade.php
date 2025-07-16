@@ -42,7 +42,8 @@
   @if ($order->get_formatted_billing_address())
     <div class="mb-4">
       <h3 class="font-bold text-base mb-1">Dirección de facturación</h3>
-      <p class="text-gray-700">{{ $order->get_formatted_billing_address() }}</p>
+                               
+      <p class="text-gray-700">{{ str_replace('<br/>', ' ', s$order->get_formatted_billing_address()) }}</p>
     </div>
   @endif
 
