@@ -27,26 +27,19 @@
                 
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
-                <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
-                                   
-                        
+                    <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">                                    
                         {{-- Antes del resumen --}}
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
-                        
-                        {{-- Resumen y Totales--}}
-                        <div id="order_review" class="w-full">
                             {{-- Resumen del pedido --}}
-                            @include('woocommerce.checkout.partials.review-order')
-                            
-                        </div>
-                        <div class="w-full">
+                            <div id="order_review" class="w-full">
+                                @include('woocommerce.checkout.partials.review-order')                            
+                            </div>
                             {{-- Método de pago (WooCommerce hook) --}}
-                            @include('woocommerce.checkout.payment')
-                        </div>
-                       <div class="w-full">
-                        {{-- Botón realizar pedido --}}
-                        <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
-                            <div class="pt-4">
+                            <div class="w-full">                            
+                                @include('woocommerce.checkout.payment')
+                            </div>
+                            {{-- Botón realizar pedido --}}    
+                            <div class="w-full pt-4">                                                    
                                 @if (is_user_logged_in())
                                     {{-- Botón de compra normal para usuarios logueados --}}
                                     <button
@@ -73,14 +66,11 @@
                                     >
                                         Inicia sesión para completar tu compra
                                     </a>
-                                @endif
-
-                            </div>
-                        </div>
-                </div>
-
-                        {{-- Después del resumen --}}
-                        @php do_action('woocommerce_checkout_after_order_review'); @endphp
+                                @endif 
+                            </div>                                       
+                    </div>
+                    {{-- Después del resumen --}}
+                    @php do_action('woocommerce_checkout_after_order_review'); @endphp
                     
                 </div>
             </div>
