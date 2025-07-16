@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @php(do_action('get_header'))
-    @php(wp_head())
+    
+    
     <style>
       html, body {
         margin: 0 !important;
@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     
 
-    @stack('styles') 
+    @stack('styles')
+    @php(wp_head()) 
   </head>
 
   <body class="m-0 p-0 bg-[#f0f0f0]" @php(body_class())>
