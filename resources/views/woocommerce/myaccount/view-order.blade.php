@@ -1,12 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
-
 <div class="container max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
-
-
-
   <h1 class="text-2xl font-bold mb-4">Detalles del pedido</h1>
 
   <p class="mb-6 text-gray-700">
@@ -14,8 +9,7 @@
     <span class="font-semibold">{{ $order->get_date_created()->date_i18n('d/m/Y') }}</span> y está actualmente
     <span class="font-semibold capitalize">{{ wc_get_order_status_name($order->get_status()) }}</span>.
   </p>
-    
-    
+
   <div class="mb-6">
     <h2 class="font-bold text-lg mb-2">Productos</h2>
     <ul class="space-y-2">
@@ -54,16 +48,15 @@
   @endif
 
   {{-- Acciones como pagar o cancelar --}}
-    <div class="mt-6 flex space-x-4">
-        @foreach (wc_get_account_orders_actions($order) as $action)
-            @if ($action['name'] !== 'Ver')
-                <a href="{{ esc_url($action['url']) }}"
-                class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium">
-                {{ esc_html($action['name']) }}
-                </a>
-            @endif
-        @endforeach
+  <div class="mt-6 flex space-x-4">
+    @foreach (wc_get_account_orders_actions($order) as $action)
+        @if ($action['name'] !== 'Ver')
+            <a href="{{ esc_url($action['url']) }}"
+            class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition text-sm font-medium">
+            {{ esc_html($action['name']) }}
+            </a>
+      @endif
+    @endforeach
     </div>
-@include('woocommerce.myaccount.status-order')
 </div>
 @endsection
