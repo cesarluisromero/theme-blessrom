@@ -153,12 +153,20 @@ add_action('after_setup_theme', function () {
     }, 99);
 
 
-    add_action('wp_enqueue_scripts', function () {
-    // Cargar jQuery si no se ha cargado aún
-    if (!wp_script_is('jquery', 'enqueued')) {
-        wp_enqueue_script('jquery');
+    add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+    if ($template_name === 'myaccount/form-login.php') {
+        $blade_template = locate_template('views/woocommerce/myaccount/form-login.blade.php');
+
+        if ($blade_template) {
+            // Renderizar la vista Blade y devolver el HTML en lugar del archivo de plantilla PHP
+            echo view(app('sage.finder')->get($blade_template), app('sage.data'))->render();
+            exit; // Detener ejecución para evitar que WooCommerce continúe buscando la plantilla PHP
+        }
     }
-    }, 1);
+
+    return $template;
+    }, 100, 3);
+
        /**
      * Enable post thumbnail support.
      *

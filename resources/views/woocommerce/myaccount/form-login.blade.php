@@ -1,4 +1,3 @@
-{{-- Prueba de plantilla personalizada --}}
-<div class="bg-red-200 p-4 rounded text-red-800">
-  Estás viendo la plantilla personalizada de login.
+<div class="bg-yellow-100 p-6 rounded shadow text-yellow-900">
+  🟡 Plantilla personalizada de login y registro cargada correctamente.
 </div>
