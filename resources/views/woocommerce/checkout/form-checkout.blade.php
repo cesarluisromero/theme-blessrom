@@ -1,7 +1,7 @@
 {{-- resources/views/woocommerce/checkout/form-checkout.blade.php --}}
 @extends('layouts.app')
 @section('content')
-<main class="max-w-6xl mx-auto py-10 px-4">
+
     @php if (!defined('ABSPATH')) exit; @endphp
     @include('partials.checkout-login-warning')
     @php 
@@ -11,52 +11,39 @@
     @endphp
 
     <form name="checkout" method="post" class="checkout woocommerce-checkout" action="{{ esc_url(wc_get_checkout_url()) }}" enctype="multipart/form-data">
-        <div class="container mx-auto py-12 px-4">
+        
+        
             <h1 class="text-3xl font-bold text-center mb-10 text-gray-800">Finalizar compra</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">     
                 {{-- Columna izquierda --}}
-                <div class="space-y-10">
+                
                     {{-- Facturación --}}
-                    <div class="bg-white rounded-2xl shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de facturación</h2>
-                        <div class="space-y-4 [&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
-                            @php do_action('woocommerce_checkout_billing'); @endphp
+                    <div class="bg-gray-50 rounded-xl shadow p-4 md:p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de Envío y facturación</h2>
+                        <div class="[&_input]:form-input [&_select]:form-select [&_textarea]:form-textarea">
+                            @include('partials.checkout-billing-fields')
                         </div>
                     </div>
-
-                    {{-- Envío --}}
-                    <div class="bg-white rounded-2xl shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-gray-700">Datos de envío</h2>
-                        <div class="space-y-4">
-                            @php do_action('woocommerce_checkout_shipping'); @endphp
-                        </div>
-                    </div>
-
-                    {{-- Información adicional --}}
-                    <div class="bg-white rounded-2xl shadow p-6">
-                        <h2 class="text-xl font-semibold mb-4 text-gray-700">Información adicional</h2>
-                        <div class="space-y-4">
-                            @php 
-                                do_action('woocommerce_before_order_notes', WC()->checkout());
-                                do_action('woocommerce_after_order_notes', WC()->checkout());
-                            @endphp
-                        </div>
-                    </div>
-                </div>
+                
 
                 {{-- Columna derecha: Resumen del pedido y pago --}}
-                <div x-data="{ loading: false }" class="bg-white rounded-2xl shadow p-6">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Resumen del pedido</h2>
-                    <div class="space-y-6">
+                <div x-data="{ loading: false }" class="bg-gray-50 rounded-xl shadow p-4 md:p-6 w-full">
+                                   
                         
                         {{-- Antes del resumen --}}
                         @php do_action('woocommerce_checkout_before_order_review'); @endphp
                         
-                        {{-- Resumen y Totales + botón --}}
-                        <div id="order_review" class="...">
-                            @php do_action('woocommerce_checkout_order_review'); @endphp
-
+                        {{-- Resumen y Totales--}}
+                        <div id="order_review" class="w-full">
+                            {{-- Resumen del pedido --}}
+                            @include('woocommerce.checkout.partials.review-order')
+                            
+                        </div>
+                        <div class="w-full">
+                            {{-- Método de pago (WooCommerce hook) --}}
+                            @include('woocommerce.checkout.payment.php')
+                        </div>
+                       <div class="w-full">
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">
                                 @if (is_user_logged_in())
@@ -77,8 +64,6 @@
                                         </template>
                                         <span x-text="loading ? 'Procesando...' : 'Realizar el pedido'"></span>
                                     </button>
-
-
                                 @else
                                     {{-- Botón falso que redirige al login si no está logueado --}}
                                     <a
@@ -91,17 +76,16 @@
 
                             </div>
                         </div>
-
+                </div>
 
                         {{-- Después del resumen --}}
                         @php do_action('woocommerce_checkout_after_order_review'); @endphp
-                    </div>
+                    
                 </div>
             </div>
-        </div>
     </form>
 
     @php do_action('woocommerce_after_checkout_form', WC()->checkout()); @endphp
-</main>
+
 
 @endsection
