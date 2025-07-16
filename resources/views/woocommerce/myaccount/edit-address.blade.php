@@ -10,7 +10,7 @@
       <div class="bg-white rounded-xl shadow p-6">
         <h2 class="text-lg font-semibold text-gray-700 mb-4">Dirección de facturación</h2>
         @php do_action('woocommerce_before_edit_account_address_form') @endphp
-        {!! wp_kses_post(wc_get_account_address('billing')) !!}
+        @php echo wp_kses_post(wc_get_account_address('billing')); @endphp
 
         <a 
           href="{{ esc_url(wc_get_endpoint_url('edit-address', 'billing')) }}"
@@ -23,7 +23,7 @@
       {{-- Dirección de envío --}}
       <div class="bg-white rounded-xl shadow p-6">
         <h2 class="text-lg font-semibold text-gray-700 mb-4">Dirección de envío</h2>
-        {!! wp_kses_post(wc_get_account_address('shipping')) !!}
+        @php echo wp_kses_post(wc_get_account_address('shipping')); @endphp
 
         <a 
           href="{{ esc_url(wc_get_endpoint_url('edit-address', 'shipping')) }}"
