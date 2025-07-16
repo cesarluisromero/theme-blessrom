@@ -236,6 +236,26 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+    add_filter('template_include', function ($template) {
+        if (is_wc_endpoint_url('view-order')) {
+            $blade_template = locate_template('resources/views/woocommerce/myaccount/view-order.blade.php');
+            if ($blade_template) {
+                global $wp;
+                $order_id = absint($wp->query_vars['view-order']);
+                $order = wc_get_order($order_id);
+
+                if ($order) {
+                    echo \Roots\view('woocommerce.myaccount.view-order', [
+                        'order' => $order,
+                    ])->render();
+                    exit;
+                }
+            }
+        }
+        return $template;
+    }, 99);
+
+
        /**
      * Enable post thumbnail support.
      *
