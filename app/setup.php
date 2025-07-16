@@ -196,6 +196,23 @@ add_action('after_setup_theme', function () {
     return $template;
     }, 99);
 
+    add_filter('template_include', function ($template) {
+    if (is_wc_endpoint_url('edit-address')) {
+        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-edit-address.blade.php');
+
+        if ($blade_template) {
+            echo \Roots\view('woocommerce.myaccount.form-edit-address', [
+                'load_address' => isset($_GET['address']) ? sanitize_text_field($_GET['address']) : 'billing',
+                'address' => WC()->countries->get_address_fields(WC()->customer->get_billing_country(), 'billing')
+            ])->render();
+            exit;
+        }
+    }
+
+    return $template;
+    }, 99);
+
+
        /**
      * Enable post thumbnail support.
      *
