@@ -16,7 +16,14 @@
     $currentIndex = array_search($status, $mainFlow) !== false ? array_search($status, $mainFlow) : 0;
 @endphp
 
-<div class="w-full mt-8">
+<div 
+    x-data="{ show: false }" 
+    x-init="setTimeout(() => show = true, 300)" 
+    x-show="show" 
+    x-transition 
+    class="mt-10 p-6 rounded-xl bg-green-50 border border-green-200 shadow-md text-center"
+    class="w-full mt-8">
+    
     <h2 class="text-lg font-semibold mb-4">Seguimiento del pedido</h2>
     <div class="flex items-center justify-between">
         @foreach ($mainFlow as $index => $step)
