@@ -196,20 +196,20 @@ add_action('after_setup_theme', function () {
     return $template;
     }, 99);
 
-    add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('edit-address')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-edit-address.blade.php');
+     add_filter('template_include', function ($template) {
+        if (is_wc_endpoint_url('edit-account')) {
+            $blade_template = locate_template('resources/views/woocommerce/myaccount/form-edit-account.blade.php');
 
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.form-edit-address', [
-                'load_address' => isset($_GET['address']) ? sanitize_text_field($_GET['address']) : 'billing',
-                'address' => WC()->countries->get_address_fields(WC()->customer->get_billing_country(), 'billing')
-            ])->render();
-            exit;
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.myaccount.form-edit-account', [
+                    'user' => wp_get_current_user(),
+                    'nonce_value' => wp_create_nonce('save_account_details'),
+                ])->render();
+                exit;
+            }
         }
-    }
 
-    return $template;
+        return $template;
     }, 99);
 
 
