@@ -255,6 +255,9 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+    add_shortcode('custom_logout_url', function() {
+    return wp_logout_url(home_url()); // o cualquier otra URL de destino
+    });
 
        /**
      * Enable post thumbnail support.
