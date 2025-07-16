@@ -37,13 +37,9 @@
                         <div id="order_review" class="w-full">
                             {{-- Resumen del pedido --}}
                             @include('woocommerce.checkout.partials.review-order')
-                            
-                        </div>
-                        <div class="w-full">
-                            {{-- Método de pago (WooCommerce hook) --}}
+                             {{-- Método de pago (WooCommerce hook) --}}
                             @include('woocommerce.checkout.payment')
                         </div>
-                       <div class="w-full">
                             {{-- Botón realizar pedido --}}
                             <div class="pt-4">
                                 @if (is_user_logged_in())
@@ -75,7 +71,7 @@
                                 @endif
 
                             </div>
-                        </div>
+                        
                 </div>
 
                         {{-- Después del resumen --}}
