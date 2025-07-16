@@ -41,7 +41,7 @@
                         </div>
                         <div class="w-full">
                             {{-- Método de pago (WooCommerce hook) --}}
-                            @include('woocommerce.checkout.payment.php')
+                            @include('woocommerce.checkout.payment')
                         </div>
                        <div class="w-full">
                             {{-- Botón realizar pedido --}}
