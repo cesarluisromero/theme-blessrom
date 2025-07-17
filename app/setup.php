@@ -284,33 +284,47 @@ add_filter('template_include', function ($template) {
 add_action('template_redirect', function () {
     global $wp;
 
+    // Capturar y guardar 'key' y 'login' si vienen por GET
+    if (
+        isset($wp->query_vars['lost-password']) &&
+        isset($_GET['key']) &&
+        isset($_GET['login'])
+    ) {
+        $key = sanitize_text_field($_GET['key']);
+        $login = sanitize_text_field($_GET['login']);
+         die("Key recibido: $key<br>Login recibido: $login");
+        // Guardarlos en cookies por 2 minutos (lo suficiente para redirigir y usarlos)
+        setcookie('reset_key', $key, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie('reset_login', $login, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
+
+        // Redirigir a la URL limpia
+        $url = wc_get_account_endpoint_url('lost-password') . '?show-reset-form=true';
+        wp_redirect($url);
+        exit;
+    }
+
+    // Si ya estás en el form, recuperar desde cookie
+    if (
+        is_account_page() &&
+        isset($wp->query_vars['lost-password']) &&
+        isset($_GET['show-reset-form'])
+    ) {
+        $key = sanitize_text_field($_COOKIE['reset_key'] ?? '');
+        $login = sanitize_text_field($_COOKIE['reset_login'] ?? '');
+
+        echo \Roots\view('woocommerce.myaccount.form-reset-password', [
+            'reset_key' => $key,
+            'reset_login' => $login,
+        ])->render();
+        exit;
+    }
+
+    // Por defecto mostrar formulario normal
     if (is_account_page() && isset($wp->query_vars['lost-password'])) {
-
-        // Si el link es para confirmar que se envió el correo
-        if (isset($_GET['reset-link-sent'])) {
-            echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-            exit;
-        }
-
-        // Si el link es para mostrar el formulario de restablecimiento de contraseña
-        if (isset($_GET['show-reset-form'])) {
-            $key = sanitize_text_field($_GET['key'] ?? '');
-            $login = sanitize_text_field($_GET['login'] ?? '');
-
-             die("Key recibido: $key<br>Login recibido: $login");
-            echo \Roots\view('woocommerce.myaccount.form-reset-password', [
-                'reset_key' => $key,
-                'reset_login' => $login,
-            ])->render();
-            exit;
-        }
-
-        // Por defecto, mostrar formulario para ingresar el correo
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
     }
 });
-
 
 
 
