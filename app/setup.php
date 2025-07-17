@@ -303,6 +303,10 @@ add_filter('template_include', function ($template) {
     }
 });
 
+add_action('init', function () {
+    add_rewrite_endpoint('reset-password', EP_ROOT | EP_PAGES);
+});
+
        /**
      * Enable post thumbnail support.
      *
