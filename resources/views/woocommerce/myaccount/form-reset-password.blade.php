@@ -20,6 +20,12 @@
         } else {
             $user = check_password_reset_key($key, $login);
             if (is_wp_error($user)) {
+
+              // DEPURACIÓN: Mostrar mensaje de error completo
+                echo '<pre>';
+                echo 'Resultado de check_password_reset_key:' . PHP_EOL;
+                var_dump($user);
+                echo '</pre>';
                 wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
             } else {
                 reset_password($user, $password1);
