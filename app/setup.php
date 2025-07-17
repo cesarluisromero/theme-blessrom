@@ -170,18 +170,6 @@ add_filter('template_include', function ($template) {
 
 
 
-//pagina logueada
-add_filter('template_include', function ($template) {
-    if (is_account_page() && !is_wc_endpoint_url()) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/dashboard.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.dashboard')->render();
-            exit;
-        }
-    }
-    return $template;
-}, 99);
-
 //página para editar direccion
 add_filter('template_include', function ($template) {
     if (is_account_page() && is_wc_endpoint_url('edit-address')) {
@@ -268,26 +256,39 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
 
+
+//página para loguearse
+add_filter('template_include', function ($template) {
+    // Mostrar solo en la página "Mi cuenta" (login/register)
+    if (is_account_page() && !is_user_logged_in()) {
+        echo \Roots\view('woocommerce.myaccount.form-login')->render();
+        exit;
+    }
+
+    return $template;
+}, 99);
+
+//pagina logueada
+add_filter('template_include', function ($template) {
+    if (is_account_page() && !is_wc_endpoint_url()) {
+        $blade_template = locate_template('resources/views/woocommerce/myaccount/dashboard.blade.php');
+        if ($blade_template) {
+            echo \Roots\view('woocommerce.myaccount.dashboard')->render();
+            exit;
+        }
+    }
+    return $template;
+}, 99);
+
 //página cuando se olvida contraseña
-
-
 add_action('template_redirect', function () {
-    if (
-        isset($GLOBALS['wp']->query_vars['lost-password']) &&
-        isset($_GET['key']) &&
-        isset($_GET['login'])
-    ) {
-        $key = sanitize_text_field($_GET['key']);
-        $login = sanitize_text_field($_GET['login']);
+    global $wp;
 
-        // Redirige a tu vista personalizada segura
-        $url = home_url('/reset-debug/?key=' . $key . '&login=' . $login);
-        wp_redirect($url);
+    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+        echo \Roots\view('woocommerce.myaccount.page-reset-password')->render();
         exit;
     }
 });
-
-
 
 
 /**
