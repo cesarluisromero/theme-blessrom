@@ -11,8 +11,7 @@ use Illuminate\Support\Facades\Vite;
 require_once get_theme_file_path('app/cart-actions.php');
 
 /**
- * Inject styles into the block editor.
- *
+ * Editor styles
  * @return array
  */
 add_filter('block_editor_settings_all', function ($settings) {
@@ -26,7 +25,7 @@ add_filter('block_editor_settings_all', function ($settings) {
 });
 
 /**
- * Inject scripts into the block editor.
+ * Editor scripts
  *
  * @return void
  */
@@ -65,38 +64,25 @@ add_filter('theme_file_path', function ($path, $file) {
  * @return void
  */
 add_action('after_setup_theme', function () {
-    /**
-     * Disable full-site editing support.
-     *
-     * @link https://wptavern.com/gutenberg-10-5-embeds-pdfs-adds-verse-block-color-options-and-introduces-new-patterns
-     */
+    
     remove_theme_support('block-templates');
-
-    /**
-     * Register the navigation menus.
-     *
-     * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
-     */
     register_nav_menus([
         'primary_navigation' => __('Primary Navigation', 'sage'),
     ]);
-
-
-    /**
-     * Disable the default block patterns.
-     *
-     * @link https://developer.wordpress.org/block-editor/developers/themes/theme-support/#disabling-the-default-block-patterns
-     */
     remove_theme_support('core-block-patterns');
-
-    /**
-     * Enable plugins to manage the document title.
-     *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#title-tag
-     */
     add_theme_support('title-tag');
-
-
+    add_theme_support('post-thumbnails');  
+    add_theme_support('responsive-embeds');
+    add_theme_support('html5', [
+        'caption',
+        'comment-form',
+        'comment-list',
+        'gallery',
+        'search-form',
+        'script',
+        'style',
+    ]);
+    add_theme_support('customize-selective-refresh-widgets');
     add_theme_support('woocommerce');
 
     add_filter('template_include', function ($template) {
@@ -256,93 +242,57 @@ add_action('after_setup_theme', function () {
     }, 99);
 
     add_action('template_redirect', function () {
-    global $wp;
+        global $wp;
 
-    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        exit;
-    }
-});
-    
-
-add_filter('template_include', function ($template) {
-    global $wp;
-
-    if (is_wc_endpoint_url('reset-password')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-reset-password.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+        if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+            echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
             exit;
         }
-    }
+    });
+    
 
-    return $template;
-}, 99);
+    add_filter('template_include', function ($template) {
+        global $wp;
 
-
-   add_action('template_redirect', function () {
-    global $wp;
-
-    if (
-        isset($wp->query_vars['lost-password']) &&
-        isset($_GET['key']) &&
-        isset($_GET['login'])
-    ) {
-        $key = sanitize_text_field($_GET['key']);
-        $login = sanitize_text_field($_GET['login']);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : null; // opcional, si lo usas
-
-        $url = wc_get_account_endpoint_url('reset-password') . "?key={$key}&login={$login}";
-
-        if ($id) {
-            $url .= "&id={$id}";
+        if (is_wc_endpoint_url('reset-password')) {
+            $blade_template = locate_template('resources/views/woocommerce/myaccount/form-reset-password.blade.php');
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+                exit;
+            }
         }
 
-        wp_redirect($url);
-        exit;
-    }
-});
+        return $template;
+    }, 99);
 
 
+    add_action('template_redirect', function () {
+        global $wp;
+
+        if (
+            isset($wp->query_vars['lost-password']) &&
+            isset($_GET['key']) &&
+            isset($_GET['login'])
+        ) {
+            $key = sanitize_text_field($_GET['key']);
+            $login = sanitize_text_field($_GET['login']);
+            $id = isset($_GET['id']) ? intval($_GET['id']) : null; // opcional, si lo usas
+
+            $url = wc_get_account_endpoint_url('reset-password') . "?key={$key}&login={$login}";
+
+            if ($id) {
+                $url .= "&id={$id}";
+            }
+
+            wp_redirect($url);
+            exit;
+        }
+    });
 
     
 
-       /**
-     * Enable post thumbnail support.
-     *
-     * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
-     */
-    add_theme_support('post-thumbnails');
-
-    /**
-     * Enable responsive embed support.
-     *
-     * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content
-     */
-    add_theme_support('responsive-embeds');
-
-    /**
-     * Enable HTML5 markup support.
-     *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#html5
-     */
-    add_theme_support('html5', [
-        'caption',
-        'comment-form',
-        'comment-list',
-        'gallery',
-        'search-form',
-        'script',
-        'style',
-    ]);
-
-    /**
-     * Enable selective refresh for widgets in customizer.
-     *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/#customize-selective-refresh-widgets
-     */
-    add_theme_support('customize-selective-refresh-widgets');
 }, 20);
+
 
 /**
  * Register the theme sidebars.
