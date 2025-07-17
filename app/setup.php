@@ -319,6 +319,22 @@ add_action('template_redirect', function () {
     }
 });
 
+add_action('template_redirect', function () {
+    global $wp;
+
+    if (
+        is_account_page() &&
+        isset($wp->query_vars['lost-password']) &&
+        isset($_GET['key']) &&
+        isset($_GET['login']) &&
+        isset($_GET['show-reset-form']) &&
+        $_GET['show-reset-form'] === 'true'
+    ) {
+        echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+        exit;
+    }
+});
+
 /**
  * Register the theme sidebars.
  *
