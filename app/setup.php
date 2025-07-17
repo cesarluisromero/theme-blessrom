@@ -107,24 +107,10 @@ add_action('template_redirect', function () {
     }
 });
 
-
-// Capturar key y login ANTES de que WooCommerce los redirija
+// Registro de endpoint reset-password
 add_action('init', function () {
-    if (
-        is_account_page() &&
-        isset($_GET['key']) &&
-        isset($_GET['login']) &&
-        isset($GLOBALS['wp']->query_vars['lost-password'])
-    ) {
-        $key = sanitize_text_field($_GET['key']);
-        $login = sanitize_user($_GET['login']);
-
-        // Guardamos en cookies por 2 minutos
-        setcookie('reset_key', $key, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie('reset_login', $login, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
-    }
-}, 1); // Muy baja prioridad para ejecutarse antes que WooCommerce
-
+    add_rewrite_endpoint('reset-password', EP_ROOT | EP_PAGES);
+});
 
 // WooCommerce login redirect
 add_filter('woocommerce_login_redirect', function($redirect, $user) {
@@ -294,7 +280,7 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
 
-//página cuando se olvida contraseña
+
 // Mostrar formularios personalizados según la URL
 add_action('template_redirect', function () {
     global $wp;
@@ -322,6 +308,24 @@ add_action('template_redirect', function () {
         // Mostrar por defecto el formulario para ingresar el correo
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
+    }
+});
+
+
+
+add_action('parse_request', function ($wp) {
+    if (
+        is_account_page() &&
+        isset($_GET['key']) &&
+        isset($_GET['login']) &&
+        isset($wp->query_vars['lost-password'])
+    ) {
+        $key = sanitize_text_field($_GET['key']);
+        $login = sanitize_user($_GET['login']);
+
+        // Guardar en cookies antes de que WooCommerce redirija
+        setcookie('reset_key', $key, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
+        setcookie('reset_login', $login, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
     }
 });
 
