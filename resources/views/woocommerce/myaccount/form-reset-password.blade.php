@@ -19,19 +19,19 @@
             wc_add_notice('Las contraseñas no coinciden.', 'error');
         } else {
             $user = check_password_reset_key($key, $login);
-            if (is_wp_error($user)) {
 
-              // DEPURACIÓN: Mostrar mensaje de error completo
-                echo '<pre>';
-                echo 'Resultado de check_password_reset_key:' . PHP_EOL;
-                var_dump($user);
-                echo '</pre>';
+            if (is_wp_error($user)) {
                 wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
+                // Debug temporal
+                echo '<pre>';
+                echo "Key: $key\n";
+                echo "Login: $login\n";
+                print_r($user);
+                echo '</pre>';
             } else {
                 reset_password($user, $password1);
                 wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
 
-                // Redirigir a "Mi cuenta"
                 wp_safe_redirect(wc_get_page_permalink('myaccount'));
                 exit;
             }
@@ -39,14 +39,15 @@
     }
   @endphp
 
-  {{-- Mostrar mensajes de éxito o error --}}
   @if (wc_notice_count())
     <div class="mb-4">
       {!! wc_print_notices() !!}
     </div>
   @endif
-
-  {{-- Formulario de restablecimiento --}}
+    <pre style="background:#f3f4f6;padding:10px;border-radius:5px;">
+    Key recibido: {{ request()->get('key') }}
+    Login recibido: {{ request()->get('login') }}
+    </pre>
   <form method="post" class="space-y-4">
     @php do_action('woocommerce_reset_password_form_start') @endphp
 
