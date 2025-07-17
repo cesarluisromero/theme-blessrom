@@ -311,7 +311,7 @@ add_action('template_redirect', function () {
     ) {
         $key = sanitize_text_field($_COOKIE['reset_key'] ?? '');
         $login = sanitize_text_field($_COOKIE['reset_login'] ?? '');
-
+        die("Key recibido segundo if: $key<br>Login recibido: $login");
         echo \Roots\view('woocommerce.myaccount.form-reset-password', [
             'reset_key' => $key,
             'reset_login' => $login,
