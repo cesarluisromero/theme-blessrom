@@ -255,23 +255,16 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-   add_filter('template_include', function ($template) {
-        global $wp;
+    add_action('template_redirect', function () {
+    global $wp;
 
-        // Mostrar el formulario de recuperación si viene con la llave
-        if (is_account_page() && isset($_GET['key']) && isset($_GET['login'])) {
-            return \Roots\view('woocommerce.myaccount.form-reset-password', [
-                'login' => sanitize_text_field($_GET['login']),
-                'key' => sanitize_text_field($_GET['key']),
-            ])->render();
-        }
-
-        return $template;
-    }, 99);
-
+    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
+        exit;
+    }
+});
     
 
-  
 add_filter('template_include', function ($template) {
     global $wp;
 
@@ -287,16 +280,17 @@ add_filter('template_include', function ($template) {
 }, 99);
 
 
-    add_action('parse_request', function ($wp) {
+   add_action('template_redirect', function () {
+    global $wp;
+
     if (
         isset($wp->query_vars['lost-password']) &&
         isset($_GET['key']) &&
-        isset($_GET['login']) &&
-        !is_admin()
+        isset($_GET['login'])
     ) {
         $key = sanitize_text_field($_GET['key']);
         $login = sanitize_text_field($_GET['login']);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+        $id = isset($_GET['id']) ? intval($_GET['id']) : null; // opcional, si lo usas
 
         $url = wc_get_account_endpoint_url('reset-password') . "?key={$key}&login={$login}";
 
@@ -309,9 +303,9 @@ add_filter('template_include', function ($template) {
     }
 });
 
-add_action('init', function () {
-    add_rewrite_endpoint('reset-password', EP_ROOT | EP_PAGES);
-});
+
+
+    
 
        /**
      * Enable post thumbnail support.
