@@ -83,9 +83,11 @@ add_action('after_setup_theme', function () {
         'style',
     ]);
     add_theme_support('customize-selective-refresh-widgets');
-    add_theme_support('woocommerce');
+    add_theme_support('woocommerce');   
 
-    add_filter('template_include', function ($template) {
+}, 20);
+
+add_filter('template_include', function ($template) {
         if (is_singular('product')) {
             $blade_template = locate_template('resources/views/woocommerce/single-product.blade.php');
             if ($blade_template) {
@@ -266,7 +268,7 @@ add_action('after_setup_theme', function () {
     }, 99);
 
 
-    add_action('template_redirect', function () {
+add_action('template_redirect', function () {
         global $wp;
 
         if (
@@ -287,12 +289,7 @@ add_action('after_setup_theme', function () {
             wp_redirect($url);
             exit;
         }
-    });
-
-    
-
-}, 20);
-
+});
 
 /**
  * Register the theme sidebars.
