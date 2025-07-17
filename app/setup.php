@@ -287,15 +287,7 @@ add_action('template_redirect', function () {
     }
 });
 
-// Reset password (cambio de contraseña)
-add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('reset-password')) {
-        return \Roots\view('woocommerce.myaccount.form-reset-password')->render() ?: $template;
-    }
-    return $template;
-}, 99);
-    
-// Redirigir a lost-password con parámetro especial que el template_redirect pueda detectar
+//nuevo redirect
 add_action('template_redirect', function () {
     global $wp;
 
@@ -304,38 +296,17 @@ add_action('template_redirect', function () {
         isset($_GET['key']) &&
         isset($_GET['login'])
     ) {
+        // En lugar de redirigir al endpoint Woo, redirige a tu página personalizada
         $key = sanitize_text_field($_GET['key']);
         $login = sanitize_text_field($_GET['login']);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-        $url = wc_get_page_permalink('myaccount') . 'lost-password/?show-reset-form=true'
-             . "&key={$key}&login={$login}";
-
-        if ($id) {
-            $url .= "&id={$id}";
-        }
+        // Usa la página Blade que tú controlas (puede ser /reset-password o /reset-debug)
+        $url = home_url('/reset-password/?key=' . $key . '&login=' . $login);
 
         wp_redirect($url);
         exit;
     }
 });
-
-
-add_action('template_redirect', function () {
-    global $wp;
-
-    // Si estamos en la página de cuenta con parámetros ?key & ?login (y posiblemente show-reset-form)
-    if (
-        is_account_page() &&
-        isset($_GET['key']) &&
-        isset($_GET['login']) &&
-        (isset($_GET['show-reset-form']) || isset($wp->query_vars['reset-password']))
-    ) {
-        echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
-        exit;
-    }
-});
-
 /**
  * Register the theme sidebars.
  *
