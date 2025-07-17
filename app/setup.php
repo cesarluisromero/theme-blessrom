@@ -255,6 +255,15 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
+    add_filter('template_include', function ($template) {
+    if (is_wc_endpoint_url('lost-password')) {
+        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
+        exit;
+    }
+
+    return $template;
+    }, 99);
+
     add_filter('woocommerce_logout_redirect', function($redirect_to) {
          return home_url(); // Redirige al home después de cerrar sesión
     });
