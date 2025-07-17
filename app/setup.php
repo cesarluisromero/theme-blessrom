@@ -168,16 +168,7 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
 
-//página para loguearse
-add_filter('template_include', function ($template) {
-    // Mostrar solo en la página "Mi cuenta" (login/register)
-    if (is_account_page() && !is_user_logged_in()) {
-        echo \Roots\view('woocommerce.myaccount.form-login')->render();
-        exit;
-    }
 
-    return $template;
-}, 99);
 
 //pagina logueada
 add_filter('template_include', function ($template) {
