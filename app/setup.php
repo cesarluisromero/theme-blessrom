@@ -290,7 +290,7 @@ add_action('template_redirect', function () {
 add_action('template_redirect', function () {
     global $wp;
 
-    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+    if (is_account_page() && isset($wp->query_vars['reset-password'])) {
         echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
         exit;
     }
