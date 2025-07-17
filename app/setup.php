@@ -284,7 +284,7 @@ add_filter('template_include', function ($template) {
 add_action('template_redirect', function () {
     global $wp;
 
-    // Capturar y guardar 'key' y 'login' si vienen por GET
+    // Paso 1: Capturar key y login originales del enlace del correo
     if (
         isset($wp->query_vars['lost-password']) &&
         isset($_GET['key']) &&
@@ -292,26 +292,30 @@ add_action('template_redirect', function () {
     ) {
         $key = sanitize_text_field($_GET['key']);
         $login = sanitize_text_field($_GET['login']);
-         die("Key recibido: $key<br>Login recibido: $login");
-        // Guardarlos en cookies por 2 minutos (lo suficiente para redirigir y usarlos)
+        die("Key recibido segundo paso1: $key<br>Login recibido: $login");
+        // Guardar en cookies por 2 minutos
         setcookie('reset_key', $key, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
         setcookie('reset_login', $login, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
 
-        // Redirigir a la URL limpia
+        // ⚠️ IMPORTANTE: no imprimir nada antes del redireccionamiento
         $url = wc_get_account_endpoint_url('lost-password') . '?show-reset-form=true';
         wp_redirect($url);
         exit;
     }
 
-    // Si ya estás en el form, recuperar desde cookie
+    // Paso 2: Mostrar el formulario y recuperar de cookies
     if (
         is_account_page() &&
         isset($wp->query_vars['lost-password']) &&
         isset($_GET['show-reset-form'])
     ) {
+        // Aquí ya deben estar disponibles las cookies
         $key = sanitize_text_field($_COOKIE['reset_key'] ?? '');
         $login = sanitize_text_field($_COOKIE['reset_login'] ?? '');
-        die("Key recibido segundo if: $key<br>Login recibido: $login");
+        die("Key recibido segundo paso2: $key<br>Login recibido: $login");
+        // DEBUG: para verificar si llegan
+        // die("Key recibido: $key<br>Login recibido: $login");
+
         echo \Roots\view('woocommerce.myaccount.form-reset-password', [
             'reset_key' => $key,
             'reset_login' => $login,
@@ -319,16 +323,12 @@ add_action('template_redirect', function () {
         exit;
     }
 
-    // Por defecto mostrar formulario normal
+    // Paso 3: formulario por defecto
     if (is_account_page() && isset($wp->query_vars['lost-password'])) {
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
     }
 });
-
-
-
-
 
 /**
  * Register the theme sidebars.
