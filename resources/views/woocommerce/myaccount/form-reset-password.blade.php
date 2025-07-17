@@ -13,36 +13,35 @@
   </div>
 
   @php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $key = sanitize_text_field($_POST['reset_key'] ?? '');
-        $login = sanitize_user($_POST['reset_login'] ?? '');
-        $password1 = $_POST['password_1'] ?? '';
-        $password2 = $_POST['password_2'] ?? '';
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $key = sanitize_text_field($_POST['reset_key'] ?? '');
+      $login = sanitize_user($_POST['reset_login'] ?? '');
+      $password1 = $_POST['password_1'] ?? '';
+      $password2 = $_POST['password_2'] ?? '';
 
-        if (empty($password1) || empty($password2)) {
-            wc_add_notice('Por favor completa ambos campos de contraseña.', 'error');
-        } elseif ($password1 !== $password2) {
-            wc_add_notice('Las contraseñas no coinciden.', 'error');
-        } else {
-            $user = check_password_reset_key($key, $login);
+      if (empty($password1) || empty($password2)) {
+          wc_add_notice('Por favor completa ambos campos de contraseña.', 'error');
+      } elseif ($password1 !== $password2) {
+          wc_add_notice('Las contraseñas no coinciden.', 'error');
+      } else {
+          $user = check_password_reset_key($key, $login);
+          if (is_wp_error($user)) {
+              wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
+          } else {
+              reset_password($user, $password1);
+              wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
 
-            // DEBUG opcional
-            echo '<pre style="background:#fee;padding:10px;border:1px solid #f00">Resultado de check_password_reset_key:<br>';
-            var_dump($user);
-            echo '</pre>';
+              // Limpiar cookies
+              setcookie('reset_key', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
+              setcookie('reset_login', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
 
-            if (is_wp_error($user)) {
-                wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
-            } else {
-                reset_password($user, $password1);
-                wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
+              wp_safe_redirect(wc_get_page_permalink('myaccount'));
+              exit;
+          }
+      }
+  }
+@endphp
 
-                wp_safe_redirect(wc_get_page_permalink('myaccount'));
-                exit;
-            }
-        }
-    }
-  @endphp
 
   {{-- Mostrar mensajes de éxito o error --}}
   @if (wc_notice_count())
