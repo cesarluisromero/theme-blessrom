@@ -265,6 +265,20 @@ add_action('after_setup_theme', function () {
 });
     
 
+add_filter('template_include', function ($template) {
+    global $wp;
+
+    if (is_wc_endpoint_url('reset-password')) {
+        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-reset-password.blade.php');
+        if ($blade_template) {
+            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+            exit;
+        }
+    }
+
+    return $template;
+}, 99);
+
 
     add_filter('woocommerce_logout_redirect', function($redirect_to) {
          return home_url(); // Redirige al home después de cerrar sesión
