@@ -278,27 +278,19 @@ add_filter('template_include', function ($template) {
 }, 99);
 
 //página cuando se olvida contraseña
-add_action('template_redirect', function () {
+add_filter('template_include', function ($template) {
     global $wp;
-
-    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        exit;
+    if (is_account_page() && isset($wp->query_vars['lost-password']) && !isset($_GET['key'])) {
+        return \Roots\view('woocommerce.myaccount.form-lost-password')->render() ?: $template;
     }
-});
+    return $template;
+}, 99);
     
 //cambio de contraseña
 add_filter('template_include', function ($template) {
-    global $wp;
-
     if (is_wc_endpoint_url('reset-password')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-reset-password.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
-            exit;
-        }
+        return \Roots\view('woocommerce.myaccount.form-reset-password')->render() ?: $template;
     }
-
     return $template;
 }, 99);
 
