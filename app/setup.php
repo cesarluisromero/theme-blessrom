@@ -107,10 +107,6 @@ add_action('template_redirect', function () {
     }
 });
 
-// Registro de endpoint reset-password
-add_action('init', function () {
-    add_rewrite_endpoint('reset-password', EP_ROOT | EP_PAGES);
-});
 
 // Capturar key y login ANTES de que WooCommerce los redirija
 add_action('init', function () {
