@@ -284,11 +284,26 @@ add_filter('template_include', function ($template) {
 add_action('template_redirect', function () {
     global $wp;
 
-    if (is_account_page() && isset($wp->query_vars['reset-link'])) {
+    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+
+        // Si el link es para confirmar que se envió el correo
+        if (isset($_GET['reset-link-sent'])) {
+            echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
+            exit;
+        }
+
+        // Si el link es para mostrar el formulario de restablecimiento de contraseña
+        if (isset($_GET['show-reset-form'])) {
+            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+            exit;
+        }
+
+        // Por defecto, mostrar formulario para ingresar el correo
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
     }
 });
+
 
 
 
