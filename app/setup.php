@@ -297,9 +297,7 @@ add_action('template_redirect', function () {
             $key = sanitize_text_field($_GET['key'] ?? '');
             $login = sanitize_text_field($_GET['login'] ?? '');
 
-             // 🔽 Aquí puedes imprimirlo
-                echo "Key recibido";
-                echo "Login recibido";
+             die("Key recibido: $key<br>Login recibido: $login");
             echo \Roots\view('woocommerce.myaccount.form-reset-password', [
                 'reset_key' => $key,
                 'reset_login' => $login,
