@@ -280,9 +280,20 @@ add_filter('template_include', function ($template) {
 }, 99);
 
 
-    add_filter('woocommerce_logout_redirect', function($redirect_to) {
-         return home_url(); // Redirige al home después de cerrar sesión
-    });
+   add_action('template_redirect', function () {
+    if (
+        is_wc_endpoint_url('lost-password') &&
+        isset($_GET['key']) &&
+        isset($_GET['login'])
+    ) {
+        // Construye la nueva URL a reset-password
+        $key = sanitize_text_field($_GET['key']);
+        $login = sanitize_text_field($_GET['login']);
+
+        wp_redirect(wc_get_account_endpoint_url('reset-password') . "?key={$key}&login={$login}");
+        exit;
+    }
+});
 
     
 
