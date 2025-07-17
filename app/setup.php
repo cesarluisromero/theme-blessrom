@@ -255,14 +255,20 @@ add_action('after_setup_theme', function () {
         return $template;
     }, 99);
 
-    add_action('template_redirect', function () {
-    global $wp;
+   add_filter('template_include', function ($template) {
+        global $wp;
 
-    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        exit;
-    }
-});
+        // Mostrar el formulario de recuperación si viene con la llave
+        if (is_account_page() && isset($_GET['key']) && isset($_GET['login'])) {
+            return \Roots\view('woocommerce.myaccount.form-reset-password', [
+                'login' => sanitize_text_field($_GET['login']),
+                'key' => sanitize_text_field($_GET['key']),
+            ])->render();
+        }
+
+        return $template;
+    }, 99);
+
     
 
   
