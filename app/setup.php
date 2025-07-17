@@ -284,7 +284,7 @@ add_filter('template_include', function ($template) {
 add_action('template_redirect', function () {
     global $wp;
 
-    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+    if (is_account_page() && isset($wp->query_vars['reset-link'])) {
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
     }
