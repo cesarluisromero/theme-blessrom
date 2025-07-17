@@ -256,12 +256,14 @@ add_action('after_setup_theme', function () {
     }, 99);
 
     add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('lost-password')) {
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        exit;
-    }
-
-    return $template;
+        if (is_wc_endpoint_url('lost-password')) {
+            $blade_template = locate_template('resources/views/woocommerce/myaccount/form-lost-password.blade.php');
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
+                exit;
+            }
+        }
+        return $template;
     }, 99);
 
     add_filter('woocommerce_logout_redirect', function($redirect_to) {
