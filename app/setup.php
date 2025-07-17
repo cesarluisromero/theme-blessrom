@@ -286,11 +286,9 @@ add_action('template_redirect', function () {
     global $wp;
 
     if (is_account_page() && isset($wp->query_vars['lost-password'])) {
-
-        // Si WooCommerce redirige automáticamente al formulario con show-reset-form
         if (isset($_GET['show-reset-form'])) {
-            $key = sanitize_text_field($_COOKIE['reset_key'] ?? '');
-            $login = sanitize_text_field($_COOKIE['reset_login'] ?? '');
+            $key = $_SESSION['reset_key'] ?? '';
+            $login = $_SESSION['reset_login'] ?? '';
 
             echo \Roots\view('woocommerce.myaccount.form-reset-password', [
                 'reset_key' => $key,
@@ -299,17 +297,16 @@ add_action('template_redirect', function () {
             exit;
         }
 
-        // Si se muestra el mensaje "Correo enviado"
         if (isset($_GET['reset-link-sent'])) {
             echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
             exit;
         }
 
-        // Mostrar por defecto el formulario para ingresar el correo
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
     }
 });
+
 
 
 
@@ -320,14 +317,11 @@ add_action('parse_request', function ($wp) {
         isset($_GET['login']) &&
         isset($wp->query_vars['lost-password'])
     ) {
-        $key = sanitize_text_field($_GET['key']);
-        $login = sanitize_user($_GET['login']);
-
-        // Guardar en cookies antes de que WooCommerce redirija
-        setcookie('reset_key', $key, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
-        setcookie('reset_login', $login, time() + 120, COOKIEPATH, COOKIE_DOMAIN);
+        $_SESSION['reset_key'] = sanitize_text_field($_GET['key']);
+        $_SESSION['reset_login'] = sanitize_user($_GET['login']);
     }
-});
+}, 1);
+
 
 
 /**
