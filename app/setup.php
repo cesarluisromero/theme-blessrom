@@ -287,14 +287,13 @@ add_action('template_redirect', function () {
     }
 });
 
-add_action('template_redirect', function () {
-    global $wp;
-
-    if (is_account_page() && isset($wp->query_vars['reset-password'])) {
-        echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
-        exit;
+// Reset password (cambio de contraseña)
+add_filter('template_include', function ($template) {
+    if (is_wc_endpoint_url('reset-password')) {
+        return \Roots\view('woocommerce.myaccount.form-reset-password')->render() ?: $template;
     }
-});
+    return $template;
+}, 99);
     
 /**
  * Register the theme sidebars.
