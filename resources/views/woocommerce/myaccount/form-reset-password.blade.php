@@ -6,12 +6,41 @@
     🔒 Restablecer contraseña
   </h1>
 
-  @if ( wc_notice_count() )
+  @php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $key = sanitize_text_field($_POST['reset_key'] ?? '');
+        $login = sanitize_user($_POST['reset_login'] ?? '');
+        $password1 = $_POST['password_1'] ?? '';
+        $password2 = $_POST['password_2'] ?? '';
+
+        if (empty($password1) || empty($password2)) {
+            wc_add_notice('Por favor completa ambos campos de contraseña.', 'error');
+        } elseif ($password1 !== $password2) {
+            wc_add_notice('Las contraseñas no coinciden.', 'error');
+        } else {
+            $user = check_password_reset_key($key, $login);
+            if (is_wp_error($user)) {
+                wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
+            } else {
+                reset_password($user, $password1);
+                wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
+
+                // Redirigir a "Mi cuenta"
+                wp_safe_redirect(wc_get_page_permalink('myaccount'));
+                exit;
+            }
+        }
+    }
+  @endphp
+
+  {{-- Mostrar mensajes de éxito o error --}}
+  @if (wc_notice_count())
     <div class="mb-4">
-      {!! do_action('woocommerce_before_reset_password_form') !!}
+      {!! wc_print_notices() !!}
     </div>
   @endif
 
+  {{-- Formulario de restablecimiento --}}
   <form method="post" class="space-y-4">
     @php do_action('woocommerce_reset_password_form_start') @endphp
 
