@@ -295,12 +295,11 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
     
-// redirigir correctamente desde lost-password a reset-password
+// Redirigir a lost-password con parámetro especial que el template_redirect pueda detectar
 add_action('template_redirect', function () {
     global $wp;
 
     if (
-        is_account_page() &&
         isset($wp->query_vars['lost-password']) &&
         isset($_GET['key']) &&
         isset($_GET['login'])
@@ -309,7 +308,9 @@ add_action('template_redirect', function () {
         $login = sanitize_text_field($_GET['login']);
         $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-        $url = wc_get_account_endpoint_url('reset-password') . "?key={$key}&login={$login}";
+        $url = wc_get_page_permalink('myaccount') . 'lost-password/?show-reset-form=true'
+             . "&key={$key}&login={$login}";
+
         if ($id) {
             $url .= "&id={$id}";
         }
@@ -319,16 +320,16 @@ add_action('template_redirect', function () {
     }
 });
 
+
 add_action('template_redirect', function () {
     global $wp;
 
+    // Si estamos en la página de cuenta con parámetros ?key & ?login (y posiblemente show-reset-form)
     if (
         is_account_page() &&
-        isset($wp->query_vars['lost-password']) &&
         isset($_GET['key']) &&
         isset($_GET['login']) &&
-        isset($_GET['show-reset-form']) &&
-        $_GET['show-reset-form'] === 'true'
+        (isset($_GET['show-reset-form']) || isset($wp->query_vars['reset-password']))
     ) {
         echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
         exit;
