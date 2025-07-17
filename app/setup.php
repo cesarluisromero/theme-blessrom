@@ -265,10 +265,23 @@ add_action('after_setup_theme', function () {
 });
     
 
-  add_action('init', function () {
+  
+add_filter('template_include', function ($template) {
     global $wp;
 
-    // Solo si estamos en la URL de lost-password con key y login
+    if (is_wc_endpoint_url('reset-password')) {
+        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-reset-password.blade.php');
+        if ($blade_template) {
+            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+            exit;
+        }
+    }
+
+    return $template;
+}, 99);
+
+
+    add_action('parse_request', function ($wp) {
     if (
         isset($wp->query_vars['lost-password']) &&
         isset($_GET['key']) &&
@@ -289,23 +302,6 @@ add_action('after_setup_theme', function () {
         exit;
     }
 });
-
-add_filter('template_include', function ($template) {
-    global $wp;
-
-    if (is_wc_endpoint_url('reset-password')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-reset-password.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
-            exit;
-        }
-    }
-
-    return $template;
-}, 99);
-
-
-    
 
        /**
      * Enable post thumbnail support.
