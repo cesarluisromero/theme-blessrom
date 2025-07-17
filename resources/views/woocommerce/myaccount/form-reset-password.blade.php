@@ -6,19 +6,16 @@
     🔒 Restablecer contraseña
   </h1>
 
-  @php
-    $key = request()->get('key') ?? ($_POST['reset_key'] ?? '');
-    $login = request()->get('login') ?? ($_POST['reset_login'] ?? '');
-  @endphp
-
-  {{-- Depuración --}}
-  <pre class="bg-gray-100 p-3 rounded">
-    Key recibido: {{ $key }}
-    Login recibido: {{ $login }}
-  </pre>
+  {{-- Mostrar los valores recibidos --}}
+  <div class="bg-gray-100 p-3 text-sm mb-4">
+    <p><strong>Key recibido:</strong> {{ $reset_key }}</p>
+    <p><strong>Login recibido:</strong> {{ $reset_login }}</p>
+  </div>
 
   @php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $key = sanitize_text_field($_POST['reset_key'] ?? '');
+        $login = sanitize_user($_POST['reset_login'] ?? '');
         $password1 = $_POST['password_1'] ?? '';
         $password2 = $_POST['password_2'] ?? '';
 
@@ -29,13 +26,17 @@
         } else {
             $user = check_password_reset_key($key, $login);
 
-            echo '<pre style="background:#fee;padding:1em">Resultado de check_password_reset_key:'; var_dump($user); echo '</pre>';
+            // DEBUG opcional
+            echo '<pre style="background:#fee;padding:10px;border:1px solid #f00">Resultado de check_password_reset_key:<br>';
+            var_dump($user);
+            echo '</pre>';
 
             if (is_wp_error($user)) {
                 wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
             } else {
                 reset_password($user, $password1);
                 wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
+
                 wp_safe_redirect(wc_get_page_permalink('myaccount'));
                 exit;
             }
@@ -43,17 +44,19 @@
     }
   @endphp
 
+  {{-- Mostrar mensajes de éxito o error --}}
   @if (wc_notice_count())
     <div class="mb-4">
       {!! wc_print_notices() !!}
     </div>
   @endif
 
+  {{-- Formulario de restablecimiento --}}
   <form method="post" class="space-y-4">
     @php do_action('woocommerce_reset_password_form_start') @endphp
 
-    <input type="hidden" name="reset_key" value="{{ $key }}">
-    <input type="hidden" name="reset_login" value="{{ $login }}">
+    <input type="hidden" name="reset_key" value="{{ $reset_key }}">
+    <input type="hidden" name="reset_login" value="{{ $reset_login }}">
 
     <div>
       <label for="password_1" class="block text-sm font-medium mb-1">Nueva contraseña</label>

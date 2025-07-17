@@ -284,40 +284,32 @@ add_filter('template_include', function ($template) {
 add_action('template_redirect', function () {
     global $wp;
 
-    // Solo si es la página de "mi cuenta" con lost-password y viene con key y login
-    if (
-        is_account_page() &&
-        isset($wp->query_vars['lost-password']) &&
-        isset($_GET['key']) &&
-        isset($_GET['login'])
-    ) {
-        $key = sanitize_text_field($_GET['key']);
-        $login = sanitize_text_field($_GET['login']);
-
-        // Para depuración
-        error_log("🧪 Redireccionando con key=$key y login=$login");
-
-        $url = wc_get_account_endpoint_url('lost-password') . "?show-reset-form=true&key={$key}&login={$login}";
-        die("Estoy dentro del filtro y voy a redirigir con key=$key y login=$login");
-        wp_redirect($url);
-        exit;
-    }
-
     if (is_account_page() && isset($wp->query_vars['lost-password'])) {
+
+        // Si el link es para confirmar que se envió el correo
         if (isset($_GET['reset-link-sent'])) {
             echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
             exit;
         }
 
+        // Si el link es para mostrar el formulario de restablecimiento de contraseña
         if (isset($_GET['show-reset-form'])) {
-            echo \Roots\view('woocommerce.myaccount.form-reset-password')->render();
+            $key = sanitize_text_field($_GET['key'] ?? '');
+            $login = sanitize_text_field($_GET['login'] ?? '');
+
+            echo \Roots\view('woocommerce.myaccount.form-reset-password', [
+                'reset_key' => $key,
+                'reset_login' => $login,
+            ])->render();
             exit;
         }
 
+        // Por defecto, mostrar formulario para ingresar el correo
         echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
         exit;
     }
 });
+
 
 
 
