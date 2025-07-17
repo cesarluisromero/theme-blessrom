@@ -284,6 +284,7 @@ add_filter('template_include', function ($template) {
 add_action('template_redirect', function () {
     global $wp;
 
+    // Detecta si viene desde el email con ?key=...&login=...
     if (
         is_account_page() &&
         isset($wp->query_vars['lost-password']) &&
@@ -293,11 +294,14 @@ add_action('template_redirect', function () {
         $key = sanitize_text_field($_GET['key']);
         $login = sanitize_text_field($_GET['login']);
 
-        $url = wc_get_account_endpoint_url('lost-password') . '?show-reset-form=true&key=' . urlencode($key) . '&login=' . urlencode($login);
+        // Redirige agregando los valores a la nueva URL
+        $url = wc_get_account_endpoint_url('lost-password') . "?show-reset-form=true&key={$key}&login={$login}";
+        error_log("Redirigiendo con key={$key} y login={$login}");
         wp_redirect($url);
         exit;
     }
 
+    // Renderizar las vistas según la URL
     if (is_account_page() && isset($wp->query_vars['lost-password'])) {
         if (isset($_GET['reset-link-sent'])) {
             echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
@@ -313,6 +317,7 @@ add_action('template_redirect', function () {
         exit;
     }
 });
+
 
 
 
