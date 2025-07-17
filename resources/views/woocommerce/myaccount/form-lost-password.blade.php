@@ -1,42 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
-  <h1 class="text-xl font-bold mb-4 flex items-center gap-2">
-    🔒 Restablecer contraseña
-  </h1>
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+  <h2 class="text-2xl font-bold mb-4 text-center">🔒 Recuperar contraseña</h2>
+  <p class="text-gray-600 text-sm text-center mb-6">¿Olvidaste tu contraseña? Ingresa tu correo electrónico y te enviaremos un enlace para restablecerla.</p>
 
-  @if ( wc_notice_count() )
-    <div class="mb-4">
-      {!! do_action('woocommerce_before_reset_password_form') !!}
-    </div>
-  @endif
+  <form method="post" class="woocommerce-ResetPassword reset-password">
+    @csrf
+    <p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+      <label for="user_login" class="block mb-2 text-sm font-medium">Correo electrónico</label>
+      <input class="woocommerce-Input woocommerce-Input--text input-text w-full border rounded px-4 py-2" type="text" name="user_login" id="user_login" autocomplete="username" />
+    </p>
 
-  <form method="post" class="space-y-4">
-    @php do_action('woocommerce_reset_password_form_start') @endphp
+    <div class="clear mb-4"></div>
 
-    <input type="hidden" name="reset_key" value="{{ request()->get('key') }}">
-    <input type="hidden" name="reset_login" value="{{ request()->get('login') }}">
+    <p class="woocommerce-form-row form-row">
+      <input type="hidden" name="wc_reset_password" value="true" />
+      <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-all">
+        Enviar enlace de recuperación
+      </button>
+    </p>
 
-    <div>
-      <label for="password_1" class="block text-sm font-medium mb-1">Nueva contraseña</label>
-      <input type="password" name="password_1" id="password_1" class="w-full border rounded px-3 py-2" required>
-    </div>
-
-    <div>
-      <label for="password_2" class="block text-sm font-medium mb-1">Confirmar nueva contraseña</label>
-      <input type="password" name="password_2" id="password_2" class="w-full border rounded px-3 py-2" required>
-    </div>
-
-    @php do_action('woocommerce_reset_password_form') @endphp
-
-    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">
-      Cambiar contraseña
-    </button>
-
-    @php wp_nonce_field('reset_password', 'woocommerce-reset-password-nonce') @endphp
+    {!! wp_nonce_field( 'lost_password', 'woocommerce-lost-password-nonce', true, false ) !!}
   </form>
-
-  @php do_action('woocommerce_after_reset_password_form') @endphp
 </div>
 @endsection
