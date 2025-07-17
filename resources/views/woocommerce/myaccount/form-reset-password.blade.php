@@ -49,7 +49,10 @@
       {!! wc_print_notices() !!}
     </div>
   @endif
-
+    <pre class="bg-gray-100 p-3 rounded">
+    Key recibido: {{ request()->get('key') }}
+    Login recibido: {{ request()->get('login') }}
+    </pre>
   {{-- Formulario de restablecimiento --}}
   <form method="post" class="space-y-4">
     @php do_action('woocommerce_reset_password_form_start') @endphp
