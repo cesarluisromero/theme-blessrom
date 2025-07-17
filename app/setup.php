@@ -287,6 +287,27 @@ add_action('template_redirect', function () {
     }
 });
 
+add_action('template_redirect', function () {
+    global $wp;
+
+    if (
+        isset($wp->query_vars['lost-password']) &&
+        isset($_GET['key']) &&
+        isset($_GET['login'])
+    ) {
+        // En lugar de redirigir al endpoint Woo, redirige a tu página personalizada
+        $key = sanitize_text_field($_GET['key']);
+        $login = sanitize_text_field($_GET['login']);
+
+        // Usa la página Blade que tú controlas (puede ser /reset-password o /reset-debug)
+        $url = home_url('/reset-password/?key=' . $key . '&login=' . $login);
+
+        wp_redirect($url);
+        exit;
+    }
+});
+
+
 
 /**
  * Register the theme sidebars.
