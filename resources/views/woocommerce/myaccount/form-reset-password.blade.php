@@ -49,14 +49,14 @@
     @php do_action('woocommerce_resetpassword_form') @endphp
 
     <div>
-      <button
-        type="submit"
-        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition"
-        :disabled="submitting"
-        @click="submitting = true"
-      >
-        {{ __('Save new password', 'woocommerce') }}
-      </button>
+      
+    <button
+      type="submit"
+      class="bg-blue-600 hover:bg-blue-700 text-white w-full py-3 rounded-lg text-center font-bold text-lg"
+    >
+      {{ __('Save new password', 'woocommerce') }}
+    </button>
+
     </div>
 
     @php wp_nonce_field('reset_password', 'woocommerce-reset-password-nonce') @endphp
