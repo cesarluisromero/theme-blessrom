@@ -2,10 +2,12 @@
 @extends('layouts.app')
 
 @section('content')
-  {!! \Roots\view('woocommerce.myaccount.form-login')->render() !!}
-  {!! \Roots\view('woocommerce.myaccount.form-lost-password')->render() !!}
-  {!! \Roots\view('woocommerce.myaccount.form-register')->render() !!}
-  {!! \Roots\view('woocommerce.myaccount.form-reset-password')->render() !!}
-  {!! \Roots\view('woocommerce.myaccount.form-edit-account')->render() !!}
-  {!! \Roots\view('woocommerce.myaccount.form-edit-address')->render() !!}
+  {{-- Mostrar login y registro si el usuario no está logueado --}}
+  @if (!is_user_logged_in())
+    {!! \Roots\view('woocommerce.myaccount.form-login')->render() !!}
+  @else
+    {{-- Si está logueado, redirigir al dashboard de WooCommerce --}}
+    @php wp_safe_redirect(get_permalink(get_option('woocommerce_myaccount_page_id'))) @endphp
+    @php exit @endphp
+  @endif
 @endsection
