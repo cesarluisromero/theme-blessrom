@@ -153,46 +153,6 @@ add_filter('template_include', function ($template) {
 }, 99);
 
 
-// WooCommerce login redirect
-add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
-    // Login
-    if ($template_name === 'myaccount/form-login.php') {
-        echo \Roots\view('woocommerce.myaccount.form-login')->render();
-        return get_theme_file_path('index.php');
-    }
-
-    // Recuperar contraseña (ingresar correo)
-    if ($template_name === 'myaccount/form-lost-password.php') {
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        return get_theme_file_path('index.php');
-    }
-
-    // Restablecer contraseña (con key/login en URL)
-    if ($template_name === 'myaccount/form-reset-password.php') {
-        echo \Roots\view('woocommerce.myaccount.form-reset-password', [
-            'reset_key' => $_GET['key'] ?? '',
-            'reset_login' => $_GET['login'] ?? '',
-        ])->render();
-        return get_theme_file_path('index.php');
-    }
-
-    // Vista del dashboard (cuando el usuario ya inició sesión)
-    if ($template_name === 'myaccount/dashboard.php') {
-        echo \Roots\view('woocommerce.myaccount.dashboard')->render();
-        return get_theme_file_path('index.php');
-    }
-
-    // Formulario de registro (opcional, si lo separas)
-    if ($template_name === 'myaccount/form-register.php') {
-        echo \Roots\view('woocommerce.myaccount.form-register')->render();
-        return get_theme_file_path('index.php');
-    }
-
-    return $template;
-}, 100, 3);
-
-
-
 
 /**
  * Register the theme sidebars.
