@@ -87,25 +87,6 @@ add_action('after_setup_theme', function () {
 
 }, 20);
 
-// Redirige si recibe ?key=...&login=...
-add_action('template_redirect', function () {
-    global $wp;
-    if (
-        isset($wp->query_vars['lost-password']) &&
-        isset($_GET['key']) &&
-        isset($_GET['login'])
-    ) {
-        $key = sanitize_text_field($_GET['key']);
-        $login = sanitize_text_field($_GET['login']);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : null; // opcional, si lo usas
-        $url = wc_get_account_endpoint_url('reset-password') . "?key={$key}&login={$login}";
-        if ($id) {
-            $url .= "&id={$id}";
-        }
-        wp_redirect($url);
-        exit;
-    }
-});
 
 // WooCommerce login redirect
 add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
