@@ -1,61 +1,60 @@
-@if (!empty($customer_orders))
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-4 text-gray-800">
-      {{ __('Recent orders', 'woocommerce') }}
-    </h2>
+@extends('layouts.app')
 
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm text-left text-gray-700 border border-gray-200">
-        <thead class="bg-gray-100 text-gray-700">
+@section('content')
+<div class="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow-md mt-6">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">
+    {{ __('Mis pedidos recientes', 'woocommerce') }}
+  </h2>
+
+  @if (have_posts())
+    <table class="w-full table-auto border border-gray-200 rounded-lg overflow-hidden">
+      <thead class="bg-gray-100 text-sm font-semibold text-gray-600 uppercase">
+        <tr>
+          <th class="px-4 py-3 text-left">{{ __('Pedido', 'woocommerce') }}</th>
+          <th class="px-4 py-3 text-left">{{ __('Fecha', 'woocommerce') }}</th>
+          <th class="px-4 py-3 text-left">{{ __('Estado', 'woocommerce') }}</th>
+          <th class="px-4 py-3 text-left">{{ __('Total', 'woocommerce') }}</th>
+          <th class="px-4 py-3 text-left">{{ __('Acciones', 'woocommerce') }}</th>
+        </tr>
+      </thead>
+      <tbody class="text-sm text-gray-700 divide-y divide-gray-200">
+        @php
+          $orders = wc_get_orders([
+            'customer_id' => get_current_user_id(),
+            'limit' => -1,
+            'orderby' => 'date',
+            'order' => 'DESC',
+          ]);
+        @endphp
+
+        @foreach ($orders as $order)
           <tr>
-            @foreach ($my_orders_columns as $column_id => $column_name)
-              <th scope="col" class="px-4 py-2">
-                {{ $column_name }}
-              </th>
-            @endforeach
-          </tr>
-        </thead>
-        <tbody class="bg-white">
-          @foreach ($customer_orders as $customer_order)
-            @php
-              $order = wc_get_order($customer_order);
-              $item_count = $order->get_item_count();
-              $actions = wc_get_account_orders_actions($order);
-            @endphp
-
-            <tr class="border-t border-gray-200 hover:bg-gray-50">
-              @foreach ($my_orders_columns as $column_id => $column_name)
-                <td class="px-4 py-3 whitespace-nowrap">
-                  @if (has_action("woocommerce_my_account_my_orders_column_{$column_id}"))
-                    @php do_action("woocommerce_my_account_my_orders_column_{$column_id}", $order); @endphp
-                  @elseif ($column_id === 'order-number')
-                    <a href="{{ $order->get_view_order_url() }}" class="text-blue-600 hover:underline">
-                      #{{ $order->get_order_number() }}
-                    </a>
-                  @elseif ($column_id === 'order-date')
-                    <time datetime="{{ $order->get_date_created()->date('c') }}">
-                      {{ wc_format_datetime($order->get_date_created()) }}
-                    </time>
-                  @elseif ($column_id === 'order-status')
-                    <span class="capitalize">{{ wc_get_order_status_name($order->get_status()) }}</span>
-                  @elseif ($column_id === 'order-total')
-                    {{ sprintf(_n('%1$s for %2$s item', '%1$s for %2$s items', $item_count, 'woocommerce'), $order->get_formatted_order_total(), $item_count) }}
-                  @elseif ($column_id === 'order-actions')
-                    <div class="flex flex-wrap gap-2">
-                      @foreach ($actions as $action)
-                        <a href="{{ esc_url($action['url']) }}"
-                          class="inline-block px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded hover:bg-blue-700">
-                          {{ $action['name'] }}
-                        </a>
-                      @endforeach
-                    </div>
-                  @endif
-                </td>
+            <td class="px-4 py-3 font-medium text-blue-600">
+              <a href="{{ esc_url($order->get_view_order_url()) }}">#{{ $order->get_order_number() }}</a>
+            </td>
+            <td class="px-4 py-3">
+              {{ wc_format_datetime($order->get_date_created()) }}
+            </td>
+            <td class="px-4 py-3">
+              {{ wc_get_order_status_name($order->get_status()) }}
+            </td>
+            <td class="px-4 py-3">
+              {!! $order->get_formatted_order_total() !!}
+            </td>
+            <td class="px-4 py-3 space-x-2">
+              @foreach (wc_get_account_orders_actions($order) as $action)
+                <a href="{{ esc_url($action['url']) }}"
+                   class="inline-block px-3 py-1 rounded-full text-sm font-medium text-white {{ $action['name'] === 'Pagar' ? 'bg-yellow-500' : ($action['name'] === 'Cancelar' ? 'bg-red-500' : 'bg-blue-500') }}">
+                  {{ $action['name'] }}
+                </a>
               @endforeach
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-  </div>
-@endif
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  @else
+    <p class="text-gray-500">{{ __('No has realizado ningún pedido aún.', 'woocommerce') }}</p>
+  @endif
+</div>
+@endsection
