@@ -54,7 +54,7 @@
       type="submit"
       class="bg-blue-600 hover:bg-blue-700 text-white w-full py-3 rounded-lg text-center font-bold text-lg"
     >
-      {{ __('Save new password', 'woocommerce') }}
+      {{ __('Guaradar password', 'woocommerce') }}
     </button>
 
     </div>
