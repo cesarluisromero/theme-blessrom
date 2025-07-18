@@ -4,7 +4,7 @@
 @section('content')
   @php
     $user = wp_get_current_user();
-    $logout_url = wc_logout_url();
+    $logout_url = esc_url(wc_logout_url());
     $orders_url = wc_get_endpoint_url('orders');
     $edit_account_url = wc_get_endpoint_url('edit-account');
     $edit_address_url = wc_get_endpoint_url('edit-address');
