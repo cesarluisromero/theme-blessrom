@@ -128,7 +128,17 @@ add_filter('woocommerce_locate_template', function ($template, $template_name, $
 
 
 
-
+//carga la página del producto
+add_filter('template_include', function ($template) {
+        if (is_singular('product')) {
+            $blade_template = locate_template('resources/views/woocommerce/single-product.blade.php');
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.single-product')->render();
+                exit; // Evita que cargue otras plantillas
+            }
+        }
+        return $template;
+}, 99);
 
 //redirige al checkout
 add_filter('template_include', function ($template) {
