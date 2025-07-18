@@ -45,15 +45,19 @@
       <div class="text-sm text-gray-700">Correo: <strong>{{ $user->user_email }}</strong></div>
       <div class="flex items-center justify-between mt-3">
         <a href="{{ $edit_account_url }}" class="text-sm text-primary hover:underline">Editar cuenta</a>
-         <p class="text-gray-600 mb-6 text-sm">
-          {!! sprintf(
+        @php
+          $logout_html = sprintf(
             wp_kses(
-              __('Not %1$s? <a class="text-primary underline" href="%2$s">Log out</a>', 'woocommerce'),
-              ['a' => ['href' => []]]
+              __('¿No eres %1$s? <a class="underline text-red-600 hover:text-red-700" href="%2$s">Cerrar sesión</a>', 'woocommerce'),
+              ['a' => ['href' => [], 'class' => []]]
             ),
-            '<strong>' . esc_html($current_user->display_name) . '</strong>',
-            esc_url(wc_logout_url())
-          ) !!}
+            '<strong>' . esc_html($user->display_name) . '</strong>',
+            esc_url($logout_url)
+          );
+        @endphp
+
+        <p class="text-sm text-gray-600 mb-6">
+          {!! $logout_html !!}
         </p>
       </div>
     </div>
