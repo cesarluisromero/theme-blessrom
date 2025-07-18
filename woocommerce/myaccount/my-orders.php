@@ -14,4 +14,4 @@ echo \Roots\view('woocommerce.myaccount.my-orders', [
         'post_type'   => wc_get_order_types('view-orders'),
         'post_status' => array_keys(wc_get_order_statuses()),
     ])),
-]);
+])->render();
