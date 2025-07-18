@@ -48,7 +48,7 @@
         @php
           $logout_html = sprintf(
             wp_kses(
-              __('¿No eres %1$s? <a class="underline text-red-600 hover:text-red-700" href="%2$s">Cerrar sesión</a>', 'woocommerce'),
+              __(<a class="underline text-red-600 hover:text-red-700" href="%2$s">Cerrar sesión</a>', 'woocommerce'),
               ['a' => ['href' => [], 'class' => []]]
             ),
             '<strong>' . esc_html($user->display_name) . '</strong>',
