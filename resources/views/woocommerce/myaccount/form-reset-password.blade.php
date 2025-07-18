@@ -1,63 +1,69 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
-  <h1 class="text-xl font-bold mb-4 flex items-center gap-2">🔒 Restablecer contraseña</h1>
 
-  @php
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $key = sanitize_text_field($_POST['reset_key'] ?? '');
-        $login = sanitize_user($_POST['reset_login'] ?? '');
-        $password1 = $_POST['password_1'] ?? '';
-        $password2 = $_POST['password_2'] ?? '';
+ @php
+  do_action('woocommerce_before_reset_password_form');
+@endphp
 
-        if (empty($password1) || empty($password2)) {
-            wc_add_notice('Por favor completa ambos campos de contraseña.', 'error');
-        } elseif ($password1 !== $password2) {
-            wc_add_notice('Las contraseñas no coinciden.', 'error');
-        } else {
-            $user = check_password_reset_key($key, $login);
-            if (is_wp_error($user)) {
-                wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
-            } else {
-                reset_password($user, $password1);
-                wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
-                wp_safe_redirect(wc_get_page_permalink('myaccount'));
-                exit;
-            }
-        }
-    }
-  @endphp
+<div class="max-w-md mx-auto mt-12 bg-white border border-gray-200 shadow-xl rounded-2xl p-8">
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Restablecer contraseña</h2>
 
-  @if (wc_notice_count())
-    <div class="mb-4">
-      {!! wc_print_notices() !!}
-    </div>
-  @endif
+  <form method="post" class="space-y-6" x-data="{ error: '', submitting: false }">
+    @csrf
 
-  <form method="post" class="space-y-4">
-    @php do_action('woocommerce_reset_password_form_start') @endphp
-
-    <input type="hidden" name="reset_key" value="{{ $reset_key }}">
-    <input type="hidden" name="reset_login" value="{{ $reset_login }}">
+    <input type="hidden" name="reset_key" value="{{ esc_attr($args['key']) }}">
+    <input type="hidden" name="reset_login" value="{{ esc_attr($args['login']) }}">
 
     <div>
-      <label for="password_1" class="block text-sm font-medium mb-1">Nueva contraseña</label>
-      <input type="password" name="password_1" id="password_1" class="w-full border rounded px-3 py-2" required>
+      <label for="password_1" class="block text-sm font-medium text-gray-700">Nueva contraseña</label>
+      <input
+        type="password"
+        name="password_1"
+        id="password_1"
+        required
+        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+      >
     </div>
 
     <div>
-      <label for="password_2" class="block text-sm font-medium mb-1">Confirmar nueva contraseña</label>
-      <input type="password" name="password_2" id="password_2" class="w-full border rounded px-3 py-2" required>
+      <label for="password_2" class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
+      <input
+        type="password"
+        name="password_2"
+        id="password_2"
+        required
+        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+      >
     </div>
 
-    @php do_action('woocommerce_reset_password_form') @endphp
+    @php do_action('woocommerce_resetpassword_form') @endphp
 
-    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">Cambiar contraseña</button>
+    <div>
+      <button
+        type="submit"
+        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition"
+        x-bind:disabled="submitting"
+        @click="submitting = true"
+      >
+        Guardar nueva contraseña
+      </button>
+    </div>
 
-    @php wp_nonce_field('reset_password', 'woocommerce-reset-password-nonce') @endphp
+    <template x-if="error">
+      <p class="text-red-500 text-sm mt-2" x-text="error"></p>
+    </template>
   </form>
 
-  @php do_action('woocommerce_after_reset_password_form') @endphp
+  <div class="mt-6 text-center">
+    <a href="{{ esc_url( wc_get_page_permalink( 'myaccount' ) ) }}" class="text-sm text-gray-600 hover:text-primary underline">
+      ¿Recordaste tu contraseña? Inicia sesión
+    </a>
+  </div>
 </div>
+
+@php
+  do_action('woocommerce_after_reset_password_form');
+@endphp
+ 
 @endsection
