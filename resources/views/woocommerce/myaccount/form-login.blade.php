@@ -64,7 +64,7 @@
           type="submit"
           name="login"
           value="{{ __('Log in', 'woocommerce') }}"
-          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition"
         >
           {{ __('Log in', 'woocommerce') }}
         </button>
