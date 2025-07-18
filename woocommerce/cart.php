@@ -1,2 +1,2 @@
 <?php
-echo \Roots\view('woocommerce.cart')->render();
+//echo \Roots\view('woocommerce.cart')->render();
