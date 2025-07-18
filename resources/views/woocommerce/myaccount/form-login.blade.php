@@ -2,67 +2,160 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-[#f0f0f0] py-12">
-  <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-xl shadow-md p-8">
-    {{-- Login --}}
-    <div>
-      <h2 class="text-xl font-bold mb-4">Acceder</h2>
-      @php do_action('woocommerce_before_customer_login_form') @endphp
-      <form method="post" class="woocommerce-form woocommerce-form-login login space-y-4">
-        @php do_action('woocommerce_login_form_start') @endphp
+@php do_action('woocommerce_before_customer_login_form') @endphp
 
-        <p class="form-row">
-          <label for="username">Correo electrónico <span class="text-red-500">*</span></label>
-          <input type="text" class="input-text w-full rounded border px-4 py-2" name="username" id="username" autocomplete="username" value="{{ old('username') ?? '' }}" />
-        </p>
+<div class="max-w-5xl mx-auto my-12 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-        <p class="form-row">
-          <label for="password">Contraseña <span class="text-red-500">*</span></label>
-          <input class="input-text w-full rounded border px-4 py-2" type="password" name="password" id="password" autocomplete="current-password" />
-        </p>
+  {{-- Login Form --}}
+  <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+      {{ __('Login', 'woocommerce') }}
+    </h2>
 
-        @php do_action('woocommerce_login_form') @endphp
+    <form class="space-y-6 woocommerce-form woocommerce-form-login login" method="post" novalidate>
+      @php do_action('woocommerce_login_form_start') @endphp
 
-        <p class="form-row flex items-center justify-between">
-          <label class="woocommerce-form__label">
-            <input class="woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" />
-            Recordarme
-          </label>
-          <a class="text-sm text-blue-600" href="{{ esc_url(wp_lostpassword_url()) }}">¿Olvidaste tu contraseña?</a>
-        </p>
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">
+          {{ __('Username or email address', 'woocommerce') }} <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          autocomplete="username"
+          required
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+          value="{{ old('username') }}"
+        >
+      </div>
 
-        <p class="form-row">
-          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Acceder</button>
-        </p>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+          {{ __('Password', 'woocommerce') }} <span class="text-red-500">*</span>
+        </label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          autocomplete="current-password"
+          required
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+        >
+      </div>
 
-        @php do_action('woocommerce_login_form_end') @endphp
-        @php wp_nonce_field('woocommerce-login', 'woocommerce-login-nonce') @endphp
-        <input type="hidden" name="login" value="Acceder" />
-      </form>
-    </div>
+      @php do_action('woocommerce_login_form') @endphp
 
-    {{-- Registro --}}
-    <div>
-      <h2 class="text-xl font-bold mb-4">Registrarse</h2>
-      <form method="post" class="woocommerce-form woocommerce-form-register register space-y-4">
+      <div class="flex justify-between items-center">
+        <label class="flex items-center gap-2 text-sm text-gray-600">
+          <input class="form-checkbox" type="checkbox" name="rememberme" id="rememberme" value="forever">
+          {{ __('Remember me', 'woocommerce') }}
+        </label>
+
+        <a href="{{ esc_url( wp_lostpassword_url() ) }}" class="text-sm text-primary hover:underline">
+          {{ __('Lost your password?', 'woocommerce') }}
+        </a>
+      </div>
+
+      @php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ) @endphp
+
+      <div>
+        <button
+          type="submit"
+          name="login"
+          value="{{ __('Log in', 'woocommerce') }}"
+          class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition"
+        >
+          {{ __('Log in', 'woocommerce') }}
+        </button>
+      </div>
+
+      @php do_action('woocommerce_login_form_end') @endphp
+    </form>
+  </div>
+
+  {{-- Registration Form --}}
+  @if ($registration_enabled)
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        {{ __('Register', 'woocommerce') }}
+      </h2>
+
+      <form method="post" class="space-y-6 woocommerce-form woocommerce-form-register register">
         @php do_action('woocommerce_register_form_start') @endphp
 
-        <p class="form-row">
-          <label for="reg_email">Correo electrónico <span class="text-red-500">*</span></label>
-          <input type="email" class="input-text w-full rounded border px-4 py-2" name="email" id="reg_email" autocomplete="email" value="{{ old('email') ?? '' }}" />
-        </p>
+        @if (get_option('woocommerce_registration_generate_username') === 'no')
+          <div>
+            <label for="reg_username" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ __('Username', 'woocommerce') }} <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              name="username"
+              id="reg_username"
+              autocomplete="username"
+              required
+              value="{{ old('username') }}"
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+            >
+          </div>
+        @endif
+
+        <div>
+          <label for="reg_email" class="block text-sm font-medium text-gray-700 mb-1">
+            {{ __('Email address', 'woocommerce') }} <span class="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="reg_email"
+            autocomplete="email"
+            required
+            value="{{ old('email') }}"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+          >
+        </div>
+
+        @if (get_option('woocommerce_registration_generate_password') === 'no')
+          <div>
+            <label for="reg_password" class="block text-sm font-medium text-gray-700 mb-1">
+              {{ __('Password', 'woocommerce') }} <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="reg_password"
+              autocomplete="new-password"
+              required
+              class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none"
+            >
+          </div>
+        @else
+          <p class="text-sm text-gray-600">
+            {{ __('A link to set a new password will be sent to your email address.', 'woocommerce') }}
+          </p>
+        @endif
 
         @php do_action('woocommerce_register_form') @endphp
+        @php wp_nonce_field('woocommerce-register', 'woocommerce-register-nonce') @endphp
 
-        <p class="form-row">
-          <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Registrarse</button>
-        </p>
+        <div>
+          <button
+            type="submit"
+            name="register"
+            value="{{ __('Register', 'woocommerce') }}"
+            class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition"
+          >
+            {{ __('Register', 'woocommerce') }}
+          </button>
+        </div>
 
         @php do_action('woocommerce_register_form_end') @endphp
-        @php wp_nonce_field('woocommerce-register', 'woocommerce-register-nonce') @endphp
-        <input type="hidden" name="register" value="Registrarse" />
       </form>
     </div>
-  </div>
+  @endif
 </div>
+
+@php do_action('woocommerce_after_customer_login_form') @endphp
+
 @endsection
