@@ -8,7 +8,7 @@ namespace App;
 
 use Illuminate\Support\Facades\Vite;
 
-require_once get_theme_file_path('app/cart-actions.php');
+//require_once get_theme_file_path('app/cart-actions.php');
 
 /**
  * Editor styles
