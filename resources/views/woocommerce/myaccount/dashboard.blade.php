@@ -32,7 +32,8 @@
     <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
       <div class="text-sm text-gray-500 mb-2">Dirección principal</div>
       <div class="text-sm text-gray-700 leading-relaxed">
-        {{ str_replace(["\n", "\r"], ', ', $address ?: __('No has configurado tu dirección aún.', 'woocommerce')) }}
+        
+
       </div>
       <a href="{{ $edit_address_url }}" class="text-sm mt-3 inline-block text-primary hover:underline">
         Editar dirección →
