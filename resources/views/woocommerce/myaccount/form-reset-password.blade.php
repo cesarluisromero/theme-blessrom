@@ -1,69 +1,38 @@
 @extends('layouts.app')
+<?php
 
-@section('content')
+defined( 'ABSPATH' ) || exit;
 
- @php
-  do_action('woocommerce_before_reset_password_form');
-@endphp
+do_action( 'woocommerce_before_reset_password_form' );
+?>
 
-<div class="max-w-md mx-auto mt-12 bg-white border border-gray-200 shadow-xl rounded-2xl p-8">
-  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Restablecer contraseña</h2>
+<form method="post" class="woocommerce-ResetPassword lost_reset_password">
 
-  <form method="post" class="space-y-6" x-data="{ error: '', submitting: false }">
-    @csrf
+	<p><?php echo apply_filters( 'woocommerce_reset_password_message', esc_html__( 'Enter a new password below.', 'woocommerce' ) ); ?></p><?php // @codingStandardsIgnoreLine ?>
 
-    <input type="hidden" name="reset_key" value="{{ esc_attr($args['key']) }}">
-    <input type="hidden" name="reset_login" value="{{ esc_attr($args['login']) }}">
+	<p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+		<label for="password_1"><?php esc_html_e( 'New password', 'woocommerce' ); ?>&nbsp;<span class="required" aria-hidden="true">*</span><span class="screen-reader-text"><?php esc_html_e( 'Required', 'woocommerce' ); ?></span></label>
+		<input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="password_1" id="password_1" autocomplete="new-password" required aria-required="true" />
+	</p>
+	<p class="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
+		<label for="password_2"><?php esc_html_e( 'Re-enter new password', 'woocommerce' ); ?>&nbsp;<span class="required" aria-hidden="true">*</span><span class="screen-reader-text"><?php esc_html_e( 'Required', 'woocommerce' ); ?></span></label>
+		<input type="password" class="woocommerce-Input woocommerce-Input--text input-text" name="password_2" id="password_2" autocomplete="new-password" required aria-required="true" />
+	</p>
 
-    <div>
-      <label for="password_1" class="block text-sm font-medium text-gray-700">Nueva contraseña</label>
-      <input
-        type="password"
-        name="password_1"
-        id="password_1"
-        required
-        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-      >
-    </div>
+	<input type="hidden" name="reset_key" value="<?php echo esc_attr( $args['key'] ); ?>" />
+	<input type="hidden" name="reset_login" value="<?php echo esc_attr( $args['login'] ); ?>" />
 
-    <div>
-      <label for="password_2" class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
-      <input
-        type="password"
-        name="password_2"
-        id="password_2"
-        required
-        class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-      >
-    </div>
+	<div class="clear"></div>
 
-    @php do_action('woocommerce_resetpassword_form') @endphp
+	<?php do_action( 'woocommerce_resetpassword_form' ); ?>
 
-    <div>
-      <button
-        type="submit"
-        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-4 rounded-lg transition"
-        x-bind:disabled="submitting"
-        @click="submitting = true"
-      >
-        Guardar nueva contraseña
-      </button>
-    </div>
+	<p class="woocommerce-form-row form-row">
+		<input type="hidden" name="wc_reset_password" value="true" />
+		<button type="submit" class="woocommerce-Button button<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" value="<?php esc_attr_e( 'Save', 'woocommerce' ); ?>"><?php esc_html_e( 'Save', 'woocommerce' ); ?></button>
+	</p>
 
-    <template x-if="error">
-      <p class="text-red-500 text-sm mt-2" x-text="error"></p>
-    </template>
-  </form>
+	<?php wp_nonce_field( 'reset_password', 'woocommerce-reset-password-nonce' ); ?>
 
-  <div class="mt-6 text-center">
-    <a href="{{ esc_url( wc_get_page_permalink( 'myaccount' ) ) }}" class="text-sm text-gray-600 hover:text-primary underline">
-      ¿Recordaste tu contraseña? Inicia sesión
-    </a>
-  </div>
-</div>
-
-@php
-  do_action('woocommerce_after_reset_password_form');
-@endphp
- 
-@endsection
+</form>
+<?php
+do_action( 'woocommerce_after_reset_password_form' );
