@@ -3,46 +3,62 @@
 
 @section('content')
   @php
-  $current_user = wp_get_current_user();
-@endphp
+    $user = wp_get_current_user();
+    $logout_url = wc_logout_url();
+    $orders_url = wc_get_endpoint_url('orders');
+    $edit_account_url = wc_get_endpoint_url('edit-account');
+    $edit_address_url = wc_get_endpoint_url('edit-address');
+    $address = wc_get_account_formatted_address('billing');
 
-<div class="bg-white shadow-md rounded-xl p-8 border border-gray-200 max-w-3xl mx-auto mt-10">
+    $customer = new WC_Customer($user->ID);
+    $order_count = wc_get_customer_order_count($user->ID);
+  @endphp
 
-  <h2 class="text-2xl font-bold text-gray-800 mb-4">
-    {{ __('Welcome back,', 'woocommerce') }} <span class="text-primary">{{ $current_user->display_name }}</span> 👋
-  </h2>
+<div class="max-w-6xl mx-auto mt-10 p-6">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6">Hola, <span class="text-primary">{{ $user->display_name }}</span> 👋</h2>
 
-  <p class="text-gray-600 mb-6 text-sm">
-    {!! sprintf(
-      wp_kses(
-        __('Not %1$s? <a class="text-primary underline" href="%2$s">Log out</a>', 'woocommerce'),
-        ['a' => ['href' => []]]
-      ),
-      '<strong>' . esc_html($current_user->display_name) . '</strong>',
-      esc_url(wc_logout_url())
-    ) !!}
-  </p>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    {{-- Card: Pedidos --}}
+    <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+      <div class="text-sm text-gray-500 mb-2">Pedidos realizados</div>
+      <div class="text-3xl font-bold text-primary">{{ $order_count }}</div>
+      <a href="{{ $orders_url }}" class="text-sm mt-3 inline-block text-primary hover:underline">
+        Ver pedidos recientes →
+      </a>
+    </div>
 
-  <div class="space-y-4 text-gray-700 text-base leading-relaxed">
-    {!! sprintf(
-      wp_kses(
-        wc_shipping_enabled()
-          ? __('From your account dashboard you can view your <a class="text-primary underline" href="%1$s">recent orders</a>, manage your <a class="text-primary underline" href="%2$s">shipping and billing addresses</a>, and <a class="text-primary underline" href="%3$s">edit your password and account details</a>.', 'woocommerce')
-          : __('From your account dashboard you can view your <a class="text-primary underline" href="%1$s">recent orders</a>, manage your <a class="text-primary underline" href="%2$s">billing address</a>, and <a class="text-primary underline" href="%3$s">edit your password and account details</a>.', 'woocommerce'),
-        ['a' => ['href' => [], 'class' => []]]
-      ),
-      esc_url(wc_get_endpoint_url('orders')),
-      esc_url(wc_get_endpoint_url('edit-address')),
-      esc_url(wc_get_endpoint_url('edit-account'))
-    ) !!}
+    {{-- Card: Dirección --}}
+    <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+      <div class="text-sm text-gray-500 mb-2">Dirección principal</div>
+      <div class="text-sm text-gray-700 leading-relaxed">
+        {!! nl2br(e($address ?: __('No has configurado tu dirección aún.', 'woocommerce'))) !!}
+      </div>
+      <a href="{{ $edit_address_url }}" class="text-sm mt-3 inline-block text-primary hover:underline">
+        Editar dirección →
+      </a>
+    </div>
+
+    {{-- Card: Cuenta --}}
+    <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+      <div class="text-sm text-gray-500 mb-2">Cuenta</div>
+      <div class="text-sm text-gray-700">Correo: <strong>{{ $user->user_email }}</strong></div>
+      <div class="flex items-center justify-between mt-3">
+        <a href="{{ $edit_account_url }}" class="text-sm text-primary hover:underline">Editar cuenta</a>
+        <a href="{{ $logout_url }}" class="text-sm text-red-500 hover:underline">Cerrar sesión</a>
+      </div>
+    </div>
+
   </div>
 
+  <div class="mt-10 text-sm text-gray-600 leading-relaxed">
+    @php
+      do_action('woocommerce_account_dashboard');
+      do_action('woocommerce_before_my_account');
+      do_action('woocommerce_after_my_account');
+    @endphp
+  </div>
 </div>
 
-@php
-  do_action('woocommerce_account_dashboard');
-  do_action('woocommerce_before_my_account'); // deprecated
-  do_action('woocommerce_after_my_account');  // deprecated
-@endphp
 
 @endsection
