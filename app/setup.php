@@ -111,7 +111,29 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
 
+//carga la página del producto
+add_filter('template_include', function ($template) {
+        if (is_singular('product')) {
+            $blade_template = locate_template('resources/views/woocommerce/single-product.blade.php');
+            if ($blade_template) {
+                echo \Roots\view('woocommerce.single-product')->render();
+                exit; // Evita que cargue otras plantillas
+            }
+        }
+        return $template;
+}, 99);
 
+//redirige al checkout
+add_filter('template_include', function ($template) {
+    if (is_checkout() && !is_order_received_page()) {
+        $blade_template = locate_template('resources/views/woocommerce/checkout/form-checkout.blade.php');
+        if ($blade_template) {
+            echo \Roots\view('woocommerce.checkout.form-checkout')->render();
+            exit; // Detiene el flujo de carga de otras plantillas
+        }
+    }
+    return $template;
+}, 99);
 
 //redirige a la página de agradecimiento después de comprar
 add_filter('template_include', function ($template) {
@@ -130,15 +152,44 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
 
+
+// WooCommerce login redirect
 add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+    // Login
     if ($template_name === 'myaccount/form-login.php') {
         echo \Roots\view('woocommerce.myaccount.form-login')->render();
         return get_theme_file_path('index.php');
     }
-    // Agrega aquí el resto de los mapeos...
+
+    // Recuperar contraseña (ingresar correo)
+    if ($template_name === 'myaccount/form-lost-password.php') {
+        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
+        return get_theme_file_path('index.php');
+    }
+
+    // Restablecer contraseña (con key/login en URL)
+    if ($template_name === 'myaccount/form-reset-password.php') {
+        echo \Roots\view('woocommerce.myaccount.form-reset-password', [
+            'reset_key' => $_GET['key'] ?? '',
+            'reset_login' => $_GET['login'] ?? '',
+        ])->render();
+        return get_theme_file_path('index.php');
+    }
+
+    // Vista del dashboard (cuando el usuario ya inició sesión)
+    if ($template_name === 'myaccount/dashboard.php') {
+        echo \Roots\view('woocommerce.myaccount.dashboard')->render();
+        return get_theme_file_path('index.php');
+    }
+
+    // Formulario de registro (opcional, si lo separas)
+    if ($template_name === 'myaccount/form-register.php') {
+        echo \Roots\view('woocommerce.myaccount.form-register')->render();
+        return get_theme_file_path('index.php');
+    }
+
     return $template;
 }, 100, 3);
-
 
 
 
