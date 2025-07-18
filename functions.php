@@ -60,8 +60,4 @@ collect(['setup', 'filters'])
     });
 
 
-add_action('init', function () {
-    if (!session_id()) {
-        session_start();
-    }
-}, 1);
+add_filter('woocommerce_enqueue_styles', '__return_empty_array');
