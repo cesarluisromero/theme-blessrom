@@ -2,55 +2,39 @@
 
 @section('content')
 <div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
-  <h1 class="text-xl font-bold mb-4 flex items-center gap-2">
-    🔒 Restablecer contraseña
-  </h1>
-
-  {{-- Mostrar los valores recibidos --}}
-  <div class="bg-gray-100 p-3 text-sm mb-4">
-    <p><strong>Key recibido:</strong> {{ $reset_key }}</p>
-    <p><strong>Login recibido:</strong> {{ $reset_login }}</p>
-  </div>
+  <h1 class="text-xl font-bold mb-4 flex items-center gap-2">🔒 Restablecer contraseña</h1>
 
   @php
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $key = sanitize_text_field($_POST['reset_key'] ?? '');
-      $login = sanitize_user($_POST['reset_login'] ?? '');
-      $password1 = $_POST['password_1'] ?? '';
-      $password2 = $_POST['password_2'] ?? '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $key = sanitize_text_field($_POST['reset_key'] ?? '');
+        $login = sanitize_user($_POST['reset_login'] ?? '');
+        $password1 = $_POST['password_1'] ?? '';
+        $password2 = $_POST['password_2'] ?? '';
 
-      if (empty($password1) || empty($password2)) {
-          wc_add_notice('Por favor completa ambos campos de contraseña.', 'error');
-      } elseif ($password1 !== $password2) {
-          wc_add_notice('Las contraseñas no coinciden.', 'error');
-      } else {
-          $user = check_password_reset_key($key, $login);
-          if (is_wp_error($user)) {
-              wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
-          } else {
-              reset_password($user, $password1);
-              wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
+        if (empty($password1) || empty($password2)) {
+            wc_add_notice('Por favor completa ambos campos de contraseña.', 'error');
+        } elseif ($password1 !== $password2) {
+            wc_add_notice('Las contraseñas no coinciden.', 'error');
+        } else {
+            $user = check_password_reset_key($key, $login);
+            if (is_wp_error($user)) {
+                wc_add_notice('El enlace de restablecimiento no es válido o ha expirado.', 'error');
+            } else {
+                reset_password($user, $password1);
+                wc_add_notice('¡Contraseña actualizada correctamente! Puedes iniciar sesión ahora.', 'success');
+                wp_safe_redirect(wc_get_page_permalink('myaccount'));
+                exit;
+            }
+        }
+    }
+  @endphp
 
-              // Limpiar cookies
-              setcookie('reset_key', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
-              setcookie('reset_login', '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN);
-
-              wp_safe_redirect(wc_get_page_permalink('myaccount'));
-              exit;
-          }
-      }
-  }
-@endphp
-
-
-  {{-- Mostrar mensajes de éxito o error --}}
   @if (wc_notice_count())
     <div class="mb-4">
       {!! wc_print_notices() !!}
     </div>
   @endif
 
-  {{-- Formulario de restablecimiento --}}
   <form method="post" class="space-y-4">
     @php do_action('woocommerce_reset_password_form_start') @endphp
 
@@ -69,9 +53,7 @@
 
     @php do_action('woocommerce_reset_password_form') @endphp
 
-    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">
-      Cambiar contraseña
-    </button>
+    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition">Cambiar contraseña</button>
 
     @php wp_nonce_field('reset_password', 'woocommerce-reset-password-nonce') @endphp
   </form>

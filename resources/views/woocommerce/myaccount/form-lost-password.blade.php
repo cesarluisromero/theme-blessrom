@@ -7,21 +7,19 @@
 
   <form method="post" class="woocommerce-ResetPassword reset-password">
     @csrf
-    <p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+    <p class="woocommerce-form-row form-row">
       <label for="user_login" class="block mb-2 text-sm font-medium">Correo electrónico</label>
-      <input class="woocommerce-Input woocommerce-Input--text input-text w-full border rounded px-4 py-2" type="text" name="user_login" id="user_login" autocomplete="username" />
+      <input class="woocommerce-Input input-text w-full border rounded px-4 py-2" type="text" name="user_login" id="user_login" autocomplete="username" />
     </p>
 
     <div class="clear mb-4"></div>
 
     <p class="woocommerce-form-row form-row">
       <input type="hidden" name="wc_reset_password" value="true" />
-      <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-all">
-        Enviar enlace de recuperación
-      </button>
+      <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-all">Enviar enlace de recuperación</button>
     </p>
 
-    {!! wp_nonce_field( 'lost_password', 'woocommerce-lost-password-nonce', true, false ) !!}
+    {!! wp_nonce_field('lost_password', 'woocommerce-lost-password-nonce', true, false) !!}
   </form>
 </div>
 @endsection

@@ -107,24 +107,32 @@ add_action('template_redirect', function () {
     }
 });
 
-// Registro de endpoint reset-password
-add_action('init', function () {
-    add_rewrite_endpoint('reset-password', EP_ROOT | EP_PAGES);
-});
-
 // WooCommerce login redirect
-add_filter('woocommerce_login_redirect', function($redirect, $user) {
-    // Si hay una redirección almacenada en la URL (por ejemplo, checkout), redirige allí
-    if (isset($_GET['redirect_to']) && !empty($_GET['redirect_to'])) {
-        return esc_url($_GET['redirect_to']);
+add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+    // Cargar plantilla de login
+    if ($template_name === 'myaccount/form-login.php') {
+        echo \Roots\view('woocommerce.myaccount.form-login')->render();
+        return get_theme_file_path('index.php');
     }
-    // Por defecto, redirige al checkout si el carrito no está vacío
-    if (WC()->cart && !WC()->cart->is_empty()) {
-        return wc_get_checkout_url();
+
+    // Cargar plantilla para solicitar restablecimiento
+    if ($template_name === 'myaccount/form-lost-password.php') {
+        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
+        return get_theme_file_path('index.php');
     }
-    // Si no hay nada en el carrito, redirige a la cuenta
-    return wc_get_page_permalink('myaccount');
-}, 10, 2);
+
+    // Cargar plantilla para restablecer contraseña (con key y login en URL)
+    if ($template_name === 'myaccount/form-reset-password.php') {
+        echo \Roots\view('woocommerce.myaccount.form-reset-password', [
+            'reset_key' => $_GET['key'] ?? '',
+            'reset_login' => $_GET['login'] ?? '',
+        ])->render();
+        return get_theme_file_path('index.php');
+    }
+
+    return $template;
+}, 100, 3);
+
 
 //carga la página del producto
 add_filter('template_include', function ($template) {
@@ -279,50 +287,6 @@ add_filter('template_include', function ($template) {
     }
     return $template;
 }, 99);
-
-
-// Mostrar formularios personalizados según la URL
-add_action('template_redirect', function () {
-    global $wp;
-
-    if (is_account_page() && isset($wp->query_vars['lost-password'])) {
-        if (isset($_GET['show-reset-form'])) {
-            $key = $_SESSION['reset_key'] ?? '';
-            $login = $_SESSION['reset_login'] ?? '';
-
-            echo \Roots\view('woocommerce.myaccount.form-reset-password', [
-                'reset_key' => $key,
-                'reset_login' => $login,
-            ])->render();
-            exit;
-        }
-
-        if (isset($_GET['reset-link-sent'])) {
-            echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-            exit;
-        }
-
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        exit;
-    }
-});
-
-
-
-
-add_action('parse_request', function ($wp) {
-    if (
-        is_account_page() &&
-        isset($_GET['key']) &&
-        isset($_GET['login']) &&
-        isset($wp->query_vars['lost-password'])
-    ) {
-        $_SESSION['reset_key'] = sanitize_text_field($_GET['key']);
-        $_SESSION['reset_login'] = sanitize_user($_GET['login']);
-    }
-}, 1);
-
-
 
 /**
  * Register the theme sidebars.
