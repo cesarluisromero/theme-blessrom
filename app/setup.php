@@ -130,6 +130,14 @@ add_filter('template_include', function ($template) {
     return $template;
 }, 99);
 
+add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
+    if ($template_name === 'myaccount/form-login.php') {
+        echo \Roots\view('woocommerce.myaccount.form-login')->render();
+        return get_theme_file_path('index.php');
+    }
+    // Agrega aquí el resto de los mapeos...
+    return $template;
+}, 100, 3);
 
 
 
