@@ -112,6 +112,24 @@ add_filter('template_include', function ($template) {
 }, 99);
 
 
+
+//redirige a la página de agradecimiento después de comprar
+add_filter('template_include', function ($template) {
+    if (is_order_received_page()) {
+        $order_id = absint(get_query_var('order-received'));
+        $order = wc_get_order($order_id);
+
+        if ($order) {
+            echo \Roots\view('woocommerce.thankyou', [
+                'order' => $order,
+            ])->render();
+            exit;
+        }
+    }
+
+    return $template;
+}, 99);
+
 // WooCommerce login redirect
 add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
     // Login
@@ -150,23 +168,6 @@ add_filter('woocommerce_locate_template', function ($template, $template_name, $
     return $template;
 }, 100, 3);
 
-
-//redirige a la página de ordenes
-add_filter('template_include', function ($template) {
-    if (is_order_received_page()) {
-        $order_id = absint(get_query_var('order-received'));
-        $order = wc_get_order($order_id);
-
-        if ($order) {
-            echo \Roots\view('woocommerce.thankyou', [
-                'order' => $order,
-            ])->render();
-            exit;
-        }
-    }
-
-    return $template;
-}, 99);
 
 
 
