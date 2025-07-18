@@ -56,9 +56,9 @@
           );
         @endphp
 
-        <p class="text-sm text-gray-600 mb-6">
+        
           {!! $logout_html !!}
-        </p>
+        
       </div>
     </div>
 
