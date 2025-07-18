@@ -89,185 +89,107 @@ add_action('after_setup_theme', function () {
 
 
 // WooCommerce login redirect
+
 add_filter('woocommerce_locate_template', function ($template, $template_name, $template_path) {
-    // Cargar plantilla de login
-    if ($template_name === 'myaccount/form-login.php') {
-        echo \Roots\view('woocommerce.myaccount.form-login')->render();
-        return get_theme_file_path('index.php');
-    }
+    $render = function ($view, $data = []) {
+        echo \Roots\view($view, $data)->render();
+        exit;
+    };
 
-    // Cargar plantilla para solicitar restablecimiento
-    if ($template_name === 'myaccount/form-lost-password.php') {
-        echo \Roots\view('woocommerce.myaccount.form-lost-password')->render();
-        return get_theme_file_path('index.php');
-    }
+    switch ($template_name) {
+        // Mi cuenta: Login
+        case 'myaccount/form-login.php':
+            $render('woocommerce.myaccount.form-login');
+            break;
 
-    // Cargar plantilla para restablecer contraseña (con key y login en URL)
-    if ($template_name === 'myaccount/form-reset-password.php') {
-        echo \Roots\view('woocommerce.myaccount.form-reset-password', [
-            'reset_key' => $_GET['key'] ?? '',
-            'reset_login' => $_GET['login'] ?? '',
-        ])->render();
-        return get_theme_file_path('index.php');
+        // Olvidaste tu contraseña
+        case 'myaccount/form-lost-password.php':
+            $render('woocommerce.myaccount.form-lost-password');
+            break;
+
+        // Restablecer contraseña (desde enlace con key/login)
+        case 'myaccount/form-reset-password.php':
+            $render('woocommerce.myaccount.form-reset-password', [
+                'reset_key' => $_GET['key'] ?? '',
+                'reset_login' => $_GET['login'] ?? '',
+            ]);
+            break;
+
+        // Panel de cuenta (dashboard)
+        case 'myaccount/dashboard.php':
+            $render('woocommerce.myaccount.dashboard');
+            break;
+
+        // Editar cuenta
+        case 'myaccount/form-edit-account.php':
+            $render('woocommerce.myaccount.form-edit-account', [
+                'user' => wp_get_current_user(),
+                'nonce_value' => wp_create_nonce('save_account_details'),
+            ]);
+            break;
+
+        // Editar dirección
+        case 'myaccount/form-edit-address.php':
+            $render('woocommerce.myaccount.form-edit-address', [
+                'load_address' => $_GET['address'] ?? 'billing',
+                'address' => WC()->countries->get_address_fields(WC()->customer->get_billing_country(), 'billing'),
+            ]);
+            break;
+
+        // Listado de pedidos
+        case 'myaccount/orders.php':
+            $current_page = max(1, get_query_var('paged'));
+            $orders = wc_get_orders([
+                'customer_id' => get_current_user_id(),
+                'paginate' => true,
+                'paged' => $current_page,
+                'limit' => 10,
+            ]);
+            $render('woocommerce.myaccount.orders', [
+                'orders' => $orders,
+                'current_page' => $current_page,
+            ]);
+            break;
+
+        // Detalle de pedido
+        case 'myaccount/view-order.php':
+            global $wp;
+            $order_id = absint($wp->query_vars['view-order']);
+            $order = wc_get_order($order_id);
+            if ($order) {
+                $render('woocommerce.myaccount.view-order', ['order' => $order]);
+            }
+            break;
+
+        // Página del producto individual
+        case 'single-product.php':
+            $render('woocommerce.single-product');
+            break;
+
+        // Página de checkout
+        case 'checkout/form-checkout.php':
+            $render('woocommerce.checkout.form-checkout');
+            break;
+
+        // Página de agradecimiento (pedido recibido)
+        case 'checkout/thankyou.php':
+            $order_id = absint(get_query_var('order-received'));
+            $order = wc_get_order($order_id);
+            if ($order) {
+                $render('woocommerce.thankyou', ['order' => $order]);
+            }
+            break;
+
+        // Página del carrito
+        case 'cart/cart.php':
+            $render('woocommerce.cart.cart');
+            break;
     }
 
     return $template;
 }, 100, 3);
 
 
-//carga la página del producto
-add_filter('template_include', function ($template) {
-        if (is_singular('product')) {
-            $blade_template = locate_template('resources/views/woocommerce/single-product.blade.php');
-            if ($blade_template) {
-                echo \Roots\view('woocommerce.single-product')->render();
-                exit; // Evita que cargue otras plantillas
-            }
-        }
-        return $template;
-}, 99);
-
-//redirige al checkout
-add_filter('template_include', function ($template) {
-    if (is_checkout() && !is_order_received_page()) {
-        $blade_template = locate_template('resources/views/woocommerce/checkout/form-checkout.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.checkout.form-checkout')->render();
-            exit; // Detiene el flujo de carga de otras plantillas
-        }
-    }
-    return $template;
-}, 99);
-
-
-//redirige a la página de ordenes
-add_filter('template_include', function ($template) {
-    if (is_order_received_page()) {
-        $order_id = absint(get_query_var('order-received'));
-        $order = wc_get_order($order_id);
-
-        if ($order) {
-            echo \Roots\view('woocommerce.thankyou', [
-                'order' => $order,
-            ])->render();
-            exit;
-        }
-    }
-
-    return $template;
-}, 99);
-
-
-
-//página para editar direccion
-add_filter('template_include', function ($template) {
-    if (is_account_page() && is_wc_endpoint_url('edit-address')) {
-        echo \Roots\view('woocommerce.myaccount.edit-address')->render();
-        exit;
-    }
-    return $template;
-}, 100);
-
-//página para editar direccion
-add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('edit-address')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-edit-address.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.form-edit-address', [
-                'load_address' => isset($_GET['address']) ? sanitize_text_field($_GET['address']) : 'billing',
-                'address' => WC()->countries->get_address_fields(WC()->customer->get_billing_country(), 'billing')
-            ])->render();
-            exit;
-        }
-    }
-    return $template;
-}, 99);
-
-//pagina para editar cuenta
-add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('edit-account')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/form-edit-account.blade.php');
-
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.form-edit-account', [
-                'user' => wp_get_current_user(),
-                'nonce_value' => wp_create_nonce('save_account_details'),
-            ])->render();
-            exit;
-        }
-    }
-
-    return $template;
-}, 99);
-
-//página de ordenes
-add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('orders')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/orders.blade.php');
-
-        if ($blade_template) {
-            $current_page = max(1, get_query_var('paged'));
-            $customer_orders = wc_get_orders([
-                'customer_id' => get_current_user_id(),
-                'paginate' => true,
-                'paged' => $current_page,
-                'limit' => 10,
-            ]);
-
-            echo \Roots\view('woocommerce.myaccount.orders', [
-                'orders' => $customer_orders,
-                'current_page' => $current_page,
-            ])->render();
-            exit;
-        }
-    }
-
-    return $template;
-}, 99);
-
-//página para ver toddas las ordenes
-add_filter('template_include', function ($template) {
-    if (is_wc_endpoint_url('view-order')) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/view-order.blade.php');
-        if ($blade_template) {
-            global $wp;
-            $order_id = absint($wp->query_vars['view-order']);
-            $order = wc_get_order($order_id);
-
-            if ($order) {
-                echo \Roots\view('woocommerce.myaccount.view-order', [
-                    'order' => $order,
-                ])->render();
-                exit;
-            }
-        }
-    }
-    return $template;
-}, 99);
-
-
-//página para loguearse
-add_filter('template_include', function ($template) {
-    // Mostrar solo en la página "Mi cuenta" (login/register)
-    if (is_account_page() && !is_user_logged_in()) {
-        echo \Roots\view('woocommerce.myaccount.form-login')->render();
-        exit;
-    }
-
-    return $template;
-}, 99);
-
-//pagina logueada
-add_filter('template_include', function ($template) {
-    if (is_account_page() && !is_wc_endpoint_url()) {
-        $blade_template = locate_template('resources/views/woocommerce/myaccount/dashboard.blade.php');
-        if ($blade_template) {
-            echo \Roots\view('woocommerce.myaccount.dashboard')->render();
-            exit;
-        }
-    }
-    return $template;
-}, 99);
 
 /**
  * Register the theme sidebars.
