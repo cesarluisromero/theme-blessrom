@@ -1,4 +1,4 @@
-@extends('layouts.app')
+
 
 @php do_action('woocommerce_before_reset_password_form') @endphp
 
