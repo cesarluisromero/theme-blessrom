@@ -24,7 +24,7 @@
                     </label>
                     <input type="text" name="account_first_name" id="account_first_name" autocomplete="given-name"
                         value="{{ old('account_first_name', $user->first_name) }}"
-                        class="woocommerce-Input woocommerce-Input--text input-text">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary">
                 </p>
             </div>
             <div>
@@ -78,11 +78,18 @@
 
         <div class="pt-6">
             @php wp_nonce_field('save_account_details', 'save-account-details-nonce'); @endphp
-            <input type="hidden" name="action" value="save_account_details">
+            @php
+                $buttonClass = 'woocommerce-Button button';
+                $themeButtonClass = wc_wp_theme_get_element_class_name('button');
+                if ($themeButtonClass) {
+                    $buttonClass .= ' ' . esc_attr($themeButtonClass);
+                }
+            @endphp
             <button type="submit"
-                    class="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold shadow">
-                Guardar cambios
+                    class="class="{{ $buttonClass }} w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold shadow">
+                {{ __('Save changes', 'woocommerce') }}
             </button>
+            <input type="hidden" name="action" value="save_account_details">
         </div>
 
         @php do_action('woocommerce_edit_account_form_end'); @endphp
