@@ -8,7 +8,7 @@
 
 <div class="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-md">
     <form method="post"
-          class="space-y-6"
+          class="woocommerce-EditAccountForm edit-account space-y-6"
           action=""
           {!! do_action('woocommerce_edit_account_form_tag') !!}>
 
