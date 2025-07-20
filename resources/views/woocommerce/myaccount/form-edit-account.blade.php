@@ -18,10 +18,12 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-                <label for="account_first_name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                <input type="text" name="account_first_name" id="account_first_name" autocomplete="given-name"
-                       value="{{ old('account_first_name', $user->first_name) }}"
-                       class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary">
+                <p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+                    <label for="account_first_name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                    <input type="text" name="account_first_name" id="account_first_name" autocomplete="given-name"
+                        value="{{ old('account_first_name', $user->first_name) }}"
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary">
+                </p>
             </div>
             <div>
                 <label for="account_last_name" class="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
