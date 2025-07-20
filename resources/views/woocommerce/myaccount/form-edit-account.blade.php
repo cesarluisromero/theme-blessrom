@@ -1,10 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-  @php
-    do_action('woocommerce_before_edit_account_form');
-@endphp
-
+  
 @php
     do_action('woocommerce_before_edit_account_form');
 @endphp
