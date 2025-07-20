@@ -24,7 +24,7 @@
                     </label>
                     <input type="text" name="account_first_name" id="account_first_name" autocomplete="given-name"
                         value="{{ old('account_first_name', $user->first_name) }}"
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-primary focus:border-primary">
+                        class="woocommerce-Input woocommerce-Input--text input-text">
                 </p>
             </div>
             <div>
