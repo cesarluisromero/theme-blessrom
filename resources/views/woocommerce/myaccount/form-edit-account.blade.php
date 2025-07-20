@@ -85,8 +85,11 @@
                     $buttonClass .= ' ' . esc_attr($themeButtonClass);
                 }
             @endphp
+
             <button type="submit"
-                    class="class="{{ $buttonClass }} w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition font-semibold shadow">
+                class="{{ $buttonClass }}"
+                name="save_account_details"
+                value="{{ esc_attr__('Save changes', 'woocommerce') }}">
                 {{ __('Save changes', 'woocommerce') }}
             </button>
             <input type="hidden" name="action" value="save_account_details">
