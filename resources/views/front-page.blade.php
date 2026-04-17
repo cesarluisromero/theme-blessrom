@@ -21,4 +21,7 @@
   
   {{-- Beneficios o razones para elegir Blessrom --}}
   @include('partials.home-features')
+
+  {{-- Página Amiga --}}
+  @include('partials.home-friend-page')
 @endsection
